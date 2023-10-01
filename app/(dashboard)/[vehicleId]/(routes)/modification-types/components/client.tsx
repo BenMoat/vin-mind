@@ -6,8 +6,16 @@ import { Plus } from "lucide-react";
 import { Heading } from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { ModificationTypeColumn, columns } from "./columns";
+import { DataTable } from "@/components/ui/data-table";
 
-export const ModificationTypesClient = () => {
+interface ModificationTypesClientProps {
+  data: ModificationTypeColumn[];
+}
+
+export const ModificationTypesClient: React.FC<
+  ModificationTypesClientProps
+> = ({ data }) => {
   const router = useRouter();
   const params = useParams();
 
@@ -15,7 +23,7 @@ export const ModificationTypesClient = () => {
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title="Modification Types (0)"
+          title={`Modification Types (${data.length})`}
           description="Manage your vehicle's modification types."
         />
         <Button
@@ -28,6 +36,7 @@ export const ModificationTypesClient = () => {
         </Button>
       </div>
       <Separator />
+      <DataTable columns={columns} data={data} />
     </>
   );
 };
