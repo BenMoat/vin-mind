@@ -12,9 +12,21 @@ datasource db {
 }
 
 model Vehicle {
+  id            String             @id @default(uuid())
+  name          String
+  userId        String
+  modifications ModificationType[] @relation("VehicleToModificationType")
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+}
+
+model ModificationType {
   id        String   @id @default(uuid())
+  vehicleId String
+  vehicle   Vehicle  @relation("VehicleToModificationType", fields: [vehicleId], references: [id])
   name      String
-  userId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([vehicleId])
 }

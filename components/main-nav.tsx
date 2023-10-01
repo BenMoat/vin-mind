@@ -14,6 +14,16 @@ export function MainNav({
 
   const routes = [
     {
+      href: `/${params.vehicleId}`,
+      label: "Overview",
+      active: pathname === `/${params.vehicleId}`,
+    },
+    {
+      href: `/${params.vehicleId}/modification-types`,
+      label: "Modification Types",
+      active: pathname === `/${params.vehicleId}/modification-types`,
+    },
+    {
       href: `/${params.vehicleId}/settings`,
       label: "Settings",
       active: pathname === `/${params.vehicleId}/settings`,
