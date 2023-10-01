@@ -12,21 +12,40 @@ datasource db {
 }
 
 model Vehicle {
-  id            String             @id @default(uuid())
-  name          String
-  userId        String
-  modifications ModificationType[] @relation("VehicleToModificationType")
-  createdAt     DateTime           @default(now())
-  updatedAt     DateTime           @updatedAt
+  id                String             @id @default(uuid())
+  name              String
+  userId            String
+  modificationTypes ModificationType[] @relation("VehicleToModificationType")
+  modifications     Modification[]     @relation("VehicleToModification")
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
 }
 
 model ModificationType {
-  id        String   @id @default(uuid())
-  vehicleId String
-  vehicle   Vehicle  @relation("VehicleToModificationType", fields: [vehicleId], references: [id])
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String         @id @default(uuid())
+  vehicleId     String
+  vehicle       Vehicle        @relation("VehicleToModificationType", fields: [vehicleId], references: [id])
+  modifications Modification[] @relation("ModificationTypeToModification")
+  name          String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   @@index([vehicleId])
+}
+
+model Modification {
+  id                 String           @id @default(uuid())
+  vehicleId          String
+  vehicle            Vehicle          @relation("VehicleToModification", fields: [vehicleId], references: [id])
+  modificationTypeId String
+  modificationType   ModificationType @relation("ModificationTypeToModification", fields: [modificationTypeId], references: [id])
+  modName            String
+  price              Decimal
+  isObsolete         Boolean          @default(false)
+  notes              String?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  @@index([vehicleId])
+  @@index([modificationTypeId])
 }

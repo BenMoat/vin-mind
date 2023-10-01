@@ -4,37 +4,40 @@ import prismadb from "@/lib/prismadb";
 
 export async function GET(
   req: Request,
-  { params }: { params: { modificationTypeId: string } }
+  { params }: { params: { modificationId: string } }
 ) {
   try {
-    if (!params.modificationTypeId) {
-      return new NextResponse("Modification Type ID is required", {
+    if (!params.modificationId) {
+      return new NextResponse("Modification ID is required", {
         status: 400,
       });
     }
 
-    const modificationType = await prismadb.modificationType.findUnique({
+    const modification = await prismadb.modification.findUnique({
       where: {
-        id: params.modificationTypeId,
+        id: params.modificationId,
+      },
+      include: {
+        modificationType: true,
       },
     });
 
-    return NextResponse.json(modificationType);
+    return NextResponse.json(modification);
   } catch (error) {
-    console.log("MODIFICATION-TYPE_GET", error);
+    console.log("MODIFICATION_GET", error);
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { vehicleId: string; modificationTypeId: string } }
+  { params }: { params: { vehicleId: string; modificationId: string } }
 ) {
   try {
     const { userId } = auth();
     const body = await req.json();
 
-    const { name } = body;
+    const { name, price, modificationTypeId, isObsolete, notes } = body;
 
     if (!userId) {
       return new NextResponse("Unauthorised", { status: 401 });
@@ -44,8 +47,18 @@ export async function PATCH(
       return new NextResponse("Vehicle name is required", { status: 400 });
     }
 
-    if (!params.modificationTypeId) {
+    if (!price) {
+      return new NextResponse("Price is required", { status: 400 });
+    }
+
+    if (!modificationTypeId) {
       return new NextResponse("Modification Type ID is required", {
+        status: 400,
+      });
+    }
+
+    if (!params.modificationId) {
+      return new NextResponse("Modification ID is required", {
         status: 400,
       });
     }
@@ -61,25 +74,29 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    const modificationType = await prismadb.modificationType.updateMany({
+    const modification = await prismadb.modification.updateMany({
       where: {
-        id: params.modificationTypeId,
+        id: params.modificationId,
       },
       data: {
-        name,
+        modName: name,
+        price: price,
+        modificationTypeId,
+        isObsolete,
+        notes,
       },
     });
 
-    return NextResponse.json(modificationType);
+    return NextResponse.json(modification);
   } catch (error) {
-    console.log("MODIFICATION-TYPE_PATCH", error);
+    console.log("MODIFICATION_PATCH", error);
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { vehicleId: string; modificationTypeId: string } }
+  { params }: { params: { vehicleId: string; modificationId: string } }
 ) {
   try {
     const { userId } = auth();
@@ -88,8 +105,8 @@ export async function DELETE(
       return new NextResponse("Unauthenticated", { status: 401 });
     }
 
-    if (!params.modificationTypeId) {
-      return new NextResponse("Modification Type ID is required", {
+    if (!params.modificationId) {
+      return new NextResponse("Modification ID is required", {
         status: 400,
       });
     }
@@ -105,15 +122,15 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    const modificationType = await prismadb.modificationType.deleteMany({
+    const modification = await prismadb.modification.deleteMany({
       where: {
-        id: params.modificationTypeId,
+        id: params.modificationId,
       },
     });
 
-    return NextResponse.json(modificationType);
+    return NextResponse.json(modification);
   } catch (error) {
-    console.log("MODIFICATION-TYPE_DELETE", error);
+    console.log("MODIFICATION_DELETE", error);
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
