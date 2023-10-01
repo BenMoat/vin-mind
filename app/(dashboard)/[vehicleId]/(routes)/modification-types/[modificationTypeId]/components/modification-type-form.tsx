@@ -78,9 +78,17 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
   const onSubmit = async (data: ModificationTypeFormValues) => {
     try {
       setLoading(true);
-      await axios.patch(`/api/vehicles/${params.vehicleId}`, data);
+      if (initialData) {
+        await axios.patch(
+          `/api/${params.vehicleId}/modification-types/${params.modificationTypeId}`,
+          data
+        );
+      } else {
+        await axios.post(`/api/${params.vehicleId}/modification-types`, data);
+      }
       router.refresh();
-      toast.success("Vehicle updated");
+      router.push(`/${params.vehicleId}/modification-types`);
+      toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
@@ -91,12 +99,14 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/vehicles/${params.vehicleId}`);
+      await axios.delete(
+        `/api/${params.vehicleId}/modification-types/${params.modificationTypeId}`
+      );
       router.refresh();
       router.push("/");
-      toast.success("Vehicle deleted");
+      toast.success("Modification Type deleted");
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error("This modification type is by one or more modifications.");
     } finally {
       setLoading(false);
       setOpen(false);
@@ -145,7 +155,7 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Vehicle Name"
+                      placeholder="Type of modification"
                       {...field}
                     />
                   </FormControl>
