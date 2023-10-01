@@ -36,7 +36,7 @@ export const ModificationTypesClient: React.FC<
         </Button>
       </div>
       <Separator />
-      <DataTable columns={columns} data={data} />
+      <DataTable filterKey="name" columns={columns} data={data} />
     </>
   );
 };

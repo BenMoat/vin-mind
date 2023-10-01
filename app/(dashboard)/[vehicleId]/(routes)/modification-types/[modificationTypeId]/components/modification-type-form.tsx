@@ -103,7 +103,7 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
         `/api/${params.vehicleId}/modification-types/${params.modificationTypeId}`
       );
       router.refresh();
-      router.push("/");
+      router.push(`/${params.vehicleId}/modification-types`);
       toast.success("Modification Type deleted");
     } catch (error) {
       toast.error("This modification type is by one or more modifications.");
