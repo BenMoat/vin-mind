@@ -25,22 +25,22 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter();
   const params = useParams();
 
-  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const onDelete = async () => {
+  const onConfirm = async () => {
     try {
       setLoading(true);
       await axios.delete(
         `/api/${params.vehicleId}/modification-types/${data.id}`
       );
-      router.refresh();
       toast.success("Modification Type deleted");
+      router.refresh();
     } catch (error) {
-      toast.error("This modification type is by one or more modifications.");
+      toast.error("This modification type is in use by a modification.");
     } finally {
-      setLoading(false);
       setOpen(false);
+      setLoading(false);
     }
   };
 
@@ -49,10 +49,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        onConfirm={onDelete}
+        onConfirm={onConfirm}
         loading={loading}
+        modificationType={data.name}
       />
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
             <span className="sr-only">Open Menu</span>

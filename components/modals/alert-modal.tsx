@@ -10,6 +10,7 @@ interface AlertModalProps {
   onConfirm: () => void;
   loading: boolean;
   vehicleName?: string;
+  modificationType?: string;
 }
 
 export const AlertModal: React.FC<AlertModalProps> = ({
@@ -18,6 +19,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({
   onConfirm,
   loading,
   vehicleName,
+  modificationType,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
 
@@ -32,6 +34,8 @@ export const AlertModal: React.FC<AlertModalProps> = ({
       title={
         vehicleName
           ? `Are you sure you want to delete "${vehicleName}" from your garage?`
+          : modificationType
+          ? `Are you sure you want to delete "${modificationType}" from your modification types?`
           : "Are you sure you want to delete this item?"
       }
       description="This action cannot be undone."

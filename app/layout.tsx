@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "VIN Mind",
-  description: "Vehicle auditing made simple",
+  description: "Keep your vehicle in mind.",
 };
 
 export default function RootLayout({

@@ -16,8 +16,8 @@ interface ModificationTypesClientProps {
 export const ModificationTypesClient: React.FC<
   ModificationTypesClientProps
 > = ({ data }) => {
-  const router = useRouter();
   const params = useParams();
+  const router = useRouter();
 
   return (
     <>
@@ -32,7 +32,7 @@ export const ModificationTypesClient: React.FC<
           }
         >
           <Plus className="mr-2 h-4 w-4" />
-          Add Modification Type
+          Add New
         </Button>
       </div>
       <Separator />
