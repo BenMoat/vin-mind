@@ -269,6 +269,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
           </div>
           {initialData && (
             <Button
+              type="button"
               disabled={loading}
               className="mr-2"
               variant="destructive"
