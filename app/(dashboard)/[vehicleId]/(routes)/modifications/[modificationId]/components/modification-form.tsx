@@ -73,10 +73,12 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? "Edit Modification" : "Create Modification";
+  const title = initialData
+    ? `Edit Modification: ${initialData.name}`
+    : "Add a Modification";
   const description = initialData
-    ? "Edit your vehicle's modification."
-    : "Create a new modification for your vehicle.";
+    ? "Edit the details of the selected modification."
+    : "Add a modification to this vehicle.";
   const toastMessage = initialData
     ? "Modification updated."
     : "Modification created.";
