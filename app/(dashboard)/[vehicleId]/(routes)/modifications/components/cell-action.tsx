@@ -3,7 +3,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ModificationTypeColumn } from "./columns";
+import { ModificationColumn } from "./columns";
 import toast from "react-hot-toast";
 
 import {
@@ -18,7 +18,7 @@ import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { AlertModal } from "@/components/modals/alert-modal";
 
 interface CellActionProps {
-  data: ModificationTypeColumn;
+  data: ModificationColumn;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
@@ -31,13 +31,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const onConfirm = async () => {
     try {
       setLoading(true);
-      await axios.delete(
-        `/api/${params.vehicleId}/modification-types/${data.id}`
-      );
-      toast.success("Modification Type deleted");
+      await axios.delete(`/api/${params.vehicleId}/modifications/${data.id}`);
+      toast.success("Modification deleted");
       router.refresh();
     } catch (error) {
-      toast.error("This modification type is in use by a modification.");
+      toast.error("Something went wrong");
     } finally {
       setOpen(false);
       setLoading(false);
@@ -64,7 +62,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem
             onClick={() =>
-              router.push(`/${params.vehicleId}/modification-types/${data.id}`)
+              router.push(`/${params.vehicleId}/modifications/${data.id}`)
             }
           >
             <Edit className="mr-2 h-4 w-4" />

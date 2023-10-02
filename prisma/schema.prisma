@@ -39,7 +39,7 @@ model Modification {
   vehicle            Vehicle          @relation("VehicleToModification", fields: [vehicleId], references: [id])
   modificationTypeId String
   modificationType   ModificationType @relation("ModificationTypeToModification", fields: [modificationTypeId], references: [id])
-  modName            String
+  name               String
   price              Decimal
   isObsolete         Boolean          @default(false)
   notes              String?

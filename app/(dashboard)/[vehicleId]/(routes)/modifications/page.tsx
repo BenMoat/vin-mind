@@ -26,7 +26,7 @@ const ModificationsPage = async ({
   const formattedModifications: ModificationColumn[] = modifications.map(
     (item) => ({
       id: item.id,
-      name: item.modName,
+      name: item.name,
       type: item.modificationType.name,
       price: formatter.format(item.price.toNumber()),
       isObsolete: item.isObsolete,

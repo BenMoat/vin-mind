@@ -79,7 +79,7 @@ export async function PATCH(
         id: params.modificationId,
       },
       data: {
-        modName: name,
+        name,
         price: price,
         modificationTypeId,
         isObsolete,

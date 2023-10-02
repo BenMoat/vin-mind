@@ -28,7 +28,7 @@ export async function GET(
         modificationType: true,
       },
       orderBy: {
-        modName: "asc",
+        name: "asc",
       },
     });
 
@@ -84,7 +84,7 @@ export async function POST(
 
     const modification = await prismadb.modification.create({
       data: {
-        modName: name,
+        name,
         price,
         modificationTypeId,
         isObsolete,
