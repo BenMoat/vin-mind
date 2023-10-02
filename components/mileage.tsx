@@ -1,5 +1,6 @@
 "use client";
 
+import { useTheme } from "next-themes";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
 interface OverviewProps {
@@ -21,23 +22,28 @@ export const Mileage: React.FC<OverviewProps> = ({ data }) => {
     { name: "November", total: 13105 },
     { name: "December", total: 13116 },
   ];
+
+  const { resolvedTheme } = useTheme();
+  const fontColor = resolvedTheme === "dark" ? "#ffffff" : "#000000";
+
   return (
     <ResponsiveContainer width="100%" height={350}>
       <BarChart data={dummyData}>
         <XAxis
           dataKey="name"
-          stroke="#000000"
+          stroke={fontColor}
           fontSize={12}
           tickLine={false}
           axisLine={false}
         />
         <YAxis
+          className=""
           domain={[10000, "auto"]}
-          stroke="#000000"
+          stroke={fontColor}
           fontSize={12}
           tickLine={false}
           tickFormatter={(value) => `${value}`}
-          axisLine={true}
+          axisLine={false}
           startOffset={10000}
         />
         <Bar dataKey="total" fill="#adfa1d" radius={[4, 4, 0, 0]} />

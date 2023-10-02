@@ -5,7 +5,6 @@ import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { Modification, ModificationType } from "@prisma/client";
-import { Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
@@ -80,8 +79,8 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
     ? "Edit the details of the selected modification."
     : "Add a modification to this vehicle.";
   const toastMessage = initialData
-    ? "Modification updated."
-    : "Modification created.";
+    ? "Modification updated"
+    : "Modification created";
   const action = initialData ? "Save changes" : "Create";
 
   const form = useForm<ModificationFormValues>({
@@ -151,19 +150,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
         vehicleName={initialData?.name}
       />
       <div className="flex items-center justify-between">
-        <Heading title={title} description={description} />
-        {initialData && (
-          <Button
-            disabled={loading}
-            variant="destructive"
-            size="sm"
-            onClick={() => {
-              setOpen(true);
-            }}
-          >
-            <Trash className="w-4 h-4" />
-          </Button>
-        )}
+        <Heading title={title} description={description} goBack />
       </div>
       <Separator />
       <Form {...form}>
@@ -280,6 +267,18 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               )}
             />
           </div>
+          {initialData && (
+            <Button
+              disabled={loading}
+              className="mr-2"
+              variant="destructive"
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              Delete
+            </Button>
+          )}
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}
           </Button>
