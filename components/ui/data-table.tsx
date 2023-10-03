@@ -34,17 +34,27 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./select";
+import { FormControl } from "./form";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filterKey: string;
+  modType?: any[];
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   filterKey,
+  modType,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([
@@ -79,6 +89,33 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+        {modType && (
+          <Select
+            onValueChange={(value) => {
+              if (value === "all") {
+                table.getColumn("type")?.setFilterValue("");
+              } else {
+                table.getColumn("type")?.setFilterValue(value ?? "");
+              }
+            }}
+            defaultValue=""
+          >
+            <SelectTrigger className="w-[150px] ml-2">
+              <SelectValue placeholder="All Types" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Types</SelectItem>
+              {modType.map((modificationType) => (
+                <SelectItem
+                  key={modificationType.id}
+                  value={modificationType.name}
+                >
+                  {modificationType.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">

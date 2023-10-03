@@ -199,7 +199,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               name="modificationTypeId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Category</FormLabel>
+                  <FormLabel>Modification Type</FormLabel>
                   <Select
                     disabled={loading}
                     onValueChange={field.onChange}

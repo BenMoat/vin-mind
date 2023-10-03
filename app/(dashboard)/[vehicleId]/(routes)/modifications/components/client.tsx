@@ -11,10 +11,12 @@ import { DataTable } from "@/components/ui/data-table";
 
 interface ModificationClientProps {
   data: ModificationColumn[];
+  modificationTypes: any[];
 }
 
 export const ModificationClient: React.FC<ModificationClientProps> = ({
   data,
+  modificationTypes,
 }) => {
   const params = useParams();
   const router = useRouter();
@@ -36,7 +38,12 @@ export const ModificationClient: React.FC<ModificationClientProps> = ({
         </Button>
       </div>
       <Separator />
-      <DataTable filterKey="name" columns={columns} data={data} />
+      <DataTable
+        filterKey="name"
+        modType={modificationTypes}
+        columns={columns}
+        data={data}
+      />
     </>
   );
 };
