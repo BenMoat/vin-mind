@@ -23,7 +23,9 @@ export const ModificationTypesClient: React.FC<
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title={`Modification Types (${data.length})`}
+          title={`${data.length} ${
+            data.length === 1 ? "Modification Type" : "Modification Types"
+          }`}
           description="Manage your vehicle's modification types."
         />
         <Button

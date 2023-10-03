@@ -23,7 +23,9 @@ export const ModificationClient: React.FC<ModificationClientProps> = ({
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title={`Modifications (${data.length})`}
+          title={`${data.length} ${
+            data.length === 1 ? "Modification" : "Modifications"
+          }`}
           description="Manage your vehicle's modifications."
         />
         <Button

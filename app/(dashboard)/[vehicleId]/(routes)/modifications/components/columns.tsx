@@ -2,6 +2,8 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { CellAction } from "./cell-action";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -18,19 +20,52 @@ export type ModificationColumn = {
 export const columns: ColumnDef<ModificationColumn>[] = [
   {
     accessorKey: "name",
-    header: "Name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "type",
-    header: "Type",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Type
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "price",
-    header: "Price",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Price
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "isObsolete",
-    header: "Obsolete",
+    header: "Obsolete?",
+    cell: ({ row }) => {
+      return row.original.isObsolete ? "Yes" : "No";
+    },
   },
   {
     accessorKey: "notes",
@@ -38,7 +73,17 @@ export const columns: ColumnDef<ModificationColumn>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: "Date Created",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Date Created
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     id: "actions",
