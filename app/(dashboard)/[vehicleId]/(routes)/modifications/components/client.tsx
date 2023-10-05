@@ -39,6 +39,7 @@ export const ModificationClient: React.FC<ModificationClientProps> = ({
       </div>
       <Separator />
       <DataTable
+        routeName="modifications"
         filterKey="name"
         modType={modificationTypes}
         columns={columns}

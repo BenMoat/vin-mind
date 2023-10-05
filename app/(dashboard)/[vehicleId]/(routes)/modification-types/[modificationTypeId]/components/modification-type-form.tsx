@@ -125,7 +125,7 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
         vehicleName={initialData?.name}
       />
       <div className="flex items-center justify-between">
-        <Heading title={title} description={description} />
+        <Heading title={title} description={description} goBack />
         {initialData && (
           <Button
             disabled={loading}

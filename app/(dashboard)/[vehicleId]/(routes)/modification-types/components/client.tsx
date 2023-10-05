@@ -38,7 +38,12 @@ export const ModificationTypesClient: React.FC<
         </Button>
       </div>
       <Separator />
-      <DataTable filterKey="name" columns={columns} data={data} />
+      <DataTable
+        routeName="modification-types"
+        filterKey="name"
+        columns={columns}
+        data={data}
+      />
     </>
   );
 };

@@ -41,13 +41,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./select";
-import { FormControl } from "./form";
+
+import { useParams, useRouter } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filterKey: string;
   modType?: any[];
+  routeName: string;
 }
 
 export function DataTable<TData, TValue>({
@@ -55,7 +57,11 @@ export function DataTable<TData, TValue>({
   data,
   filterKey,
   modType,
+  routeName,
 }: DataTableProps<TData, TValue>) {
+  const params = useParams();
+  const router = useRouter();
+
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([
     { id: "name", desc: false },
@@ -167,8 +173,15 @@ export function DataTable<TData, TValue>({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
+                  className="cursor-pointer"
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  onClick={() =>
+                    router.push(
+                      // @ts-ignore
+                      `/${params.vehicleId}/${routeName}/${row.original.id}`
+                    )
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
