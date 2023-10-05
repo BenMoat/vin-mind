@@ -4,7 +4,7 @@ import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { Modification, ModificationType } from "@prisma/client";
+import { Modification, ModificationType, Files } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
@@ -32,9 +32,14 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
+import FileUpload from "@/components/file-upload";
 
 interface ModificationFormProps {
-  initialData: Modification | null;
+  initialData:
+    | (Modification & {
+        files: Files[];
+      })
+    | null;
   modificationTypes: ModificationType[];
 }
 
@@ -58,6 +63,7 @@ const formSchema = z.object({
   price: z.coerce.number().min(1),
   isObsolete: z.boolean().default(false).optional(),
   notes: z.string().optional(),
+  files: z.object({ url: z.string() }).array(),
 });
 
 type ModificationFormValues = z.infer<typeof formSchema>;
@@ -97,6 +103,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
           price: 0,
           isObsolete: false,
           notes: "",
+          files: [],
         },
   });
 
@@ -260,6 +267,32 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                       disabled={loading}
                       placeholder="Notes about this modification"
                       {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="files"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Files</FormLabel>
+                  <FormControl>
+                    <FileUpload
+                      value={field.value.map((file) => file.url)}
+                      disabled={loading}
+                      onChange={(url) =>
+                        field.onChange([...field.value, { url }])
+                      }
+                      onRemove={(url) =>
+                        field.onChange([
+                          ...field.value.filter(
+                            (current) => current.url !== url
+                          ),
+                        ])
+                      }
                     />
                   </FormControl>
                   <FormMessage />

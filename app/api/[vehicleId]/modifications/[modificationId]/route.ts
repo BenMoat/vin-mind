@@ -19,6 +19,7 @@ export async function GET(
       },
       include: {
         modificationType: true,
+        files: true,
       },
     });
 
@@ -37,7 +38,7 @@ export async function PATCH(
     const { userId } = auth();
     const body = await req.json();
 
-    const { name, price, modificationTypeId, isObsolete, notes } = body;
+    const { name, price, modificationTypeId, isObsolete, notes, files } = body;
 
     if (!userId) {
       return new NextResponse("Unauthorised", { status: 401 });
@@ -74,16 +75,32 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    const modification = await prismadb.modification.updateMany({
+    await prismadb.modification.update({
       where: {
         id: params.modificationId,
       },
       data: {
         name,
-        price: price,
+        price,
         modificationTypeId,
         isObsolete,
         notes,
+        files: {
+          deleteMany: {},
+        },
+      },
+    });
+
+    const modification = await prismadb.modification.update({
+      where: {
+        id: params.modificationId,
+      },
+      data: {
+        files: {
+          createMany: {
+            data: [...files.map((file: { url: string }) => file)],
+          },
+        },
       },
     });
 

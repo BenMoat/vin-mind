@@ -11,6 +11,7 @@ const ModificationPage = async ({
     where: { id: params.modificationId },
     include: {
       modificationType: true,
+      files: true,
     },
   });
 

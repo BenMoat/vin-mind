@@ -43,9 +43,21 @@ model Modification {
   price              Decimal
   isObsolete         Boolean          @default(false)
   notes              String?
+  files              Files[]
   createdAt          DateTime         @default(now())
   updatedAt          DateTime         @updatedAt
 
   @@index([vehicleId])
   @@index([modificationTypeId])
+}
+
+model Files {
+  id             String       @id @default(uuid())
+  modificationId String
+  modification   Modification @relation(fields: [modificationId], references: [id], onDelete: Cascade)
+  url            String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([modificationId])
 }
