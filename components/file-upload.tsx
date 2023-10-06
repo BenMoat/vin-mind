@@ -37,19 +37,16 @@ const FileUpload: React.FC<ImageUploadProps> = ({
       <div className="mb-4 flex items-center gap-4">
         {value.map((url) => {
           const isImage = /\.(jpg|jpeg|png|gif)$/i.test(url);
+          const filename = url.split("/").pop();
 
           return (
             <div
               key={url}
               className="relative w-[400px] h-[400px] rounded-md overflow-hidden"
             >
+              <a>{filename}</a>
               <div className="z-10 absolute top-2 right-2">
-                <Button
-                  type="button"
-                  onClick={() => onRemove(url)}
-                  variant="destructive"
-                  size="sm"
-                >
+                <Button type="button" onClick={() => onRemove(url)} size="sm">
                   <Trash className="h-4 w-4" />
                 </Button>
               </div>

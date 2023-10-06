@@ -21,9 +21,9 @@ export const Heading: React.FC<HeadingProps> = ({
     <div className="flex items-center">
       {goBack && (
         <Button
-          className="mr-4 flex-shrink-0"
+          className="mr-4 flex-shrink-0 h-14"
           type="button"
-          variant="outline"
+          variant="secondary"
           onClick={() => router.back()}
         >
           <ArrowLeft className="w-4 h-4" />

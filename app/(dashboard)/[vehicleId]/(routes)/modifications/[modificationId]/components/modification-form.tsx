@@ -44,23 +44,11 @@ interface ModificationFormProps {
 }
 
 const formSchema = z.object({
-  name: z
-    .string()
-    .min(1)
-    .refine((value) => {
-      if (!value) {
-        throw new z.ZodError([
-          {
-            code: z.ZodIssueCode.custom,
-            message: "Please enter a vehicle name",
-            path: ["name"],
-          },
-        ]);
-      }
-      return true;
-    }),
-  modificationTypeId: z.string().min(1),
-  price: z.coerce.number().min(1),
+  name: z.string().min(1, "Modification name is required"),
+  price: z.coerce
+    .number()
+    .min(0.01, "Please add the price of the modification"),
+  modificationTypeId: z.string().min(1, "Select a modification type"),
   isObsolete: z.boolean().default(false).optional(),
   notes: z.string().optional(),
   files: z.object({ url: z.string() }).array(),
@@ -165,7 +153,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
         >
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 w-[55%] gap-8">
             <FormField
               control={form.control}
               name="name"
@@ -175,7 +163,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Modification Name"
+                      placeholder="Fake-but-real-to-me Carbon Spoiler"
                       {...field}
                     />
                   </FormControl>
@@ -206,7 +194,10 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               name="modificationTypeId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Modification Type</FormLabel>
+                  <FormLabel aria-required>Modification Type</FormLabel>
+                  <FormDescription>
+                    What type of modification is this? (e.g. Engine, Wheels)...
+                  </FormDescription>
                   <Select
                     disabled={loading}
                     onValueChange={field.onChange}
@@ -265,11 +256,10 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                   <FormControl>
                     <Textarea
                       disabled={loading}
-                      placeholder="Notes about this modification"
+                      placeholder="This cold air intake will add at least 170hp"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -295,7 +285,6 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                       }
                     />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               )}
             />

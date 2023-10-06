@@ -207,6 +207,9 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="flex-1 text-md text-muted-foreground">
+          {table.getRowModel().rows.length} of {data.length} records
+        </div>
         <Button
           variant="outline"
           size="sm"
