@@ -21,12 +21,9 @@ export function MainNav({
     {
       href: `/${params.vehicleId}/modifications`,
       label: "Modifications",
-      active: pathname === `/${params.vehicleId}/modifications`,
-    },
-    {
-      href: `/${params.vehicleId}/modification-types`,
-      label: "Modification Types",
-      active: pathname === `/${params.vehicleId}/modification-types`,
+      active:
+        pathname === `/${params.vehicleId}/modifications` ||
+        pathname === `/${params.vehicleId}/modification-types`,
     },
     {
       href: `/${params.vehicleId}/settings`,

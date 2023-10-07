@@ -35,6 +35,7 @@ import { Textarea } from "@/components/ui/textarea";
 import FileUpload from "@/components/file-upload";
 import { TypeModal } from "@/components/modals/type-modal";
 import { PlusCircle } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 
 interface ModificationFormProps {
   initialData:
@@ -266,7 +267,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                   <div className="space-y-1 leading-none">
                     <FormLabel>Obsolete</FormLabel>
                     <FormDescription>
-                      Is this modification no longer in use?
+                      Tick the box if this modification is no longer in use.
                     </FormDescription>
                   </div>
                 </FormItem>

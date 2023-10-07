@@ -42,22 +42,27 @@ import {
   SelectValue,
 } from "./select";
 
+import { Label } from "./label";
+
 import { useParams, useRouter } from "next/navigation";
+import { Checkbox } from "./checkbox";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  routeName: string;
   filterKey: string;
   modType?: any[];
-  routeName: string;
+  isObsolete?: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  routeName,
   filterKey,
   modType,
-  routeName,
+  isObsolete,
 }: DataTableProps<TData, TValue>) {
   const params = useParams();
   const router = useRouter();
@@ -66,7 +71,9 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([
     { id: "name", desc: false },
   ]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+    createdAt: false,
+  });
   const table = useReactTable({
     data,
     columns,
@@ -119,6 +126,29 @@ export function DataTable<TData, TValue>({
                   {modificationType.name}
                 </SelectItem>
               ))}
+            </SelectContent>
+          </Select>
+        )}
+        {isObsolete && (
+          <Select
+            onValueChange={(value) => {
+              if (value === "all") {
+                table.getColumn("isObsolete")?.setFilterValue("");
+              } else if (value === "true") {
+                table.getColumn("isObsolete")?.setFilterValue(true ?? "");
+              } else {
+                table.getColumn("isObsolete")?.setFilterValue(false ?? "");
+              }
+            }}
+            defaultValue=""
+          >
+            <SelectTrigger className="w-[150px] ml-2">
+              <SelectValue placeholder="All Types" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Obsolete </SelectItem>
+              <SelectItem value="true">Yes</SelectItem>
+              <SelectItem value="false">No</SelectItem>
             </SelectContent>
           </Select>
         )}
