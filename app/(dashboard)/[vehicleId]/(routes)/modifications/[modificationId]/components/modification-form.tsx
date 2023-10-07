@@ -33,7 +33,6 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import FileUpload from "@/components/file-upload";
-import { Type } from "lucide-react";
 import { TypeModal } from "@/components/modals/type-modal";
 
 interface ModificationFormProps {
@@ -152,7 +151,6 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
         onClose={() => {
           setTypeOpen(false);
         }}
-        onConfirm={onDelete}
         loading={loading}
       />
       <div className="flex items-center justify-between">

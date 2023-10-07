@@ -1,24 +1,63 @@
 "use client";
 
+import * as z from "zod";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { Modal } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useParams, useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
-interface AlertModalProps {
+interface TypeModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: () => void;
   loading: boolean;
-  vehicleName?: string;
-  modificationType?: string;
 }
 
-export const TypeModal: React.FC<AlertModalProps> = ({
+const formSchema = z.object({
+  name: z
+    .string()
+    .min(1)
+    .refine((value) => {
+      if (!value) {
+        throw new z.ZodError([
+          {
+            code: z.ZodIssueCode.custom,
+            message: "Please enter a vehicle name",
+            path: ["name"],
+          },
+        ]);
+      }
+      return true;
+    }),
+});
+
+export const TypeModal: React.FC<TypeModalProps> = ({
   isOpen,
   onClose,
-  onConfirm,
   loading,
 }) => {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+    },
+  });
+
+  const params = useParams();
+  const router = useRouter();
+
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -27,21 +66,65 @@ export const TypeModal: React.FC<AlertModalProps> = ({
 
   if (!isMounted) return null;
 
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      await axios.post(`/api/${params.vehicleId}/modification-types`, values);
+      router.refresh();
+      toast.success("Modification Type Added");
+      form.reset();
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      onClose();
+    }
+  };
+
   return (
     <Modal
-      title="Yo"
+      title="Add a new modification"
       description="This action cannot be undone."
       isOpen={isOpen}
       onClose={onClose}
     >
-      <div className="pt-6 space-x-2 flex items-center justify-end w-full">
-        <Button disabled={loading} variant="outline" onClick={onClose}>
-          Cancel
-        </Button>
-        <Button disabled={loading} variant="destructive" onClick={onConfirm}>
-          Continue
-        </Button>
-      </div>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8 w-full"
+        >
+          <div className="grid grid-cols-3 gap-8">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Type of modification"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="pt-6 space-x-2 flex items-center justify-end w-full">
+            <Button
+              disabled={loading}
+              type="button"
+              variant="outline"
+              onClick={onClose}
+            >
+              Cancel
+            </Button>
+            <Button disabled={loading} type="submit">
+              Continue
+            </Button>
+          </div>
+        </form>
+      </Form>
     </Modal>
   );
 };
