@@ -28,7 +28,7 @@ const ModificationsPage = async ({
       id: item.id,
       name: item.name,
       type: item.modificationType.name,
-      price: formatter.format(item.price.toNumber()),
+      price: item.price.toString(),
       isObsolete: item.isObsolete,
       notes: item.notes?.toString() ?? "",
       createdAt: format(item.createdAt, "do MMM yyyy"),

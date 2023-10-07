@@ -56,12 +56,25 @@ export const columns: ColumnDef<ModificationColumn>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      const amount = parseFloat(row.getValue("price"));
+      const formatted = new Intl.NumberFormat("en-UK", {
+        style: "currency",
+        currency: "GBP",
+      }).format(amount);
+
+      return <div className="text-right font-medium">{formatted}</div>;
+    },
   },
   {
     accessorKey: "isObsolete",
     header: "Obsolete?",
     cell: ({ row }) => {
-      return row.original.isObsolete ? "Yes" : "No";
+      return (
+        <div className="text-center">
+          {row.original.isObsolete ? "Yes" : "No"}
+        </div>
+      );
     },
   },
   {
@@ -80,6 +93,9 @@ export const columns: ColumnDef<ModificationColumn>[] = [
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
+    },
+    cell: ({ row }) => {
+      return <div className="text-center">{row.original.createdAt}</div>;
     },
   },
 ];
