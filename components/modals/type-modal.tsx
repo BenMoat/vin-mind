@@ -81,8 +81,8 @@ export const TypeModal: React.FC<TypeModalProps> = ({
 
   return (
     <Modal
-      title="Add a new modification"
-      description="This action cannot be undone."
+      title="Add a New Modification Type"
+      description="This will be accessible from the modification type dropdown when adding a new modification."
       isOpen={isOpen}
       onClose={onClose}
     >
@@ -91,25 +91,23 @@ export const TypeModal: React.FC<TypeModalProps> = ({
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
         >
-          <div className="grid grid-cols-3 gap-8">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="Type of modification"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input
+                    disabled={loading}
+                    placeholder="Type of modification"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <div className="pt-6 space-x-2 flex items-center justify-end w-full">
             <Button
               disabled={loading}
@@ -120,7 +118,7 @@ export const TypeModal: React.FC<TypeModalProps> = ({
               Cancel
             </Button>
             <Button disabled={loading} type="submit">
-              Continue
+              Create
             </Button>
           </div>
         </form>

@@ -34,6 +34,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import FileUpload from "@/components/file-upload";
 import { TypeModal } from "@/components/modals/type-modal";
+import { PlusCircle } from "lucide-react";
 
 interface ModificationFormProps {
   initialData:
@@ -90,7 +91,6 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
       : {
           name: "",
           modificationTypeId: "",
-          price: 0,
           isObsolete: false,
           notes: "",
           files: [],
@@ -158,11 +158,8 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
       </div>
       <Separator />
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-full"
-        >
-          <div className="grid grid-cols-1 w-[55%] gap-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <div className="grid grid-cols-1 gap-8">
             <FormField
               control={form.control}
               name="name"
@@ -172,7 +169,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Fake-but-real-to-me Carbon Spoiler"
+                      placeholder="Carbon Spoiler"
                       {...field}
                     />
                   </FormControl>
@@ -198,53 +195,63 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="modificationTypeId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel aria-required>Modification Type</FormLabel>
-                  <FormDescription>
-                    What type of modification is this? (e.g. Engine, Wheels)...
-                  </FormDescription>
-                  <Select
-                    disabled={loading}
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder="Modification type"
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {modificationTypes.map((modificationType) => (
-                        <SelectItem
-                          key={modificationType.id}
-                          value={modificationType.id}
-                        >
-                          {modificationType.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button
-              type="button"
-              className="ml-auto"
-              onClick={() => {
-                setTypeOpen(true);
-              }}
-            >
-              New Modification Type
-            </Button>
+            <div className="grid grid-rows-1 grid-flow-col gap-4">
+              <div className="row-span-3">
+                <FormField
+                  control={form.control}
+                  name="modificationTypeId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel aria-required>Modification Type</FormLabel>
+                      <FormDescription>
+                        What type of modification is this? (e.g. Engine,
+                        Wheels)...
+                      </FormDescription>
+                      <Select
+                        disabled={loading}
+                        onValueChange={field.onChange}
+                        value={field.value}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              className=""
+                              defaultValue={field.value}
+                              placeholder="---"
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {modificationTypes.map((modificationType) => (
+                            <SelectItem
+                              key={modificationType.id}
+                              value={modificationType.id}
+                            >
+                              {modificationType.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="col-span-2 ..."></div>
+              <div className="row-span-2 col-span-2">
+                <Button
+                  type="button"
+                  className="ml-auto"
+                  onClick={() => {
+                    setTypeOpen(true);
+                  }}
+                >
+                  <PlusCircle className="mr-2 h-5 w-5" />
+                  New Type
+                </Button>
+              </div>
+            </div>
             <FormField
               control={form.control}
               name="isObsolete"
@@ -259,7 +266,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                   <div className="space-y-1 leading-none">
                     <FormLabel>Obsolete</FormLabel>
                     <FormDescription>
-                      Is this modification still in use?
+                      Is this modification no longer in use?
                     </FormDescription>
                   </div>
                 </FormItem>

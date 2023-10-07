@@ -47,7 +47,7 @@ export async function POST(
     const { userId } = auth();
     const body = await req.json();
 
-    const { name, price, modificationTypeId, isObsolete, notes } = body;
+    const { name, price, modificationTypeId, isObsolete, notes, files } = body;
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 401 });
@@ -90,6 +90,11 @@ export async function POST(
         isObsolete,
         notes,
         vehicleId: params.vehicleId,
+        files: {
+          createMany: {
+            data: [...files.map((file: { url: string }) => file)],
+          },
+        },
       },
     });
 
