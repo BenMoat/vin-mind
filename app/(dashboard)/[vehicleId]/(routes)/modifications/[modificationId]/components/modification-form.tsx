@@ -33,6 +33,8 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import FileUpload from "@/components/file-upload";
+import { Type } from "lucide-react";
+import { TypeModal } from "@/components/modals/type-modal";
 
 interface ModificationFormProps {
   initialData:
@@ -63,7 +65,8 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
   const params = useParams();
   const router = useRouter();
 
-  const [open, setOpen] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [typeOpen, setTypeOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const title = initialData
@@ -129,20 +132,28 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
-      setOpen(false);
+      setAlertOpen(false);
     }
   };
 
   return (
     <>
       <AlertModal
-        isOpen={open}
+        isOpen={alertOpen}
         onClose={() => {
-          setOpen(false);
+          setAlertOpen(false);
         }}
         onConfirm={onDelete}
         loading={loading}
         vehicleName={initialData?.name}
+      />
+      <TypeModal
+        isOpen={typeOpen}
+        onClose={() => {
+          setTypeOpen(false);
+        }}
+        onConfirm={onDelete}
+        loading={loading}
       />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} goBack />
@@ -227,6 +238,15 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                 </FormItem>
               )}
             />
+            <Button
+              type="button"
+              className="ml-auto"
+              onClick={() => {
+                setTypeOpen(true);
+              }}
+            >
+              New Modification Type
+            </Button>
             <FormField
               control={form.control}
               name="isObsolete"
@@ -296,7 +316,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               className="mr-2"
               variant="destructive"
               onClick={() => {
-                setOpen(true);
+                setAlertOpen(true);
               }}
             >
               Delete
