@@ -35,7 +35,6 @@ import { Textarea } from "@/components/ui/textarea";
 import FileUpload from "@/components/file-upload";
 import { TypeModal } from "@/components/modals/type-modal";
 import { PlusCircle } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
 
 interface ModificationFormProps {
   initialData:

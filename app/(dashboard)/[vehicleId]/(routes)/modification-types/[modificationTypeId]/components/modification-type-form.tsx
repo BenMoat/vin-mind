@@ -5,7 +5,7 @@ import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { Modification, ModificationType } from "@prisma/client";
-import { ExternalLink, Info, Trash } from "lucide-react";
+import { ExternalLink, Info } from "lucide-react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
@@ -137,51 +137,54 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
       />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} goBack />
-        {initialData && (
-          <Button
-            disabled={loading}
-            variant="destructive"
-            size="sm"
-            onClick={() => {
-              setOpen(true);
-            }}
-          >
-            <Trash className="w-4 h-4" />
-          </Button>
-        )}
       </div>
       <Separator />
       <div className="flex flex-wrap">
-        <div className="w-full md:w-1/2 pr-4">
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-8 w-full"
-            >
-              <div className="grid grid-cols-2 gap-8">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          disabled={loading}
-                          placeholder="Type of modification"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
+        <div className="w-full md:w-1/2 pr-4 flex items-center justify-center">
+          <Card className="h-full w-full flex flex-col justify-center items-center">
+            <CardContent>
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-6 w-full"
+                >
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input
+                            disabled={loading}
+                            placeholder="Type of modification"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  {initialData && (
+                    <Button
+                      type="button"
+                      disabled={loading}
+                      className="mr-2"
+                      variant="destructive"
+                      onClick={() => {
+                        setOpen(true);
+                      }}
+                    >
+                      Delete
+                    </Button>
                   )}
-                />
-              </div>
-              <Button disabled={loading} className="ml-auto" type="submit">
-                {action}
-              </Button>
-            </form>
-          </Form>
+                  <Button disabled={loading} className="ml-auto" type="submit">
+                    {action}
+                  </Button>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
         </div>
         {initialData && (
           <div className="w-full md:w-1/2 pl-4">
@@ -196,7 +199,12 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
                 </CardTitle>
                 <CardDescription>
                   A mod type's name can be changed, but a type cannot be deleted
-                  if there are mods associated with it.
+                  if there are mods associated with it. <br />
+                  <br />
+                  <strong className="dark:text-white text-black">
+                    Click on a mod to edit it
+                  </strong>
+                  .
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-8 w-full">

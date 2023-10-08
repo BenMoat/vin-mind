@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, File } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export type ModificationColumn = {
@@ -12,6 +12,7 @@ export type ModificationColumn = {
   isObsolete: boolean;
   notes: string;
   createdAt: string;
+  files: string[];
 };
 
 export const columns: ColumnDef<ModificationColumn>[] = [
@@ -28,6 +29,16 @@ export const columns: ColumnDef<ModificationColumn>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      return (
+        <div className="inline-flex">
+          {row.original.name}&nbsp;
+          {row.original.files.length > 0 ? (
+            <File color="green" size={20} />
+          ) : null}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "type",
@@ -41,6 +52,9 @@ export const columns: ColumnDef<ModificationColumn>[] = [
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
+    },
+    cell: ({ row }) => {
+      return <div className="text-center">{row.original.type}</div>;
     },
   },
   {
@@ -63,7 +77,7 @@ export const columns: ColumnDef<ModificationColumn>[] = [
         currency: "GBP",
       }).format(amount);
 
-      return <div className="text-right font-medium">{formatted}</div>;
+      return <div className="text-center font-medium">{formatted}</div>;
     },
   },
   {

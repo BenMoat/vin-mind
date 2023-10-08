@@ -16,6 +16,7 @@ const ModificationsPage = async ({
     },
     include: {
       modificationType: true,
+      files: true,
     },
     orderBy: {
       createdAt: "desc",
@@ -31,6 +32,7 @@ const ModificationsPage = async ({
       isObsolete: item.isObsolete,
       notes: item.notes?.toString() ?? "",
       createdAt: format(item.createdAt, "do MMM yyyy"),
+      files: item.files.map((file) => file.id),
     })
   );
 
