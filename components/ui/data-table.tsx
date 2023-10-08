@@ -183,7 +183,7 @@ export function DataTable<TData, TValue>({
         {showResetButton && (
           <Button
             className="ml-2"
-            variant="ghost"
+            variant="outline"
             onClick={() => {
               setResetButtonPressed(true);
               table.getColumn("isObsolete")?.setFilterValue("");

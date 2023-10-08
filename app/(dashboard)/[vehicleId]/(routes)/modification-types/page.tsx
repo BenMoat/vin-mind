@@ -13,6 +13,9 @@ const ModificationTypesPage = async ({
     where: {
       vehicleId: params.vehicleId,
     },
+    include: {
+      modifications: true,
+    },
     orderBy: {
       createdAt: "desc",
     },
@@ -23,6 +26,7 @@ const ModificationTypesPage = async ({
       id: item.id,
       name: item.name,
       createdAt: format(item.createdAt, "do MMM yyyy"),
+      noOfModifications: item.modifications.length,
     }));
 
   return (

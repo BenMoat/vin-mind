@@ -11,10 +11,17 @@ const ModificationTypePage = async ({
     where: { id: params.modificationTypeId },
   });
 
+  const modifications = await prismadb.modification.findMany({
+    where: { modificationTypeId: params.modificationTypeId },
+  });
+
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <ModificationTypeForm initialData={modificationType} />
+        <ModificationTypeForm
+          initialData={modificationType}
+          modifications={modifications}
+        />
       </div>
     </div>
   );

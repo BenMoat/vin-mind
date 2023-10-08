@@ -4,8 +4,8 @@ import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { ModificationType } from "@prisma/client";
-import { Trash } from "lucide-react";
+import { Modification, ModificationType } from "@prisma/client";
+import { Info, Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
@@ -23,9 +23,18 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { AlertModal } from "@/components/modals/alert-modal";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 
 interface ModificationTypeFormProps {
   initialData: ModificationType | null;
+  modifications: Modification[] | null;
 }
 
 const formSchema = z.object({
@@ -50,6 +59,7 @@ type ModificationTypeFormValues = z.infer<typeof formSchema>;
 
 export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
   initialData,
+  modifications,
 }) => {
   const params = useParams();
   const router = useRouter();
@@ -58,7 +68,7 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
   const [loading, setLoading] = useState(false);
 
   const title = initialData
-    ? "Edit Modification Type"
+    ? `Edit Modification Type: ${initialData.name}`
     : "Create Modification Type";
   const description = initialData
     ? "Edit your vehicle's modification type."
@@ -106,7 +116,9 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
       router.push(`/${params.vehicleId}/modification-types`);
       toast.success("Modification Type deleted");
     } catch (error) {
-      toast.error("This modification type is by one or more modifications.");
+      toast.error(
+        `This modification type cannot be deleted as it has ${modifications?.length} modifications attached to it.`
+      );
     } finally {
       setLoading(false);
       setOpen(false);
@@ -169,6 +181,25 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
           </Button>
         </form>
       </Form>
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            <Info className="inline-block" /> {modifications?.length} Mods
+            Associated with {initialData?.name}
+          </CardTitle>
+          <CardDescription>
+            A mod type's name can be changed, but a type cannot be deleted if
+            there are mods associated with it.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ul className="list-disc list-inside">
+            {modifications?.map((modification) => (
+              <li key={modification.id}>{modification.name}</li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
     </>
   );
 };
