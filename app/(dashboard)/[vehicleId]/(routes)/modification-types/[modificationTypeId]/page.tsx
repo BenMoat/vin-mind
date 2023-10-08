@@ -13,6 +13,7 @@ const ModificationTypePage = async ({
 
   const modifications = await prismadb.modification.findMany({
     where: { modificationTypeId: params.modificationTypeId },
+    orderBy: { name: "asc" },
   });
 
   return (

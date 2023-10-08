@@ -5,7 +5,7 @@ import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { Modification, ModificationType } from "@prisma/client";
-import { Info, Trash } from "lucide-react";
+import { ExternalLink, Info, Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
@@ -29,7 +29,6 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
 } from "@/components/ui/card";
 
 interface ModificationTypeFormProps {
@@ -152,54 +151,74 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
         )}
       </div>
       <Separator />
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-full"
-        >
-          <div className="grid grid-cols-3 gap-8">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="Type of modification"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+      <div className="flex flex-wrap">
+        <div className="w-full md:w-1/2 pr-4">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-8 w-full"
+            >
+              <div className="grid grid-cols-2 gap-8">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          disabled={loading}
+                          placeholder="Type of modification"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <Button disabled={loading} className="ml-auto" type="submit">
+                {action}
+              </Button>
+            </form>
+          </Form>
+        </div>
+        {initialData && (
+          <div className="w-full md:w-1/2 pl-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>
+                  <Info className="inline-block" />{" "}
+                  {modifications?.length === 1
+                    ? "1 Mod Associated with "
+                    : `${modifications?.length} Mods Associated with `}
+                  {initialData?.name ? initialData.name : "this type"}
+                </CardTitle>
+                <CardDescription>
+                  A mod type's name can be changed, but a type cannot be deleted
+                  if there are mods associated with it.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-8 w-full">
+                <ul className="list-disc list-inside">
+                  {modifications?.map((modification) => (
+                    <li key={modification.id}>
+                      <a
+                        className="underline"
+                        href={`/${modification.vehicleId}/modifications/${modification.id}`}
+                      >
+                        {modification.name}
+                      </a>
+                      &nbsp;
+                      <ExternalLink size={14} className="inline-block" />
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
           </div>
-          <Button disabled={loading} className="ml-auto" type="submit">
-            {action}
-          </Button>
-        </form>
-      </Form>
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            <Info className="inline-block" /> {modifications?.length} Mods
-            Associated with {initialData?.name}
-          </CardTitle>
-          <CardDescription>
-            A mod type's name can be changed, but a type cannot be deleted if
-            there are mods associated with it.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ul className="list-disc list-inside">
-            {modifications?.map((modification) => (
-              <li key={modification.id}>{modification.name}</li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
+        )}
+      </div>
     </>
   );
 };

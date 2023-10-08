@@ -45,7 +45,7 @@ const FileUpload: React.FC<ImageUploadProps> = ({
               className="relative w-[400px] h-[400px] rounded-md overflow-hidden"
             >
               <>
-                <a href={url} target="_blank" className="truncate">
+                <a href={url} target="_blank" className="truncate underline">
                   {filename} <ExternalLink size={14} className="inline-block" />
                 </a>
               </>
