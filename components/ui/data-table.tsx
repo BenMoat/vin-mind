@@ -66,6 +66,7 @@ export function DataTable<TData, TValue>({
   const router = useRouter();
 
   const [obsoleteText, setObsoleteText] = useState("Obsolete?");
+  const [typeText, setTypeText] = useState("Mod Type");
   const [resetButtonPressed, setResetButtonPressed] = useState(false);
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -111,14 +112,18 @@ export function DataTable<TData, TValue>({
             onValueChange={(value) => {
               if (value === "all") {
                 table.getColumn("type")?.setFilterValue("");
+                setTypeText("Mod Type");
               } else {
                 table.getColumn("type")?.setFilterValue(value || "");
+                setTypeText(value || "Mod Type");
               }
             }}
             defaultValue="all"
           >
             <SelectTrigger className="w-[150px] ml-2">
-              <SelectValue placeholder="All Types" />
+              <SelectValue placeholder={typeText}>
+                {resetButtonPressed ? null : typeText}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Types</SelectItem>
@@ -176,6 +181,7 @@ export function DataTable<TData, TValue>({
             table.getColumn("isObsolete")?.setFilterValue("");
             setObsoleteText("Obsolete?");
             table.getColumn("type")?.setFilterValue("");
+            setTypeText("Mod Type");
             table.getColumn(filterKey)?.setFilterValue("");
             setTimeout(() => setResetButtonPressed(false), 0);
           }}
