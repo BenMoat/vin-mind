@@ -105,11 +105,14 @@ export function DataTable<TData, TValue>({
         />
         {modType && (
           <Select
+            value={
+              (table.getColumn("type")?.getFilterValue() || "all") as string
+            }
             onValueChange={(value) => {
               if (value === "all") {
                 table.getColumn("type")?.setFilterValue("");
               } else {
-                table.getColumn("type")?.setFilterValue(value ?? "");
+                table.getColumn("type")?.setFilterValue(value || "");
               }
             }}
             defaultValue="all"
@@ -172,6 +175,8 @@ export function DataTable<TData, TValue>({
             setResetButtonPressed(true);
             table.getColumn("isObsolete")?.setFilterValue("");
             setObsoleteText("Obsolete?");
+            table.getColumn("type")?.setFilterValue("");
+            table.getColumn(filterKey)?.setFilterValue("");
             setTimeout(() => setResetButtonPressed(false), 0);
           }}
         >
