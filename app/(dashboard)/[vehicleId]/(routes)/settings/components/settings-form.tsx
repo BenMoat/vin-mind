@@ -5,7 +5,7 @@ import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { Vehicle } from "@prisma/client";
-import { Trash } from "lucide-react";
+import { AlertCircle, Trash } from "lucide-react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
@@ -60,7 +60,8 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
-  const [open, setOpen] = useState(false);
+  const [vehicleDeleteOpen, setvehicleDeleteOpen] = useState(false);
+  const [modificationsDeleteOpen, setmodificationsDeleteOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const form = useForm<SettingsFormValues>({
@@ -81,7 +82,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
     }
   };
 
-  const onDelete = async () => {
+  const onVehicleDelete = async () => {
     try {
       setLoading(true);
       await axios.delete(`/api/vehicles/${params.vehicleId}`);
@@ -92,36 +93,49 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
-      setOpen(false);
+      setvehicleDeleteOpen(false);
+    }
+  };
+
+  const onModificationsDelete = async () => {
+    try {
+      setLoading(true);
+      await axios.delete(`/api/${params.vehicleId}/modifications`);
+      router.refresh();
+      toast.success("All modifications deleted");
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
+      setmodificationsDeleteOpen(false);
     }
   };
 
   return (
     <>
       <AlertModal
-        isOpen={open}
+        isOpen={vehicleDeleteOpen}
         onClose={() => {
-          setOpen(false);
+          setvehicleDeleteOpen(false);
         }}
-        onConfirm={onDelete}
+        onConfirm={onVehicleDelete}
         loading={loading}
         vehicleName={initialData.name}
+      />
+      <AlertModal
+        isOpen={modificationsDeleteOpen}
+        onClose={() => {
+          setmodificationsDeleteOpen(false);
+        }}
+        onConfirm={onModificationsDelete}
+        loading={loading}
+        vehicleName={"all modifications"}
       />
       <div className="flex items-center justify-between">
         <Heading
           title="Settings"
-          description="Manage your vehicle's settings."
+          description="Manage your vehicle's settings and data."
         />
-        <Button
-          disabled={loading}
-          variant="destructive"
-          size="sm"
-          onClick={() => {
-            setOpen(true);
-          }}
-        >
-          <Trash className="w-4 h-4" />
-        </Button>
       </div>
       <Separator />
       <Form {...form}>
@@ -151,20 +165,76 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
           <Button disabled={loading} className="ml-auto" type="submit">
             Save Changes
           </Button>
-          <Card>
+          <Card className="border-destructive">
             <CardHeader>
-              <CardTitle>Danger Zone</CardTitle>
+              <CardTitle className="inline-flex items-center">
+                <AlertCircle color="#7f1d1d" className="mr-2" /> Danger Zone
+              </CardTitle>
               <CardDescription>
                 Actions taken within the Danger Zone{" "}
                 <b className="text-black dark:text-white">cannot</b> be undone.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p>Card Content</p>
+              <Card>
+                <CardContent>
+                  <p className="mt-5 mb-2">Delete All Modifications</p>
+                  <CardDescription className="mb-2">
+                    You will still keep your modification types, but all
+                    modifications including their associated files will be
+                    deleted.
+                  </CardDescription>
+                  <Button
+                    type="button"
+                    disabled={loading}
+                    variant="destructive"
+                    onClick={() => {
+                      setmodificationsDeleteOpen(true);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </CardContent>
+              </Card>
+              <Card className="mt-2">
+                <CardContent>
+                  <p className="mt-5 mb-2">Delete All Modification Types</p>
+                  <CardDescription className="mb-2">
+                    If your vehicle has no modifications, you will be able to
+                    delete all modification types.
+                  </CardDescription>
+                  <Button
+                    type="button"
+                    disabled={loading}
+                    variant="destructive"
+                    onClick={() => {
+                      setmodificationsDeleteOpen(true);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </CardContent>
+              </Card>
+              <Card className="mt-2">
+                <CardContent>
+                  <p className="mt-5 mb-2">Delete Vehicle</p>
+                  <CardDescription className="mb-2">
+                    You can delete your vehicle and all of it's associated data
+                    at any time.
+                  </CardDescription>
+                  <Button
+                    type="button"
+                    disabled={loading}
+                    variant="destructive"
+                    onClick={() => {
+                      setvehicleDeleteOpen(true);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </CardContent>
+              </Card>
             </CardContent>
-            <CardFooter>
-              <p>Card Footer</p>
-            </CardFooter>
           </Card>
         </form>
       </Form>
