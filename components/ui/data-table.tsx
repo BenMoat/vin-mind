@@ -67,6 +67,8 @@ export function DataTable<TData, TValue>({
   const params = useParams();
   const router = useRouter();
 
+  const [obsoleteText, setObsoleteText] = useState("Obsolete?");
+
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([
     { id: "name", desc: false },
@@ -95,12 +97,12 @@ export function DataTable<TData, TValue>({
     <div>
       <div className="flex items-center py-4">
         <Input
+          className="max-w-sm"
           placeholder="Search"
           value={(table.getColumn(filterKey)?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn(filterKey)?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
+          onChange={(event) => {
+            table.getColumn(filterKey)?.setFilterValue(event.target.value);
+          }}
         />
         {modType && (
           <Select
@@ -134,19 +136,22 @@ export function DataTable<TData, TValue>({
             onValueChange={(value) => {
               if (value === "all") {
                 table.getColumn("isObsolete")?.setFilterValue("");
+                setObsoleteText("Obsolete?");
               } else if (value === "true") {
                 table.getColumn("isObsolete")?.setFilterValue(true ?? "");
+                setObsoleteText("Show All");
               } else {
                 table.getColumn("isObsolete")?.setFilterValue(false ?? "");
+                setObsoleteText("Show All");
               }
             }}
             defaultValue=""
           >
-            <SelectTrigger className="w-[150px] ml-2">
-              <SelectValue placeholder="All Types" />
+            <SelectTrigger className="w-[120px] ml-2">
+              <SelectValue placeholder={obsoleteText} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Obsolete </SelectItem>
+              <SelectItem value="all">{obsoleteText}</SelectItem>
               <SelectItem value="true">Yes</SelectItem>
               <SelectItem value="false">No</SelectItem>
             </SelectContent>
