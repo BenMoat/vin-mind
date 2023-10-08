@@ -67,6 +67,7 @@ export function DataTable<TData, TValue>({
 
   const [obsoleteText, setObsoleteText] = useState("Obsolete?");
   const [typeText, setTypeText] = useState("Mod Type");
+  const [showResetButton, setShowResetButton] = useState(false);
   const [resetButtonPressed, setResetButtonPressed] = useState(false);
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -102,6 +103,7 @@ export function DataTable<TData, TValue>({
           value={(table.getColumn(filterKey)?.getFilterValue() as string) ?? ""}
           onChange={(event) => {
             table.getColumn(filterKey)?.setFilterValue(event.target.value);
+            setShowResetButton(!!event.target.value);
           }}
         />
         {modType && (
@@ -113,9 +115,11 @@ export function DataTable<TData, TValue>({
               if (value === "all") {
                 table.getColumn("type")?.setFilterValue("");
                 setTypeText("Mod Type");
+                setShowResetButton(false);
               } else {
                 table.getColumn("type")?.setFilterValue(value || "");
                 setTypeText(value || "Mod Type");
+                setShowResetButton(true);
               }
             }}
             defaultValue="all"
@@ -151,12 +155,15 @@ export function DataTable<TData, TValue>({
               if (value === "all") {
                 table.getColumn("isObsolete")?.setFilterValue("");
                 setObsoleteText("Obsolete?");
+                setShowResetButton(false);
               } else if (value === "true") {
                 table.getColumn("isObsolete")?.setFilterValue(true ?? "");
                 setObsoleteText("Yes");
+                setShowResetButton(true);
               } else {
                 table.getColumn("isObsolete")?.setFilterValue(false ?? "");
                 setObsoleteText("No");
+                setShowResetButton(true);
               }
             }}
             defaultValue="all"
@@ -173,21 +180,25 @@ export function DataTable<TData, TValue>({
             </SelectContent>
           </Select>
         )}
-        <Button
-          className="ml-2"
-          variant="ghost"
-          onClick={() => {
-            setResetButtonPressed(true);
-            table.getColumn("isObsolete")?.setFilterValue("");
-            setObsoleteText("Obsolete?");
-            table.getColumn("type")?.setFilterValue("");
-            setTypeText("Mod Type");
-            table.getColumn(filterKey)?.setFilterValue("");
-            setTimeout(() => setResetButtonPressed(false), 0);
-          }}
-        >
-          <RotateCcw size={18} />
-        </Button>
+        {showResetButton && (
+          <Button
+            className="ml-2"
+            variant="ghost"
+            onClick={() => {
+              setResetButtonPressed(true);
+              table.getColumn("isObsolete")?.setFilterValue("");
+              setObsoleteText("Obsolete?");
+              table.getColumn("type")?.setFilterValue("");
+              setTypeText("Mod Type");
+              table.getColumn(filterKey)?.setFilterValue("");
+              setTimeout(() => setResetButtonPressed(false), 0);
+              setShowResetButton(false);
+            }}
+          >
+            Reset
+            <RotateCcw size={18} className="ml-2" />
+          </Button>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
