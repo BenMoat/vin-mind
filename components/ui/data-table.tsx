@@ -42,10 +42,8 @@ import {
   SelectValue,
 } from "./select";
 
-import { Label } from "./label";
-
 import { useParams, useRouter } from "next/navigation";
-import { Checkbox } from "./checkbox";
+import { RotateCcw } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -68,6 +66,7 @@ export function DataTable<TData, TValue>({
   const router = useRouter();
 
   const [obsoleteText, setObsoleteText] = useState("Obsolete?");
+  const [resetButtonPressed, setResetButtonPressed] = useState(false);
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([
@@ -113,7 +112,7 @@ export function DataTable<TData, TValue>({
                 table.getColumn("type")?.setFilterValue(value ?? "");
               }
             }}
-            defaultValue=""
+            defaultValue="all"
           >
             <SelectTrigger className="w-[150px] ml-2">
               <SelectValue placeholder="All Types" />
@@ -133,30 +132,51 @@ export function DataTable<TData, TValue>({
         )}
         {isObsolete && (
           <Select
+            value={
+              table.getColumn("isObsolete")?.getFilterValue() === true
+                ? "true"
+                : table.getColumn("isObsolete")?.getFilterValue() === false
+                ? "false"
+                : "all"
+            }
             onValueChange={(value) => {
               if (value === "all") {
                 table.getColumn("isObsolete")?.setFilterValue("");
                 setObsoleteText("Obsolete?");
               } else if (value === "true") {
                 table.getColumn("isObsolete")?.setFilterValue(true ?? "");
-                setObsoleteText("Show All");
+                setObsoleteText("Yes");
               } else {
                 table.getColumn("isObsolete")?.setFilterValue(false ?? "");
-                setObsoleteText("Show All");
+                setObsoleteText("No");
               }
             }}
-            defaultValue=""
+            defaultValue="all"
           >
-            <SelectTrigger className="w-[120px] ml-2">
-              <SelectValue placeholder={obsoleteText} />
+            <SelectTrigger className="w-[150px] ml-2">
+              <SelectValue placeholder={obsoleteText}>
+                {resetButtonPressed ? null : obsoleteText}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">{obsoleteText}</SelectItem>
+              <SelectItem value="all">All Types</SelectItem>
               <SelectItem value="true">Yes</SelectItem>
               <SelectItem value="false">No</SelectItem>
             </SelectContent>
           </Select>
         )}
+        <Button
+          className="ml-2"
+          variant="ghost"
+          onClick={() => {
+            setResetButtonPressed(true);
+            table.getColumn("isObsolete")?.setFilterValue("");
+            setObsoleteText("Obsolete?");
+            setTimeout(() => setResetButtonPressed(false), 0);
+          }}
+        >
+          <RotateCcw size={18} />
+        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
