@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, File } from "lucide-react";
+import { ArrowUpDown, File, Files } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export type ModificationColumn = {
@@ -29,12 +29,17 @@ export const columns: ColumnDef<ModificationColumn>[] = [
         </Button>
       );
     },
+  },
+  {
+    accessorKey: "files",
+    header: "Files",
     cell: ({ row }) => {
       return (
-        <div className="inline-flex">
-          {row.original.name}&nbsp;
-          {row.original.files.length > 0 ? (
-            <File color="green" size={20} />
+        <div className="text-center">
+          {row.original.files.length === 1 ? (
+            <File size={20} />
+          ) : row.original.files.length > 1 ? (
+            <Files size={20} />
           ) : null}
         </div>
       );

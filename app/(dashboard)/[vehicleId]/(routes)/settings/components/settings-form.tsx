@@ -23,6 +23,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { AlertModal } from "@/components/modals/alert-modal";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 
 interface SettingsFormProps {
   initialData: Vehicle;
@@ -143,6 +151,21 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
           <Button disabled={loading} className="ml-auto" type="submit">
             Save Changes
           </Button>
+          <Card>
+            <CardHeader>
+              <CardTitle>Danger Zone</CardTitle>
+              <CardDescription>
+                Actions taken within the Danger Zone{" "}
+                <b className="text-black dark:text-white">cannot</b> be undone.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>Card Content</p>
+            </CardContent>
+            <CardFooter>
+              <p>Card Footer</p>
+            </CardFooter>
+          </Card>
         </form>
       </Form>
     </>

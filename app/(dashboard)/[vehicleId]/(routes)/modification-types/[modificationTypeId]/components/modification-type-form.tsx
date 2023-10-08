@@ -168,7 +168,7 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
                   {initialData && (
                     <Button
                       type="button"
-                      disabled={loading}
+                      disabled={loading || (modifications?.length ?? 0) > 0}
                       className="mr-2"
                       variant="destructive"
                       onClick={() => {
@@ -191,20 +191,22 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
             <Card>
               <CardHeader>
                 <CardTitle>
-                  <Info className="inline-block" />{" "}
+                  <Info className="inline-block" />
                   {modifications?.length === 1
-                    ? "1 Mod Associated with "
-                    : `${modifications?.length} Mods Associated with `}
-                  {initialData?.name ? initialData.name : "this type"}
+                    ? " 1 Mod Associated with "
+                    : ` ${modifications?.length} Mods Associated with `}
+                  {initialData?.name}
                 </CardTitle>
                 <CardDescription>
                   A mod type's name can be changed, but a type cannot be deleted
-                  if there are mods associated with it. <br />
+                  if there are mods associated with it.
                   <br />
-                  <strong className="dark:text-white text-black">
-                    Click on a mod to edit it
-                  </strong>
-                  .
+                  <br />
+                  {(modifications?.length ?? 0) > 0 && (
+                    <b className="dark:text-white text-black">
+                      Click on a mod to edit it
+                    </b>
+                  )}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-8 w-full">

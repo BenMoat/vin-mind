@@ -35,6 +35,13 @@ import { Textarea } from "@/components/ui/textarea";
 import FileUpload from "@/components/file-upload";
 import { TypeModal } from "@/components/modals/type-modal";
 import { PlusCircle } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface ModificationFormProps {
   initialData:
@@ -288,31 +295,41 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="files"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Files</FormLabel>
-                  <FormControl>
-                    <FileUpload
-                      value={field.value.map((file) => file.url)}
-                      disabled={loading}
-                      onChange={(url) =>
-                        field.onChange([...field.value, { url }])
-                      }
-                      onRemove={(url) =>
-                        field.onChange([
-                          ...field.value.filter(
-                            (current) => current.url !== url
-                          ),
-                        ])
-                      }
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+            <Card>
+              <CardHeader>
+                <CardTitle>File Upload</CardTitle>
+                <CardDescription>
+                  Upload any files related related to this modification. (e.g
+                  receipts, invoices, user guides)...
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <FormField
+                  control={form.control}
+                  name="files"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <FileUpload
+                          value={field.value.map((file) => file.url)}
+                          disabled={loading}
+                          onChange={(url) =>
+                            field.onChange([...field.value, { url }])
+                          }
+                          onRemove={(url) =>
+                            field.onChange([
+                              ...field.value.filter(
+                                (current) => current.url !== url
+                              ),
+                            ])
+                          }
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+            </Card>
           </div>
           {initialData && (
             <Button
