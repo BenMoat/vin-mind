@@ -210,7 +210,7 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-8 w-full">
-                <ul className="list-disc list-inside">
+                <ul className="list-disc list-inside marker:text-[#e2e8f0] dark:marker:text-[#1e293b]">
                   {modifications?.map((modification) => (
                     <li key={modification.id}>
                       <a
