@@ -5,7 +5,7 @@ import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { Vehicle } from "@prisma/client";
-import { AlertCircle, Trash } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
@@ -29,7 +29,6 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
 } from "@/components/ui/card";
 
 interface SettingsFormProps {
@@ -168,7 +167,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
           <Card className="border-destructive">
             <CardHeader>
               <CardTitle className="inline-flex items-center">
-                <AlertCircle color="#7f1d1d" className="mr-2" /> Danger Zone
+                <AlertCircle className="mr-2" /> Danger Zone
               </CardTitle>
               <CardDescription>
                 Actions taken within the Danger Zone{" "}
