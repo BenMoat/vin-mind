@@ -87,7 +87,7 @@ export default function VehicleSwitcher({
                 <CommandItem
                   key={vehicle.value}
                   onSelect={() => onVehicleSelect(vehicle)}
-                  className="text-sm"
+                  className="text-sm cursor-pointer"
                 >
                   <CarFront className="mr-2 h-4 w-4" />
                   {vehicle.label}
@@ -107,6 +107,7 @@ export default function VehicleSwitcher({
           <CommandList>
             <CommandGroup>
               <CommandItem
+                className="cursor-pointer"
                 onSelect={() => {
                   setOpen(false);
                   vehicleModal.onOpen();

@@ -3,7 +3,6 @@ import { Heading } from "@/components/heading";
 import { Mileage } from "@/components/mileage";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import prismadb from "@/lib/prismadb";
 import { formatter } from "@/lib/utils";
 import { Milestone, PoundSterling, Wallet } from "lucide-react";
 

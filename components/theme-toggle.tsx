@@ -7,13 +7,18 @@ import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 export function ThemeToggle() {
-  const { setTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
+  const defaultMode =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
 
   return (
     <DropdownMenu>
@@ -25,14 +30,31 @@ export function ThemeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
+        <DropdownMenuCheckboxItem
+          className="cursor-pointer"
+          checked={resolvedTheme === "light"}
+          onClick={() => setTheme("light")}
+        >
           Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
+        </DropdownMenuCheckboxItem>
+        <DropdownMenuCheckboxItem
+          className="cursor-pointer"
+          checked={resolvedTheme === "dark"}
+          onClick={() => setTheme("dark")}
+        >
           Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
+        </DropdownMenuCheckboxItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          className="cursor-pointer flex justify-center space-x-2"
+          onClick={() => setTheme("system")}
+        >
           System
+          {defaultMode ? (
+            <Moon className="h-4 w-4 ml-2" />
+          ) : (
+            <Sun className="h-4 w-4 ml-2" />
+          )}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
