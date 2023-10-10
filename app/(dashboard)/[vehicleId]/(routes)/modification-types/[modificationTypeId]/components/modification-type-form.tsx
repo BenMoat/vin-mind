@@ -133,7 +133,7 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
         }}
         onConfirm={onDelete}
         loading={loading}
-        vehicleName={initialData?.name}
+        modificationType={initialData?.name}
       />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} goBack />

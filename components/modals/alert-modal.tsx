@@ -9,7 +9,10 @@ interface AlertModalProps {
   onClose: () => void;
   onConfirm: () => void;
   loading: boolean;
-  vehicleName?: string;
+  vehicle?: string;
+  allModifications?: boolean;
+  allModificationTypes?: boolean;
+  modification?: string;
   modificationType?: string;
 }
 
@@ -18,7 +21,10 @@ export const AlertModal: React.FC<AlertModalProps> = ({
   onClose,
   onConfirm,
   loading,
-  vehicleName,
+  vehicle,
+  allModifications,
+  allModificationTypes,
+  modification,
   modificationType,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
@@ -32,8 +38,14 @@ export const AlertModal: React.FC<AlertModalProps> = ({
   return (
     <Modal
       title={
-        vehicleName
-          ? `Are you sure you want to delete "${vehicleName}" from your garage?`
+        vehicle
+          ? `Are you sure you want to delete "${vehicle}" from your garage?`
+          : allModifications
+          ? `Are you sure you want to delete all modifications?`
+          : allModificationTypes
+          ? `Are you sure you want to delete all modification types?`
+          : modification
+          ? `Are you sure you want to delete "${modification}" from your modifications?`
           : modificationType
           ? `Are you sure you want to delete "${modificationType}" from your modification types?`
           : "Are you sure you want to delete this item?"

@@ -151,7 +151,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
         }}
         onConfirm={onDelete}
         loading={loading}
-        vehicleName={initialData?.name}
+        modification={initialData?.name}
       />
       <TypeModal
         isOpen={typeOpen}

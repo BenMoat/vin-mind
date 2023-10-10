@@ -4,7 +4,7 @@ import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { Vehicle, Modification, ModificationType } from "@prisma/client";
+import { Vehicle } from "@prisma/client";
 import { AlertCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -30,12 +30,11 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
 
 interface SettingsFormProps {
   initialData: Vehicle;
-  modifications: Modification[];
-  modificationTypes: ModificationType[];
+  noOfModifications: number;
+  noOfModificationTypes: number;
 }
 
 const formSchema = z.object({
@@ -60,8 +59,8 @@ type SettingsFormValues = z.infer<typeof formSchema>;
 
 export const SettingsForm: React.FC<SettingsFormProps> = ({
   initialData,
-  modifications,
-  modificationTypes,
+  noOfModifications,
+  noOfModificationTypes,
 }) => {
   const params = useParams();
   const router = useRouter();
@@ -142,7 +141,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
         }}
         onConfirm={onVehicleDelete}
         loading={loading}
-        vehicleName={initialData.name}
+        vehicle={initialData.name}
       />
       <AlertModal
         isOpen={modificationsDeleteOpen}
@@ -151,7 +150,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
         }}
         onConfirm={onModificationsDelete}
         loading={loading}
-        vehicleName={"all modifications"}
+        allModifications
       />
       <AlertModal
         isOpen={modificationTypesDeleteOpen}
@@ -160,7 +159,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
         }}
         onConfirm={onModificationTypesDelete}
         loading={loading}
-        vehicleName={"all modification types"}
+        allModificationTypes
       />
       <div className="flex items-center justify-between">
         <Heading
@@ -211,7 +210,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                 <CardContent>
                   <p className="mt-5 mb-2">
                     Delete All{" "}
-                    {modifications.length > 0 ? modifications.length : null}{" "}
+                    {noOfModifications > 0 ? noOfModifications : null}{" "}
                     Modifications
                   </p>
                   <CardDescription className="mb-2">
@@ -221,7 +220,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                   </CardDescription>
                   <Button
                     type="button"
-                    disabled={loading || modifications.length === 0}
+                    disabled={loading || noOfModifications === 0}
                     variant="destructive"
                     onClick={() => {
                       setmodificationsDeleteOpen(true);
@@ -235,9 +234,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                 <CardContent>
                   <p className="mt-5 mb-2">
                     Delete All{" "}
-                    {modificationTypes?.length > 0
-                      ? modificationTypes?.length
-                      : null}{" "}
+                    {noOfModificationTypes > 0 ? noOfModificationTypes : null}{" "}
                     Modification Types
                   </p>
                   <CardDescription className="mb-2">
@@ -246,7 +243,11 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                   </CardDescription>
                   <Button
                     type="button"
-                    disabled={loading || modificationTypes?.length === 0}
+                    disabled={
+                      loading ||
+                      noOfModificationTypes === 0 ||
+                      noOfModifications > 0
+                    }
                     variant="destructive"
                     onClick={() => {
                       setmodificationTypesDeleteOpen(true);

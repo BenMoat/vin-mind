@@ -23,13 +23,13 @@ const SettingsPage: React.FC<SettingsPageProps> = async ({ params }) => {
     },
   });
 
-  const modifications = await prismadb.modification.findMany({
+  const noOfModifications = await prismadb.modification.count({
     where: {
       vehicleId: params.vehicleId,
     },
   });
 
-  const modificationTypes = await prismadb.modificationType.findMany({
+  const noOfModificationTypes = await prismadb.modificationType.count({
     where: {
       vehicleId: params.vehicleId,
     },
@@ -44,8 +44,8 @@ const SettingsPage: React.FC<SettingsPageProps> = async ({ params }) => {
       <div className="flex-1 space-y-4 p-8 pt-6">
         <SettingsForm
           initialData={vehicle}
-          modifications={modifications}
-          modificationTypes={modificationTypes}
+          noOfModifications={noOfModifications}
+          noOfModificationTypes={noOfModificationTypes}
         />
       </div>
     </div>
