@@ -4,7 +4,7 @@ import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { Vehicle } from "@prisma/client";
+import { Vehicle, Modification, ModificationType } from "@prisma/client";
 import { AlertCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -30,9 +30,12 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 interface SettingsFormProps {
   initialData: Vehicle;
+  modifications: Modification[];
+  modificationTypes: ModificationType[];
 }
 
 const formSchema = z.object({
@@ -55,12 +58,18 @@ const formSchema = z.object({
 
 type SettingsFormValues = z.infer<typeof formSchema>;
 
-export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
+export const SettingsForm: React.FC<SettingsFormProps> = ({
+  initialData,
+  modifications,
+  modificationTypes,
+}) => {
   const params = useParams();
   const router = useRouter();
 
   const [vehicleDeleteOpen, setvehicleDeleteOpen] = useState(false);
   const [modificationsDeleteOpen, setmodificationsDeleteOpen] = useState(false);
+  const [modificationTypesDeleteOpen, setmodificationTypesDeleteOpen] =
+    useState(false);
   const [loading, setLoading] = useState(false);
 
   const form = useForm<SettingsFormValues>({
@@ -110,6 +119,20 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
     }
   };
 
+  const onModificationTypesDelete = async () => {
+    try {
+      setLoading(true);
+      await axios.delete(`/api/${params.vehicleId}/modification-types`);
+      router.refresh();
+      toast.success("All modifications types deleted");
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
+      setmodificationTypesDeleteOpen(false);
+    }
+  };
+
   return (
     <>
       <AlertModal
@@ -129,6 +152,15 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
         onConfirm={onModificationsDelete}
         loading={loading}
         vehicleName={"all modifications"}
+      />
+      <AlertModal
+        isOpen={modificationTypesDeleteOpen}
+        onClose={() => {
+          setmodificationTypesDeleteOpen(false);
+        }}
+        onConfirm={onModificationTypesDelete}
+        loading={loading}
+        vehicleName={"all modification types"}
       />
       <div className="flex items-center justify-between">
         <Heading
@@ -177,7 +209,11 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
             <CardContent>
               <Card>
                 <CardContent>
-                  <p className="mt-5 mb-2">Delete All Modifications</p>
+                  <p className="mt-5 mb-2">
+                    Delete All{" "}
+                    {modifications.length > 0 ? modifications.length : null}{" "}
+                    Modifications
+                  </p>
                   <CardDescription className="mb-2">
                     You will still keep your modification types, but all
                     modifications including their associated files will be
@@ -185,7 +221,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
                   </CardDescription>
                   <Button
                     type="button"
-                    disabled={loading}
+                    disabled={loading || modifications.length === 0}
                     variant="destructive"
                     onClick={() => {
                       setmodificationsDeleteOpen(true);
@@ -197,17 +233,23 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
               </Card>
               <Card className="mt-2">
                 <CardContent>
-                  <p className="mt-5 mb-2">Delete All Modification Types</p>
+                  <p className="mt-5 mb-2">
+                    Delete All{" "}
+                    {modificationTypes?.length > 0
+                      ? modificationTypes?.length
+                      : null}{" "}
+                    Modification Types
+                  </p>
                   <CardDescription className="mb-2">
                     If your vehicle has no modifications, you will be able to
                     delete all modification types.
                   </CardDescription>
                   <Button
                     type="button"
-                    disabled={loading}
+                    disabled={loading || modificationTypes?.length === 0}
                     variant="destructive"
                     onClick={() => {
-                      setmodificationsDeleteOpen(true);
+                      setmodificationTypesDeleteOpen(true);
                     }}
                   >
                     Delete

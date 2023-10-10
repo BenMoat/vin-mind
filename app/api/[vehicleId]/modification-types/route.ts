@@ -71,3 +71,39 @@ export async function POST(
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { vehicleId: string } }
+) {
+  try {
+    const { userId } = auth();
+
+    if (!userId) {
+      return new NextResponse("Unauthenticated", { status: 401 });
+    }
+
+    const vehicleByUserId = await prismadb.vehicle.findFirst({
+      where: {
+        id: params.vehicleId,
+        userId,
+      },
+    });
+
+    if (!vehicleByUserId) {
+      return new NextResponse("Unauthorized", { status: 403 });
+    }
+
+    const modificationType = await prismadb.modificationType.deleteMany({
+      where: {
+        vehicleId: params.vehicleId,
+      },
+    });
+
+    console.log(modificationType);
+    return NextResponse.json(modificationType);
+  } catch (error) {
+    console.log("MODIFICATION-TYPES_DELETE", error);
+    return new NextResponse("Internal server error", { status: 500 });
+  }
+}

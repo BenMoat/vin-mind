@@ -23,6 +23,18 @@ const SettingsPage: React.FC<SettingsPageProps> = async ({ params }) => {
     },
   });
 
+  const modifications = await prismadb.modification.findMany({
+    where: {
+      vehicleId: params.vehicleId,
+    },
+  });
+
+  const modificationTypes = await prismadb.modificationType.findMany({
+    where: {
+      vehicleId: params.vehicleId,
+    },
+  });
+
   if (!vehicle) {
     redirect("/");
   }
@@ -30,7 +42,11 @@ const SettingsPage: React.FC<SettingsPageProps> = async ({ params }) => {
   return (
     <div className="fkex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
-        <SettingsForm initialData={vehicle} />
+        <SettingsForm
+          initialData={vehicle}
+          modifications={modifications}
+          modificationTypes={modificationTypes}
+        />
       </div>
     </div>
   );

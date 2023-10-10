@@ -73,8 +73,8 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
     ? "Edit your vehicle's modification type."
     : "Create a new modification type for your vehicle.";
   const toastMessage = initialData
-    ? "Modification type updated."
-    : "Modification type created.";
+    ? "Modification type updated"
+    : "Modification type created";
   const action = initialData ? "Save changes" : "Create";
 
   const form = useForm<ModificationTypeFormValues>({
