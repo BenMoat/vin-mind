@@ -3,7 +3,7 @@
 import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Vehicle } from "@prisma/client";
 import { AlertCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -37,6 +37,29 @@ interface SettingsFormProps {
   noOfModificationTypes: number;
 }
 
+interface DvlaData {
+  registrationNumber: string;
+  artEndDate: string;
+  co2Emissions: number;
+  engineCapacity: number;
+  euroStatus: string;
+  markedForExport: boolean;
+  fuelType: string;
+  motStatus: string;
+  revenueWeight: number;
+  colour: string;
+  make: string;
+  typeApproval: string;
+  yearOfManufacture: number;
+  taxDueDate: string;
+  taxStatus: string;
+  dateOfLastV5CIssued: string;
+  wheelplan: string;
+  monthOfFirstDvlaRegistration: string;
+  monthOfFirstRegistration: string;
+  realDrivingEmissions: string;
+}
+
 const formSchema = z.object({
   name: z
     .string()
@@ -65,6 +88,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
   const params = useParams();
   const router = useRouter();
 
+  const [dvlaData, setDvlaData] = useState<DvlaData | null>(null);
   const [vehicleDeleteOpen, setvehicleDeleteOpen] = useState(false);
   const [modificationsDeleteOpen, setmodificationsDeleteOpen] = useState(false);
   const [modificationTypesDeleteOpen, setmodificationTypesDeleteOpen] =
@@ -75,6 +99,22 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
     resolver: zodResolver(formSchema),
     defaultValues: initialData,
   });
+
+  useEffect(() => {
+    const registratonNumber = JSON.stringify({ registrationNumber: "AA19AAA" });
+    const fetchData = async () => {
+      try {
+        const response = await axios.post(
+          `/api/${params.vehicleId}/vehicle-enquiry`,
+          registratonNumber
+        );
+        setDvlaData(response.data);
+      } catch (error) {
+        console.error("Error fetching DVLA data", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const onSubmit = async (data: SettingsFormValues) => {
     try {
@@ -195,6 +235,22 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
           <Button disabled={loading} className="ml-auto" type="submit">
             Save Changes
           </Button>
+          <div>
+            {dvlaData ? (
+              <div>
+                <h1>Vehicle Information:</h1>
+                <ul>
+                  {Object.entries(dvlaData).map(([key, value]) => (
+                    <li key={key}>
+                      {key}: {value}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <p>Loading DVLA data...</p>
+            )}
+          </div>
           <Card className="border-destructive">
             <CardHeader>
               <CardTitle className="inline-flex items-center">
