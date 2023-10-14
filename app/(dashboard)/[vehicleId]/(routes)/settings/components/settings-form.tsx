@@ -37,21 +37,16 @@ interface SettingsFormProps {
   noOfModificationTypes: number;
 }
 
+const regNoRegex =
+  /^([A-HJ-PR-Y]\d{1,2}\s?[A-Z]{1,2}\s?[A-HJ-PR-Y]{0,2})|([A-HJ-PR-Y]{2}\s?\d{2}\s?[A-Z]{3})$/i;
+
 const formSchema = z.object({
-  name: z
+  name: z.string().min(1, "Enter a name for your vehicle"),
+  registrationNumber: z
     .string()
-    .min(1)
-    .refine((value) => {
-      if (!value) {
-        throw new z.ZodError([
-          {
-            code: z.ZodIssueCode.custom,
-            message: "Please enter a vehicle name",
-            path: ["name"],
-          },
-        ]);
-      }
-      return true;
+    .optional()
+    .refine((value) => !value || regNoRegex.test(value), {
+      message: "Invalid UK number plate",
     }),
 });
 
@@ -73,7 +68,10 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
 
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData,
+    defaultValues: {
+      name: initialData.name,
+      registrationNumber: initialData.registrationNumber ?? "",
+    },
   });
 
   const onSubmit = async (data: SettingsFormValues) => {
@@ -173,7 +171,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
         >
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-8">
             <FormField
               control={form.control}
               name="name"
@@ -184,6 +182,23 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                     <Input
                       disabled={loading}
                       placeholder="Vehicle Name"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="registrationNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Number Plate</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="BM69 MER"
                       {...field}
                     />
                   </FormControl>
