@@ -3,7 +3,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { CheckCircle, XCircle } from "lucide-react";
+import {
+  CheckCircle,
+  RegexIcon,
+  TextCursor,
+  TextCursorInput,
+  XCircle,
+} from "lucide-react";
 import { Skeleton } from "./ui/skeleton";
 
 interface DvlaData {
@@ -31,12 +37,20 @@ interface DvlaCardProps {
   registrationNumber: string;
 }
 
+interface ErrorState {
+  message: string | null;
+  icon: JSX.Element | null;
+}
+
 export const DVLACard: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
   const params = useParams();
 
   const [dvlaData, setDvlaData] = useState<DvlaData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<ErrorState>({ message: null, icon: null });
 
   useEffect(() => {
+    setLoading(true);
     const registratonNumber = JSON.stringify({
       registrationNumber: registrationNumber,
     });
@@ -48,7 +62,42 @@ export const DVLACard: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
         );
         setDvlaData(response.data);
       } catch (error) {
-        console.error("Error fetching DVLA data", error);
+        if (axios.isAxiosError(error) && error.response) {
+          switch (error.response.status) {
+            case 400:
+              setError({
+                message: "Invalid Registration Number",
+                icon: <TextCursorInput className="w-8 h-8 text-red-500" />,
+              });
+              break;
+            case 404:
+              setError({
+                message: "Vehicle Not Found",
+                icon: <XCircle className="w-8 h-8 text-red-500" />,
+              });
+              break;
+            case 500:
+              setError({
+                message: "Internal Server Error",
+                icon: <XCircle className="w-8 h-8 text-red-500" />,
+              });
+              break;
+            case 503:
+              setError({
+                message: "Service Unavailable",
+                icon: <XCircle className="w-8 h-8 text-red-500" />,
+              });
+              break;
+            default:
+              setError({
+                message: "An error occurred",
+                icon: <XCircle className="w-8 h-8 text-red-500" />,
+              });
+              break;
+          }
+        }
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
@@ -56,47 +105,56 @@ export const DVLACard: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
 
   return (
     <>
-      {dvlaData ? (
-        <>
-          <div className="px-6 py-6 space-y-2 w-40 rounded-lg border text-center">
-            <div>
-              <span className="flex items-center justify-center">
-                {dvlaData?.taxStatus === "Taxed" ? (
-                  <>
-                    <CheckCircle className="w-8 h-8 mr-2 text-green-500" />
-                    {dvlaData?.taxStatus}
-                  </>
-                ) : (
-                  <>
-                    <XCircle className="w-8 h-8 mr-2 text-red-500" />
-                    {dvlaData?.taxStatus}
-                  </>
-                )}
-              </span>
-            </div>
-            <p className="text-sm">
-              Due:{" "}
-              {dvlaData?.taxDueDate
-                ? new Date(dvlaData.taxDueDate).toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "2-digit",
-                  })
-                : "--/--/--"}
-            </p>
-          </div>
-        </>
-      ) : (
+      {loading && (
         <div className="px-6 py-6 space-y-2 w-40 rounded-lg border text-center">
           <div>
-            <span className="flex items-center justify-center">
+            <div className="flex items-center justify-center">
               <Skeleton className="w-8 h-8 mr-2 rounded-full" />
               <Skeleton className="h-4 w-[50px]" />
-            </span>
+            </div>
           </div>
           <div className="flex items-center justify-center">
             <Skeleton className="h-4 w-[100px]" />
           </div>
+        </div>
+      )}
+      {error.message !== null && (
+        <div className="px-6 py-6 space-y-2 w-40 rounded-lg border text-center">
+          <div>
+            <span className="flex items-center justify-center">
+              <>{error.icon}</>
+            </span>
+          </div>
+          <p className="text-sm">{error.message}</p>
+        </div>
+      )}
+      {dvlaData && (
+        <div className="px-6 py-6 space-y-2 w-40 rounded-lg border text-center">
+          <div>
+            <span className="flex items-center justify-center">
+              {dvlaData?.taxStatus === "Taxed" ? (
+                <>
+                  <CheckCircle className="w-8 h-8 mr-2 text-green-500" />
+                  {dvlaData?.taxStatus}
+                </>
+              ) : (
+                <>
+                  <XCircle className="w-8 h-8 mr-2 text-red-500" />
+                  {dvlaData?.taxStatus}
+                </>
+              )}
+            </span>
+          </div>
+          <p className="text-sm">
+            Due:{" "}
+            {dvlaData?.taxDueDate
+              ? new Date(dvlaData.taxDueDate).toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "2-digit",
+                })
+              : "--/--/--"}
+          </p>
         </div>
       )}
     </>

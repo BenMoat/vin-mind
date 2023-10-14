@@ -19,6 +19,15 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
       <div className="flex-1 space-y-4 p-8 pt-6">
         <Heading title="Dashboard" description="An overview of your vehicle" />
         <Separator />
+        {
+          /* For testing response types*/
+          // <DVLACard registrationNumber="AA19AAA" /> - 200
+          // <DVLACard registrationNumber="ER19BAD" /> - 400 invalid registration number
+          // <DVLACard registrationNumber="ER19NFD" /> - 404 vehicle not found
+          // <DVLACard registrationNumber="ER19THR" /> - 429 too many requests
+          // <DVLACard registrationNumber="ER19ERR" /> - 500 internal server error
+          // <DVLACard registrationNumber="ER19MNT" /> - 503 service unavailable
+        }
         <DVLACard registrationNumber="AA19AAA" />
 
         <div className="grid gap-4 grid-cols-3">
