@@ -1,5 +1,5 @@
 import { getTotalModifications } from "@/actions/get-total-modifications";
-import { DVLACard } from "@/components/dvla-card";
+import { TaxAndMOT } from "@/components/tax-and-mot";
 import { Heading } from "@/components/heading";
 import { Mileage } from "@/components/mileage";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,7 +19,9 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
       <div className="flex-1 space-y-4 p-8 pt-6">
         <Heading title="Dashboard" description="An overview of your vehicle" />
         <Separator />
-        <DVLACard registrationNumber="AA19AAA" />
+        <div className="grid gap-4 grid-cols-3">
+          <TaxAndMOT registrationNumber="AA19AAA" />
+        </div>
         <div className="grid gap-4 grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0">

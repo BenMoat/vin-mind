@@ -3,16 +3,10 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import {
-  CheckCircle,
-  RegexIcon,
-  TextCursor,
-  TextCursorInput,
-  XCircle,
-} from "lucide-react";
-import { Skeleton } from "./ui/skeleton";
+import { XCircle } from "lucide-react";
+import { StatusCard } from "./status-card";
 
-interface DvlaData {
+export interface DvlaData {
   registrationNumber: string;
   taxStatus: string;
   taxDueDate: string;
@@ -34,7 +28,7 @@ interface DvlaData {
 }
 
 interface DvlaCardProps {
-  registrationNumber: string;
+  registrationNumber?: string;
 }
 
 interface ErrorState {
@@ -42,7 +36,11 @@ interface ErrorState {
   icon: JSX.Element | null;
 }
 
-export const DVLACard: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
+export const TaxAndMOT: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
+  if (!registrationNumber) {
+    return null;
+  }
+
   const params = useParams();
 
   const [dvlaData, setDvlaData] = useState<DvlaData | null>(null);
@@ -77,19 +75,6 @@ export const DVLACard: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
 
   return (
     <>
-      {loading && (
-        <div className="px-6 py-6 space-y-2 w-40 rounded-lg border text-center">
-          <div>
-            <div className="flex items-center justify-center">
-              <Skeleton className="w-8 h-8 mr-2 rounded-full" />
-              <Skeleton className="h-4 w-[50px]" />
-            </div>
-          </div>
-          <div className="flex items-center justify-center">
-            <Skeleton className="h-4 w-[100px]" />
-          </div>
-        </div>
-      )}
       {error.message !== null && (
         <div className="px-6 py-6 space-y-2 w-40 rounded-lg border text-center">
           <div>
@@ -100,35 +85,9 @@ export const DVLACard: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
           <p className="text-sm">{error.message}</p>
         </div>
       )}
-      {dvlaData && (
-        <div className="px-6 py-6 space-y-2 w-40 rounded-lg border text-center">
-          <div>
-            <span className="flex items-center justify-center">
-              {dvlaData?.taxStatus === "Taxed" ? (
-                <>
-                  <CheckCircle className="w-8 h-8 mr-2 text-green-500" />
-                  {dvlaData?.taxStatus}
-                </>
-              ) : (
-                <>
-                  <XCircle className="w-8 h-8 mr-2 text-red-500" />
-                  {dvlaData?.taxStatus}
-                </>
-              )}
-            </span>
-          </div>
-          <p className="text-sm">
-            Due:{" "}
-            {dvlaData?.taxDueDate
-              ? new Date(dvlaData.taxDueDate).toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "2-digit",
-                  year: "2-digit",
-                })
-              : "--/--/--"}
-          </p>
-        </div>
-      )}
+
+      <StatusCard tax data={dvlaData} loading={loading} />
+      <StatusCard mot data={dvlaData} loading={loading} />
     </>
   );
 };
