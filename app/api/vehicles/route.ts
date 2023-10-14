@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const { userId } = auth();
     const body = await req.json();
 
-    const { name } = body;
+    const { name, registrationNumber } = body;
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -21,6 +21,7 @@ export async function POST(req: Request) {
     const vehicle = await prismadb.vehicle.create({
       data: {
         name,
+        registrationNumber,
         userId,
       },
     });

@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { formatter } from "@/lib/utils";
 import { Milestone, PoundSterling, Wallet } from "lucide-react";
+import prismadb from "@/lib/prismadb";
 
 interface DashboardPageProps {
   params: { vehicleId: string };
@@ -14,12 +15,18 @@ interface DashboardPageProps {
 const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
   const totalModifications = await getTotalModifications(params.vehicleId);
 
+  const vehicle = await prismadb.vehicle.findFirst({
+    where: {
+      id: params.vehicleId,
+    },
+  });
+
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
         <Heading title="Dashboard" description="An overview of your vehicle" />
         <Separator />
-        <TaxAndMOT registrationNumber="AA19AAA" />
+        <TaxAndMOT registrationNumber={vehicle?.registrationNumber ?? ""} />
         <div className="grid gap-4 grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
