@@ -3,8 +3,16 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { XCircle } from "lucide-react";
-import { StatusCard } from "./status-card";
+import { CheckCircle, XCircle } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import { Skeleton } from "./ui/skeleton";
+import CardSkeleton from "./card-skeleton";
 
 export interface DvlaData {
   registrationNumber: string;
@@ -43,7 +51,7 @@ export const TaxAndMOT: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
 
   const params = useParams();
 
-  const [dvlaData, setDvlaData] = useState<DvlaData | null>(null);
+  const [data, setData] = useState<DvlaData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<ErrorState>({ message: null, icon: null });
 
@@ -58,7 +66,7 @@ export const TaxAndMOT: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
           `/api/${params.vehicleId}/vehicle-enquiry`,
           registratonNumber
         );
-        setDvlaData(response.data);
+        setData(response.data);
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
           setError({
@@ -76,7 +84,7 @@ export const TaxAndMOT: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
   return (
     <>
       {error.message !== null && (
-        <div className="px-6 py-6 space-y-2 w-40 rounded-lg border text-center">
+        <div className="px-6 py-6 space-y- rounded-lg border text-center">
           <div>
             <span className="flex items-center justify-center">
               <>{error.icon}</>
@@ -86,8 +94,80 @@ export const TaxAndMOT: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
         </div>
       )}
 
-      <StatusCard tax data={dvlaData} loading={loading} />
-      <StatusCard mot data={dvlaData} loading={loading} />
+      {loading && (
+        <>
+          <CardSkeleton />
+          <CardSkeleton />
+        </>
+      )}
+
+      {data && (
+        <>
+          {data?.taxStatus === "Taxed" ? (
+            <Card className="px-6 space-y-2 text-center">
+              <CardHeader>
+                <CardTitle>Tax</CardTitle>
+                <CardDescription>
+                  <span className="flex items-center justify-center">
+                    <CheckCircle className="w-8 h-8 mr-2 text-[#adfa1d]" />
+                    {data?.taxStatus}
+                  </span>
+                </CardDescription>
+                <CardContent className="pb-0">
+                  Expires: {data?.taxDueDate}
+                </CardContent>
+              </CardHeader>
+            </Card>
+          ) : (
+            <Card className="px-6 space-y-2 text-center">
+              <CardHeader>
+                <CardTitle>Tax</CardTitle>
+                <CardDescription>
+                  <span className="flex items-center justify-center">
+                    <XCircle className="w-8 h-8 mr-2 text-[#7f1d1d]" />
+                    {data?.taxStatus}
+                  </span>
+                </CardDescription>
+                <CardContent className="pb-0">
+                  Expires: {data?.taxDueDate}
+                </CardContent>
+              </CardHeader>
+            </Card>
+          )}
+
+          {data?.motStatus === "Valid" ? (
+            <Card className="px-6 space-y-2 text-center">
+              <CardHeader>
+                <CardTitle>MOT</CardTitle>
+                <CardDescription>
+                  <span className="flex items-center justify-center">
+                    <CheckCircle className="w-8 h-8 mr-2 text-[#adfa1d]" />
+                    {data?.motStatus}
+                  </span>
+                </CardDescription>
+                <CardContent className="pb-0">
+                  Expires: {data?.motExpiryDate}
+                </CardContent>
+              </CardHeader>
+            </Card>
+          ) : (
+            <Card className="px-6 space-y-2 text-center">
+              <CardHeader>
+                <CardTitle>MOT</CardTitle>
+                <CardDescription>
+                  <span className="flex items-center justify-center">
+                    <XCircle className="w-8 h-8 mr-2 text-[#7f1d1d]" />
+                    {data?.motStatus}
+                  </span>
+                </CardDescription>
+                <CardContent className="pb-0">
+                  Expires: {data?.motExpiryDate}
+                </CardContent>
+              </CardHeader>
+            </Card>
+          )}
+        </>
+      )}
     </>
   );
 };
