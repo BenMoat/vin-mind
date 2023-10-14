@@ -1,8 +1,13 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
 
-const dvlaApiKey = process.env.DVLA_API_KEY_TEST;
-const dvlaApiUrl = process.env.DVLA_API_URL_TEST;
+//Test
+const dvlaApiKeyTest = process.env.DVLA_API_KEY_TEST;
+const dvlaApiUrlTest = process.env.DVLA_API_URL_TEST;
+
+//Prod
+const dvlaApiKey = process.env.DVLA_API_KEY_PROD;
+const dvlaApiUrl = process.env.DVLA_API_URL_PROD;
 
 export async function POST(req: Request) {
   try {
@@ -10,9 +15,9 @@ export async function POST(req: Request) {
     console.log(body);
     var config = {
       method: "post",
-      url: dvlaApiUrl,
+      url: dvlaApiUrlTest,
       headers: {
-        "x-api-key": dvlaApiKey,
+        "x-api-key": dvlaApiKeyTest,
         "Content-Type": "application/json",
       },
       data: body,
