@@ -63,38 +63,10 @@ export const DVLACard: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
         setDvlaData(response.data);
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
-          switch (error.response.status) {
-            case 400:
-              setError({
-                message: "Invalid Registration Number",
-                icon: <TextCursorInput className="w-8 h-8 text-red-500" />,
-              });
-              break;
-            case 404:
-              setError({
-                message: "Vehicle Not Found",
-                icon: <XCircle className="w-8 h-8 text-red-500" />,
-              });
-              break;
-            case 500:
-              setError({
-                message: "Internal Server Error",
-                icon: <XCircle className="w-8 h-8 text-red-500" />,
-              });
-              break;
-            case 503:
-              setError({
-                message: "Service Unavailable",
-                icon: <XCircle className="w-8 h-8 text-red-500" />,
-              });
-              break;
-            default:
-              setError({
-                message: "An error occurred",
-                icon: <XCircle className="w-8 h-8 text-red-500" />,
-              });
-              break;
-          }
+          setError({
+            message: error.response.data.message,
+            icon: <XCircle className="w-8 h-8 text-red-500" />,
+          });
         }
       } finally {
         setLoading(false);

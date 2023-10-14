@@ -29,21 +29,31 @@ export async function POST(req: Request) {
     if (axios.isAxiosError(error) && error.response) {
       switch (error.response.status) {
         case 400:
-          return new NextResponse("Invalid Registration Number", {
-            status: 400,
-          });
+          return new NextResponse(
+            JSON.stringify({ message: "Invalid Reg Number" }),
+            { status: 400 }
+          );
         case 404:
           return new NextResponse(
             JSON.stringify({ message: "Vehicle Not Found" }),
             { status: 404 }
           );
         case 500:
-          return new NextResponse("Internal Server Error", { status: 500 });
+          return new NextResponse(
+            JSON.stringify({ message: "Internal Server Error" }),
+            { status: 500 }
+          );
         case 503:
-          return new NextResponse("Service Unavailable", { status: 503 });
+          return new NextResponse(
+            JSON.stringify({ message: "Service Unavailable" }),
+            { status: 503 }
+          );
       }
     } else {
-      return new NextResponse("Internal Server Error", { status: 500 });
+      return new NextResponse(
+        JSON.stringify({ message: "Internal Server Error" }),
+        { status: 500 }
+      );
     }
   }
 }
