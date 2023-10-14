@@ -17,10 +17,10 @@ import CardSkeleton from "./card-skeleton";
 export interface DvlaData {
   registrationNumber: string;
   taxStatus: string;
-  taxDueDate: string;
+  taxDueDate: Date;
   motStatus: string;
-  motExpiryDate: string;
-  artEndDate: string;
+  motExpiryDate: Date;
+  artEndDate: Date;
   make: string;
   colour: string;
   yearOfManufacture: number;
@@ -30,7 +30,7 @@ export interface DvlaData {
   markedForExport: boolean;
   typeApproval: string;
   euroStatus: string;
-  dateOfLastV5CIssued: string;
+  dateOfLastV5CIssued: Date;
   wheelplan: string;
   monthOfFirstRegistration: string;
 }
@@ -84,10 +84,10 @@ export const TaxAndMOT: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
   return (
     <>
       {error.message !== null && (
-        <div className="px-6 py-6 space-y- rounded-lg border text-center">
+        <div className="px-6 py-6 space-y-2 w-full rounded-lg border text-center">
           <div>
             <span className="flex items-center justify-center">
-              <>{error.icon}</>
+              {error.icon}
             </span>
           </div>
           <p className="text-sm">{error.message}</p>
@@ -95,14 +95,14 @@ export const TaxAndMOT: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
       )}
 
       {loading && (
-        <>
+        <div className="grid gap-4 grid-cols-3">
           <CardSkeleton />
           <CardSkeleton />
-        </>
+        </div>
       )}
 
       {data && (
-        <>
+        <div className="grid gap-4 grid-cols-3">
           {data?.taxStatus === "Taxed" ? (
             <Card className="px-6 space-y-2 text-center">
               <CardHeader>
@@ -114,7 +114,7 @@ export const TaxAndMOT: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
                   </span>
                 </CardDescription>
                 <CardContent className="pb-0">
-                  Expires: {data?.taxDueDate}
+                  Due: {new Date(data?.taxDueDate).toLocaleDateString("en-GB")}
                 </CardContent>
               </CardHeader>
             </Card>
@@ -129,7 +129,7 @@ export const TaxAndMOT: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
                   </span>
                 </CardDescription>
                 <CardContent className="pb-0">
-                  Expires: {data?.taxDueDate}
+                  Due: {new Date(data?.taxDueDate).toLocaleDateString("en-GB")}
                 </CardContent>
               </CardHeader>
             </Card>
@@ -146,7 +146,8 @@ export const TaxAndMOT: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
                   </span>
                 </CardDescription>
                 <CardContent className="pb-0">
-                  Expires: {data?.motExpiryDate}
+                  Expires:{" "}
+                  {new Date(data?.motExpiryDate).toLocaleDateString("en-GB")}
                 </CardContent>
               </CardHeader>
             </Card>
@@ -161,12 +162,15 @@ export const TaxAndMOT: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
                   </span>
                 </CardDescription>
                 <CardContent className="pb-0">
-                  Expires: {data?.motExpiryDate}
+                  {data?.motExpiryDate
+                    ? "Expires:" +
+                      new Date(data?.motExpiryDate).toLocaleDateString("en-GB")
+                    : "Expires: --/--/----"}
                 </CardContent>
               </CardHeader>
             </Card>
           )}
-        </>
+        </div>
       )}
     </>
   );

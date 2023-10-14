@@ -19,9 +19,7 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
       <div className="flex-1 space-y-4 p-8 pt-6">
         <Heading title="Dashboard" description="An overview of your vehicle" />
         <Separator />
-        <div className="grid gap-4 grid-cols-3">
-          <TaxAndMOT registrationNumber="AA19AAA" />
-        </div>
+        <TaxAndMOT registrationNumber="AA19AAA" />
         <div className="grid gap-4 grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
