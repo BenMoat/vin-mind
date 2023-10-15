@@ -58,7 +58,7 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
               <Wallet className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold">8th September 2023</div>
+              <div className="text-3xl font-bold">01/03/04</div>
             </CardContent>
           </Card>
         </div>
