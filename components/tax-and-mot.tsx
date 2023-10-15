@@ -90,7 +90,7 @@ export const TaxAndMOT: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
               {error.icon}
             </span>
           </div>
-          <p className="text-sm">{error.message}</p>
+          <p className="text-sm">{error.message.toString()}</p>
         </div>
       )}
 

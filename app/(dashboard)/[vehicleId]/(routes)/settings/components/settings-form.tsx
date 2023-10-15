@@ -16,6 +16,7 @@ import { Separator } from "@/components/ui/separator";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -171,7 +172,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
         >
-          <div className="grid grid-cols-1 gap-8">
+          <div className="grid grid-cols-1 gap-6 max-w-[300px]">
             <FormField
               control={form.control}
               name="name"
@@ -195,10 +196,23 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Number Plate</FormLabel>
+                  <FormDescription className="">
+                    Enter your vehicle's registration number to access its
+                    up-to-date tax and MOT status, directly sourced from the{" "}
+                    <a
+                      className="underline font-bold"
+                      href="https://developer-portal.driver-vehicle-licensing.api.gov.uk/apis/vehicle-enquiry-service/vehicle-enquiry-service-description.html#vehicle-enquiry-service-ves-api-guide"
+                      target="_blank"
+                    >
+                      DVLA
+                    </a>
+                    .
+                  </FormDescription>
                   <FormControl>
                     <Input
+                      className="max-w-[130px] text-center bg-yellow-400 text-black font-bold text-lg uppercase"
                       disabled={loading}
-                      placeholder="BM69 MER"
+                      placeholder="YOUR REG"
                       {...field}
                     />
                   </FormControl>
@@ -210,7 +224,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
           <Button disabled={loading} className="ml-auto" type="submit">
             Save Changes
           </Button>
-          <Card className="border-destructive">
+          <Card className="border-destructive max-w-[850px]">
             <CardHeader>
               <CardTitle className="inline-flex items-center">
                 <AlertCircle className="mr-2" /> Danger Zone

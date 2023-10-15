@@ -54,6 +54,10 @@ export default function VehicleSwitcher({
     (item) => item.value === params.vehicleId
   );
 
+  const label = currentVehicle?.label;
+  const formattedLabel =
+    label && label.length > 15 ? `${label.slice(0, 15)}...` : label;
+
   const [open, setOpen] = useState(false);
 
   const onVehicleSelect = (vehicle: { label: string; value: string }) => {
@@ -70,10 +74,10 @@ export default function VehicleSwitcher({
           role="combobox"
           aria-expanded={open}
           aria-label="Select a Vehicle"
-          className={cn("w-[200px] justify-between", className)}
+          className={cn("w-[70px] sm:w-[200px] justify-between", className)}
         >
           <CarFrontIcon className="mr-2 h-4 w-4" />
-          {currentVehicle?.label}
+          <span className="hidden sm:block">{formattedLabel}</span>
           <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
