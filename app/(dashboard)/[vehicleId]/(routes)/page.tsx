@@ -19,6 +19,9 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
     where: {
       id: params.vehicleId,
     },
+    include: {
+      modifications: true,
+    },
   });
 
   return (
@@ -31,7 +34,7 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
               <CardTitle className="text-sm font-medium">
-                Total in Modifications
+                Total of {vehicle?.modifications.length} Modifications
               </CardTitle>
               <PoundSterling className="h-4 w-4 text-muted-foreground" />
             </CardHeader>

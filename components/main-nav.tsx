@@ -39,6 +39,11 @@ export function MainNav({
           `/${params.vehicleId}/modification-types/${params.modificationTypeId}`,
     },
     {
+      href: `/${params.vehicleId}/insurance`,
+      label: "Insurance",
+      active: pathname === `/${params.vehicleId}/insurance`,
+    },
+    {
       href: `/${params.vehicleId}/settings`,
       label: "Settings",
       active: pathname === `/${params.vehicleId}/settings`,

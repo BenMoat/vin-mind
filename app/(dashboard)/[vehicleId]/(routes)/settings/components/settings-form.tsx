@@ -42,7 +42,10 @@ const regNoRegex =
   /^([A-HJ-PR-Y]\d{1,2}\s?[A-Z]{1,2}\s?[A-HJ-PR-Y]{0,2})|([A-HJ-PR-Y]{2}\s?\d{2}\s?[A-Z]{3})$/i;
 
 const formSchema = z.object({
-  name: z.string().min(1, "Enter a name for your vehicle"),
+  name: z
+    .string()
+    .min(1, "Enter a name for your vehicle")
+    .max(40, "Vehicle name must be less than 40 characters"),
   registrationNumber: z
     .string()
     .optional()
