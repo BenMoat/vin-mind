@@ -33,7 +33,6 @@ export default async function DashboardLayout({
     <>
       <Navbar />
       {children}
-      <Footer />
     </>
   );
 }

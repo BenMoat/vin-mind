@@ -30,7 +30,7 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
         <Heading title="Dashboard" description="An overview of your vehicle" />
         <Separator />
         <TaxAndMOT registrationNumber={vehicle?.registrationNumber ?? ""} />
-        <div className="grid gap-4 grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
               <CardTitle className="text-sm font-medium">

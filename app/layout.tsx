@@ -7,6 +7,7 @@ import { ModalProvider } from "@/providers/modal-provider";
 import { ToastProvider } from "@/providers/toast-provider";
 
 import "./globals.css";
+import Footer from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,12 +23,13 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={inter.className}>
+      <html lang="en" suppressHydrationWarning={true}>
+        <body className={`${inter.className} flex flex-col min-h-screen`}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <ToastProvider />
             <ModalProvider />
             {children}
+            <Footer />
           </ThemeProvider>
         </body>
       </html>

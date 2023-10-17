@@ -11,10 +11,9 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { Skeleton } from "./ui/skeleton";
 import CardSkeleton from "./card-skeleton";
 
-export interface DvlaData {
+interface DvlaData {
   registrationNumber: string;
   taxStatus: string;
   taxDueDate: Date;
@@ -84,25 +83,25 @@ export const TaxAndMOT: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
   return (
     <>
       {error.message !== null && (
-        <div className="px-6 py-6 space-y-2 w-full rounded-lg border text-center">
-          <div>
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          <div className="px-6 py-6 space-y-2 w-full rounded-lg border text-center">
             <span className="flex items-center justify-center">
               {error.icon}
             </span>
+            <p className="text-sm">{error.message.toString()}</p>
           </div>
-          <p className="text-sm">{error.message.toString()}</p>
         </div>
       )}
 
       {loading && (
-        <div className="grid gap-4 grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           <CardSkeleton />
           <CardSkeleton />
         </div>
       )}
 
       {data && (
-        <div className="grid gap-4 grid-cols-3">
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {data?.taxStatus === "Taxed" ? (
             <Card className="px-6 space-y-2 text-center">
               <CardHeader>
