@@ -1,8 +1,8 @@
 "use client";
 
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { CheckCircle, XCircle } from "lucide-react";
 import {
   Card,
@@ -17,21 +17,8 @@ interface DvlaData {
   registrationNumber: string;
   taxStatus: string;
   taxDueDate: Date;
-  artEndDate: Date;
   motStatus: string;
-  make: string;
-  yearOfManufacture: number;
-  engineCapacity: number;
-  co2Emissions: number;
-  fuelType: string;
-  markedForExport: boolean;
-  colour: string;
-  typeApproval: string;
-  euroStatus: string;
-  dateOfLastV5CIssued: Date;
   motExpiryDate: Date;
-  wheelplan: string;
-  monthOfFirstRegistration: string;
 }
 
 interface DvlaCardProps {
@@ -59,13 +46,29 @@ export const TaxAndMOT: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
     const registratonNumber = JSON.stringify({
       registrationNumber: registrationNumber,
     });
+
     const fetchData = async () => {
       try {
+        // Check if cached data exists in localStorage
+        const cachedData = localStorage.getItem("dvlaData");
+        const cachedRegistrationNumber = localStorage.getItem(
+          "dvlaRegistrationNumber"
+        );
+
+        if (cachedData && cachedRegistrationNumber === registrationNumber) {
+          setData(JSON.parse(cachedData));
+          setLoading(false);
+          return; // Exit early if cached data matches the registration number
+        }
+
+        // If there is no cached data or the reg has changed, call the API
         const response = await axios.post(
           `/api/${params.vehicleId}/vehicle-enquiry`,
           registratonNumber
         );
         setData(response.data);
+        localStorage.setItem("dvlaData", JSON.stringify(response.data));
+        localStorage.setItem("dvlaRegistrationNumber", registrationNumber);
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
           setError({
@@ -78,7 +81,7 @@ export const TaxAndMOT: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
       }
     };
     fetchData();
-  }, [params.vehicleId]);
+  }, [params.vehicleId, registrationNumber]);
 
   return (
     <>
