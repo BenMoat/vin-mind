@@ -49,26 +49,26 @@ export const TaxAndMOT: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
 
     const fetchData = async () => {
       try {
-        // Check if cached data exists in localStorage
-        const cachedData = localStorage.getItem("dvlaData");
-        const cachedRegistrationNumber = localStorage.getItem(
-          "dvlaRegistrationNumber"
-        );
+        // Check the last update date in localStorage
+        const lastUpdateDate = localStorage.getItem("dvlaLastUpdateDate");
 
-        if (cachedData && cachedRegistrationNumber === registrationNumber) {
-          setData(JSON.parse(cachedData));
-          setLoading(false);
-          return; // Exit early if cached data matches the registration number
+        // If lastUpdateDate is not available or a day has passed since the last update
+        if (!lastUpdateDate || hasADayPassed(new Date(lastUpdateDate))) {
+          const response = await axios.post(
+            `/api/${params.vehicleId}/vehicle-enquiry`,
+            registratonNumber
+          );
+          setData(response.data);
+          localStorage.setItem("dvlaData", JSON.stringify(response.data));
+          localStorage.setItem("dvlaRegistrationNumber", registrationNumber);
+          localStorage.setItem("dvlaLastUpdateDate", new Date().toISOString());
+        } else {
+          // If a day has not passed, use the cached data
+          const cachedData = localStorage.getItem("dvlaData");
+          if (cachedData) {
+            setData(JSON.parse(cachedData));
+          }
         }
-
-        // If there is no cached data or the reg has changed, call the API
-        const response = await axios.post(
-          `/api/${params.vehicleId}/vehicle-enquiry`,
-          registratonNumber
-        );
-        setData(response.data);
-        localStorage.setItem("dvlaData", JSON.stringify(response.data));
-        localStorage.setItem("dvlaRegistrationNumber", registrationNumber);
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
           setError({
@@ -80,8 +80,15 @@ export const TaxAndMOT: React.FC<DvlaCardProps> = ({ registrationNumber }) => {
         setLoading(false);
       }
     };
+
     fetchData();
   }, [params.vehicleId, registrationNumber]);
+
+  function hasADayPassed(lastUpdateDate: Date) {
+    const oneDayInMillis = 24 * 60 * 60 * 1000;
+    const currentTime = new Date().getTime();
+    return currentTime - lastUpdateDate.getTime() >= oneDayInMillis;
+  }
 
   return (
     <>
