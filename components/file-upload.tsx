@@ -34,22 +34,28 @@ const FileUpload: React.FC<ImageUploadProps> = ({
 
   return (
     <div>
-      <div className="mb-4 flex items-center gap-4">
+      <div className="mb-4 grid grid-cols-1 md:grid-cols-2 items-center gap-4">
         {value.map((url) => {
           const isImage = /\.(jpg|jpeg|png|gif)$/i.test(url);
           const filename = url.split("/").pop();
 
+          const formattedFilename =
+            filename && filename.length > 15
+              ? `${filename.slice(0, 23)}...`
+              : filename;
+
           return (
             <div
               key={url}
-              className="relative w-[400px] h-[400px] rounded-md overflow-hidden"
+              className="relative h-[400px] rounded-md overflow-hidden"
             >
               <>
                 <a href={url} target="_blank" className="truncate underline">
-                  {filename} <ExternalLink size={14} className="inline-block" />
+                  {formattedFilename}{" "}
+                  <ExternalLink size={14} className="inline-block" />
                 </a>
               </>
-              <div className="z-10 absolute bottom-2 left-2">
+              <div className="z-10 absolute bottom-2 right-2">
                 <Button
                   type="button"
                   variant="destructive"

@@ -166,17 +166,17 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
       <Separator />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <div className="grid grid-cols-1 gap-8">
+          <div className="grid grid-cols-1 gap-5">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="max-w-[300px]">
                   <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Carbon Spoiler"
+                      placeholder="Cold Air Intake"
                       {...field}
                     />
                   </FormControl>
@@ -188,13 +188,13 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               control={form.control}
               name="price"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="max-w-[120px]">
                   <FormLabel>Price</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
                       disabled={loading}
-                      placeholder="9.99"
+                      placeholder="149.99"
                       {...field}
                     />
                   </FormControl>
@@ -223,7 +223,6 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue
-                              className=""
                               defaultValue={field.value}
                               placeholder="---"
                             />
@@ -263,7 +262,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               control={form.control}
               name="isObsolete"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 max-w-[420px]">
                   <FormControl>
                     <Checkbox
                       checked={field.value}
@@ -283,7 +282,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               control={form.control}
               name="notes"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="max-w-[420px]">
                   <FormLabel>Notes</FormLabel>
                   <FormControl>
                     <Textarea
@@ -295,42 +294,43 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                 </FormItem>
               )}
             />
-            <Card>
-              <CardHeader>
-                <CardTitle>File Upload</CardTitle>
-                <CardDescription>
-                  Upload any files related related to this modification. (e.g
-                  receipts, invoices, user guides)...
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <FormField
-                  control={form.control}
-                  name="files"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <FileUpload
-                          value={field.value.map((file) => file.url)}
-                          disabled={loading}
-                          onChange={(url) =>
-                            field.onChange([...field.value, { url }])
-                          }
-                          onRemove={(url) =>
-                            field.onChange([
-                              ...field.value.filter(
-                                (current) => current.url !== url
-                              ),
-                            ])
-                          }
-                        />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              </CardContent>
-            </Card>
           </div>
+          <Card className="max-w-[850px]">
+            <CardHeader>
+              <CardTitle>File Upload</CardTitle>
+              <CardDescription>
+                Upload any files related related to this modification. (e.g
+                receipts, invoices, user guides)...
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <FormField
+                control={form.control}
+                name="files"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <FileUpload
+                        value={field.value.map((file) => file.url)}
+                        disabled={loading}
+                        onChange={(url) =>
+                          field.onChange([...field.value, { url }])
+                        }
+                        onRemove={(url) =>
+                          field.onChange([
+                            ...field.value.filter(
+                              (current) => current.url !== url
+                            ),
+                          ])
+                        }
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </CardContent>
+          </Card>
+
           {initialData && (
             <Button
               type="button"

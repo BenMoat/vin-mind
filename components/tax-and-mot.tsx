@@ -17,19 +17,19 @@ interface DvlaData {
   registrationNumber: string;
   taxStatus: string;
   taxDueDate: Date;
-  motStatus: string;
-  motExpiryDate: Date;
   artEndDate: Date;
+  motStatus: string;
   make: string;
-  colour: string;
   yearOfManufacture: number;
   engineCapacity: number;
   co2Emissions: number;
   fuelType: string;
   markedForExport: boolean;
+  colour: string;
   typeApproval: string;
   euroStatus: string;
   dateOfLastV5CIssued: Date;
+  motExpiryDate: Date;
   wheelplan: string;
   monthOfFirstRegistration: string;
 }
