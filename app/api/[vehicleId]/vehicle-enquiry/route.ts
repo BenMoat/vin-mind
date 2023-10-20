@@ -14,9 +14,9 @@ export async function POST(req: Request) {
     const body = await req.json();
     var config = {
       method: "post",
-      url: dvlaApiUrl,
+      url: dvlaApiUrlTest,
       headers: {
-        "x-api-key": dvlaApiKey,
+        "x-api-key": dvlaApiKeyTest,
         "Content-Type": "application/json",
       },
       data: body,

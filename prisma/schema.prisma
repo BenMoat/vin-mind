@@ -18,6 +18,7 @@ model Vehicle {
   userId             String
   modificationTypes  ModificationType[] @relation("VehicleToModificationType")
   modifications      Modification[]     @relation("VehicleToModification")
+  dvlaData           DvlaData[]         @relation("VehicleToDvlaData")
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
 }
@@ -61,4 +62,19 @@ model Files {
   updatedAt      DateTime     @updatedAt
 
   @@index([modificationId])
+}
+
+model DvlaData {
+  id                 String   @id @default(uuid())
+  vehicleId          String
+  vehicle            Vehicle  @relation("VehicleToDvlaData", fields: [vehicleId], references: [id])
+  registrationNumber String
+  taxStatus          String
+  taxDueDate         String
+  motStatus          String
+  motExpiryDate      String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([vehicleId])
 }
