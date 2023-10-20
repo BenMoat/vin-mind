@@ -5,7 +5,7 @@ import { Mileage } from "@/components/mileage";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { formatter } from "@/lib/utils";
-import { Milestone, PoundSterling, Wallet } from "lucide-react";
+import { CarIcon, Milestone, PoundSterling, Wallet } from "lucide-react";
 import prismadb from "@/lib/prismadb";
 
 interface DashboardPageProps {
@@ -25,17 +25,28 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
     },
   });
 
+  if (!vehicle) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="text-center">
+          <CarIcon className="h-16 w-16 text-muted-foreground mx-auto" />
+          Vehicle not found. <br></br> Please refresh the page.{" "}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
         <Heading title="Dashboard" description="An overview of your vehicle" />
         <Separator />
-        {vehicle?.dvlaData && <TaxAndMOT initialData={vehicle.dvlaData} />}
+        {vehicle.dvlaData && <TaxAndMOT initialData={vehicle.dvlaData} />}
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
               <CardTitle className="text-sm font-medium">
-                Total of {vehicle?.modifications.length} Modifications
+                Total of {vehicle.modifications.length} Modifications
               </CardTitle>
               <PoundSterling className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
@@ -76,5 +87,4 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
     </div>
   );
 };
-
 export default DashboardPage;

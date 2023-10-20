@@ -19,6 +19,13 @@ import {
 import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface DvlaDataProps {
   initialData: DvlaData | null;
@@ -66,21 +73,18 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
 
   async function saveData(data: DvlaDataProps) {
     try {
-      if (data) {
-        if (initialData) {
-          await axios.patch(
-            `/api/${params.vehicleId}/vehicle-enquiry/save-enquiry`,
-            data
-          );
-        } else {
-          await axios.post(
-            `/api/${params.vehicleId}/vehicle-enquiry/save-enquiry`,
-            data
-          );
-        }
-        toast.success("Data saved");
-        router.refresh(); // Display new data on overview page
+      if (initialData) {
+        await axios.patch(
+          `/api/${params.vehicleId}/vehicle-enquiry/save-enquiry`,
+          data
+        );
+      } else {
+        await axios.post(
+          `/api/${params.vehicleId}/vehicle-enquiry/save-enquiry`,
+          data
+        );
       }
+      router.refresh(); // Ensure latest data is displayed ASAP
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
@@ -89,28 +93,30 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-        <div className="grid grid-cols-1 gap-2 max-w-[300px]">
+    <Card className="max-w-full md:max-w-[406px]">
+      <Form {...form}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
             name="registrationNumber"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Number Plate</FormLabel>
-                <FormDescription>
-                  Enter your vehicle's registration number to access its
-                  up-to-date tax and MOT status, directly sourced from the{" "}
-                  <a
-                    className="underline font-bold"
-                    href="https://developer-portal.driver-vehicle-licensing.api.gov.uk/apis/vehicle-enquiry-service/vehicle-enquiry-service-description.html#vehicle-enquiry-service-ves-api-guide"
-                    target="_blank"
-                  >
-                    DVLA
-                  </a>
-                  .
-                </FormDescription>
-                <FormControl>
+                <CardHeader>
+                  <CardTitle>Number Plate</CardTitle>
+                  <CardDescription>
+                    Enter your vehicle's registration number to access its
+                    up-to-date tax and MOT status, directly sourced from the{" "}
+                    <a
+                      className="underline font-bold"
+                      href="https://developer-portal.driver-vehicle-licensing.api.gov.uk/apis/vehicle-enquiry-service/vehicle-enquiry-service-description.html#vehicle-enquiry-service-ves-api-guide"
+                      target="_blank"
+                    >
+                      DVLA
+                    </a>
+                    .
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2">
                   <Input
                     className="max-w-[130px] text-center bg-yellow-400 text-black font-bold text-lg uppercase"
                     disabled={loading}
@@ -118,16 +124,16 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
                     {...field}
                     defaultValue={initialData?.registrationNumber}
                   />
-                </FormControl>
-                <FormMessage>{error.message}</FormMessage>
+                  <FormMessage>{error.message}</FormMessage>
+                  <Button disabled={loading} type="submit">
+                    Save Changes
+                  </Button>
+                </CardContent>
               </FormItem>
             )}
           />
-        </div>
-        <Button disabled={loading} className="ml-auto" type="submit">
-          Save Changes
-        </Button>
-      </form>
-    </Form>
+        </form>
+      </Form>
+    </Card>
   );
 };

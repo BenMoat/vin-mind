@@ -16,7 +16,6 @@ import { Separator } from "@/components/ui/separator";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -163,114 +162,129 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
         />
       </div>
       <Separator />
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <div className="grid grid-cols-1 gap-6 max-w-[300px]">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Vehicle Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="Vehicle Name"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <Button disabled={loading} className="ml-auto" type="submit">
-            Save Changes
-          </Button>
-        </form>
-      </Form>
-      <RegChecker initialData={dvlaData} />
-      <Card className="border-destructive max-w-[850px]">
-        <CardHeader>
-          <CardTitle className="inline-flex items-center">
-            <AlertCircle className="mr-2" /> Danger Zone
-          </CardTitle>
-          <CardDescription>
-            Actions taken within the Danger Zone{" "}
-            <b className="text-black dark:text-white">cannot</b> be undone.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Card>
-            <CardContent>
-              <p className="mt-5 mb-2">
-                Delete All {noOfModifications > 0 ? noOfModifications : null}{" "}
-                Modifications
-              </p>
-              <CardDescription className="mb-2">
-                You will still keep your modification types, but all
-                modifications including their associated files will be deleted.
-              </CardDescription>
-              <Button
-                type="button"
-                disabled={loading || noOfModifications === 0}
-                variant="destructive"
-                onClick={() => {
-                  setmodificationsDeleteOpen(true);
-                }}
-              >
-                Delete
-              </Button>
-            </CardContent>
-          </Card>
-          <Card className="mt-2">
-            <CardContent>
-              <p className="mt-5 mb-2">
-                Delete All{" "}
-                {noOfModificationTypes > 0 ? noOfModificationTypes : null}{" "}
-                Modification Types
-              </p>
-              <CardDescription className="mb-2">
-                If your vehicle has no modifications, you will be able to delete
-                all modification types.
-              </CardDescription>
-              <Button
-                type="button"
-                disabled={
-                  loading ||
-                  noOfModificationTypes === 0 ||
-                  noOfModifications > 0
-                }
-                variant="destructive"
-                onClick={() => {
-                  setmodificationTypesDeleteOpen(true);
-                }}
-              >
-                Delete
-              </Button>
-            </CardContent>
-          </Card>
-          <Card className="mt-2">
-            <CardContent>
-              <p className="mt-5 mb-2">Delete Vehicle</p>
-              <CardDescription className="mb-2">
-                You can delete your vehicle and all of it's associated data at
-                any time.
-              </CardDescription>
-              <Button
-                type="button"
-                disabled={loading}
-                variant="destructive"
-                onClick={() => {
-                  setvehicleDeleteOpen(true);
-                }}
-              >
-                Delete
-              </Button>
-            </CardContent>
-          </Card>
-        </CardContent>
-      </Card>
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+        <Card className="max-w-full md:max-w-[406px] md:ml-auto">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <CardHeader>
+                      <CardTitle>Vehicle Name</CardTitle>
+                      <CardDescription>
+                        Change your vehicle's name at any time without affecting
+                        the data attached to it.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <Input
+                        disabled={loading}
+                        placeholder="Vehicle Name"
+                        {...field}
+                      />
+                      <FormMessage />
+                      <Button
+                        disabled={loading}
+                        className="ml-auto"
+                        type="submit"
+                      >
+                        Save Changes
+                      </Button>
+                    </CardContent>
+                  </FormItem>
+                )}
+              />
+            </form>
+          </Form>
+        </Card>
+        <RegChecker initialData={dvlaData} />
+      </div>
+      <div className="flex justify-center">
+        <Card className="border-destructive max-w-[850px]">
+          <CardHeader>
+            <CardTitle className="inline-flex items-center">
+              <AlertCircle className="mr-2" /> Danger Zone
+            </CardTitle>
+            <CardDescription>
+              Actions taken within the Danger Zone{" "}
+              <b className="text-black dark:text-white">cannot</b> be undone.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Card>
+              <CardContent>
+                <p className="mt-5 mb-2">
+                  Delete All {noOfModifications > 0 ? noOfModifications : null}{" "}
+                  Modifications
+                </p>
+                <CardDescription className="mb-2">
+                  You will still keep your modification types, but all
+                  modifications including their associated files will be
+                  deleted.
+                </CardDescription>
+                <Button
+                  type="button"
+                  disabled={loading || noOfModifications === 0}
+                  variant="destructive"
+                  onClick={() => {
+                    setmodificationsDeleteOpen(true);
+                  }}
+                >
+                  Delete
+                </Button>
+              </CardContent>
+            </Card>
+            <Card className="mt-2">
+              <CardContent>
+                <p className="mt-5 mb-2">
+                  Delete All{" "}
+                  {noOfModificationTypes > 0 ? noOfModificationTypes : null}{" "}
+                  Modification Types
+                </p>
+                <CardDescription className="mb-2">
+                  If your vehicle has no modifications, you will be able to
+                  delete all modification types.
+                </CardDescription>
+                <Button
+                  type="button"
+                  disabled={
+                    loading ||
+                    noOfModificationTypes === 0 ||
+                    noOfModifications > 0
+                  }
+                  variant="destructive"
+                  onClick={() => {
+                    setmodificationTypesDeleteOpen(true);
+                  }}
+                >
+                  Delete
+                </Button>
+              </CardContent>
+            </Card>
+            <Card className="mt-2">
+              <CardContent>
+                <p className="mt-5 mb-2">Delete Vehicle</p>
+                <CardDescription className="mb-2">
+                  You can delete your vehicle and all of it's associated data at
+                  any time.
+                </CardDescription>
+                <Button
+                  type="button"
+                  disabled={loading}
+                  variant="destructive"
+                  onClick={() => {
+                    setvehicleDeleteOpen(true);
+                  }}
+                >
+                  Delete
+                </Button>
+              </CardContent>
+            </Card>
+          </CardContent>
+        </Card>
+      </div>
     </>
   );
 };

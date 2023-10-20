@@ -20,20 +20,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-const regNoRegex =
-  /^([A-HJ-PR-Y]\d{1,2}\s?[A-Z]{1,2}\s?[A-HJ-PR-Y]{0,2})|([A-HJ-PR-Y]{2}\s?\d{2}\s?[A-Z]{3})$/i;
-
 const formSchema = z.object({
   name: z
     .string()
     .min(1, "Enter a name for your vehicle")
     .max(40, "Vehicle name must be less than 40 characters"),
-  registrationNumber: z
-    .string()
-    .optional()
-    .refine((value) => !value || regNoRegex.test(value), {
-      message: "Invalid UK number plate",
-    }),
 });
 
 export const StoreModal = () => {
@@ -45,7 +36,6 @@ export const StoreModal = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      registrationNumber: "",
     },
   });
 
@@ -86,23 +76,6 @@ export const StoreModal = () => {
                     <Input
                       disabled={loading}
                       placeholder="A90 Toyota Supra"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="registrationNumber"
-              render={({ field }) => (
-                <FormItem className="pt-3">
-                  <FormLabel>Number Plate</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="BM69 MER"
                       {...field}
                     />
                   </FormControl>
