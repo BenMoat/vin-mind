@@ -35,7 +35,7 @@ import { RegChecker } from "./reg-checker";
 
 interface SettingsFormProps {
   initialData: Vehicle;
-  dvlaData: DvlaData;
+  dvlaData: DvlaData | null;
   noOfModifications: number;
   noOfModificationTypes: number;
 }

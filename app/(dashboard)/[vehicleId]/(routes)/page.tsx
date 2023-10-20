@@ -30,9 +30,7 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
       <div className="flex-1 space-y-4 p-8 pt-6">
         <Heading title="Dashboard" description="An overview of your vehicle" />
         <Separator />
-        {vehicle?.dvlaData[0] && (
-          <TaxAndMOT initialData={vehicle?.dvlaData[0]} />
-        )}
+        {vehicle?.dvlaData && <TaxAndMOT initialData={vehicle.dvlaData} />}
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
