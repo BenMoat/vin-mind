@@ -111,3 +111,31 @@ export async function PATCH(
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { vehicleId: string } }
+) {
+  try {
+    const { userId } = auth();
+
+    if (!userId) {
+      return new NextResponse("Unauthorised", { status: 401 });
+    }
+
+    if (!params.vehicleId) {
+      return new NextResponse("Vehicle ID is required", { status: 400 });
+    }
+
+    const dvlaData = await prismadb.dvlaData.deleteMany({
+      where: {
+        vehicleId: params.vehicleId,
+      },
+    });
+
+    return NextResponse.json(dvlaData);
+  } catch (error) {
+    console.log("SAVE_ENQUIRY_DELETE", error);
+    return new NextResponse("Internal server error", { status: 500 });
+  }
+}

@@ -88,6 +88,22 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
     }
   }
 
+  const onDelete = async () => {
+    try {
+      setLoading(true);
+      await axios.delete(
+        `/api/${params.vehicleId}/vehicle-enquiry/save-enquiry`
+      );
+      toast.success("Registration removed");
+      form.reset();
+      router.refresh();
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   //Check if the two registraion numbers are equal, ignoring whitespace and casing
   function areEqual(value1: string, value2: string | null) {
     if (value1 && value2) {
@@ -144,6 +160,19 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
                   >
                     {initialData ? "Update" : "Add"} Reg
                   </Button>
+                  {initialData && (
+                    <Button
+                      className="ml-2"
+                      type="button"
+                      variant="destructive"
+                      disabled={loading}
+                      onClick={() => {
+                        onDelete();
+                      }}
+                    >
+                      Remove Reg
+                    </Button>
+                  )}
                 </CardContent>
               </FormItem>
             )}
