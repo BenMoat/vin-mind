@@ -5,7 +5,7 @@ import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { DvlaData, Vehicle } from "@prisma/client";
-import { AlertCircle } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
@@ -13,14 +13,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Heading } from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { AlertModal } from "@/components/modals/alert-modal";
 import {
@@ -163,7 +156,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
       </div>
       <Separator />
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-        <Card className="max-w-full md:max-w-[406px] md:ml-auto">
+        <Card className="max-w-full md:max-w-[407px] md:ml-auto">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
@@ -186,11 +179,12 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                       />
                       <FormMessage />
                       <Button
-                        disabled={loading}
-                        className="ml-auto"
+                        disabled={
+                          loading || field.value.trim() === initialData?.name
+                        }
                         type="submit"
                       >
-                        Save Changes
+                        Save Name
                       </Button>
                     </CardContent>
                   </FormItem>
@@ -201,11 +195,11 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
         </Card>
         <RegChecker initialData={dvlaData} />
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center ">
         <Card className="border-destructive max-w-[850px]">
           <CardHeader>
             <CardTitle className="inline-flex items-center">
-              <AlertCircle className="mr-2" /> Danger Zone
+              <AlertTriangle className="mr-2" size={25} /> Danger Zone
             </CardTitle>
             <CardDescription>
               Actions taken within the Danger Zone{" "}

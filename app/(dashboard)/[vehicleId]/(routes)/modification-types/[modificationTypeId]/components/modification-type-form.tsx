@@ -190,8 +190,8 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
           <div className="w-full md:w-1/2 pl-4">
             <Card>
               <CardHeader>
-                <CardTitle>
-                  <Info className="inline-block" />
+                <CardTitle className="inline-flex items-center">
+                  <Info className="mr-2" size={25} />
                   {modifications?.length === 1
                     ? " 1 Mod Associated with "
                     : ` ${modifications?.length} Mods Associated with `}

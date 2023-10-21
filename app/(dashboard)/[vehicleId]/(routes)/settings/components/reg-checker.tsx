@@ -6,16 +6,7 @@ import axios from "axios";
 import { DvlaData } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -39,16 +30,21 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
-  const { handleSubmit } = useForm();
-  const form = useForm();
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ErrorState>({ message: null });
+
+  const { handleSubmit } = useForm();
+  const form = useForm<DvlaDataProps>({
+    defaultValues: {
+      initialData: initialData,
+    },
+  });
 
   const onSubmit: SubmitHandler<FieldValues> = async () => {
     setLoading(true);
     const registrationNumber =
-      form.getValues("registrationNumber") || initialData?.registrationNumber; // Use initialData if form value is empty
+      form.getValues("initialData.registrationNumber") ||
+      initialData?.registrationNumber; // Use initialData if form value is empty
     const fetchData = async () => {
       try {
         const response = await axios.post(
@@ -92,23 +88,34 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
     }
   }
 
+  //Check if the two registraion numbers are equal, ignoring whitespace and casing
+  function areEqual(value1: string, value2: string | null) {
+    if (value1 && value2) {
+      const sanitizedValue1 = value1.replace(/\s/g, "").toUpperCase();
+      const sanitizedValue2 = value2.replace(/\s/g, "").toUpperCase();
+      return sanitizedValue1 === sanitizedValue2;
+    }
+    return false;
+  }
+
   return (
-    <Card className="max-w-full md:max-w-[406px]">
+    <Card className="max-w-full md:max-w-[407px]">
       <Form {...form}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
-            name="registrationNumber"
+            name="initialData.registrationNumber"
             render={({ field }) => (
               <FormItem>
                 <CardHeader>
                   <CardTitle>Number Plate</CardTitle>
                   <CardDescription>
-                    Enter your vehicle's registration number to access its
-                    up-to-date tax and MOT status, directly sourced from the{" "}
+                    Enter your vehicle's registration number to view its
+                    up-to-date tax and MOT status in the <b>Overview</b> tab.
+                    This is directly sourced from the{" "}
                     <a
                       className="underline font-bold"
-                      href="https://developer-portal.driver-vehicle-licensing.api.gov.uk/apis/vehicle-enquiry-service/vehicle-enquiry-service-description.html#vehicle-enquiry-service-ves-api-guide"
+                      href="https://dvladigital.blog.gov.uk/2020/03/12/dvlas-new-api-developer-portal-launch-first-api-vehicle-enquiry-service-ves-on-gov-uk/"
                       target="_blank"
                     >
                       DVLA
@@ -116,17 +123,25 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
                     .
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-2">
+                <CardContent className="space-y-2 !mt-[-12px]">
                   <Input
-                    className="max-w-[130px] text-center bg-yellow-400 text-black font-bold text-lg uppercase"
+                    className="max-w-[140px] font-UKNumberPlate text-center bg-yellow-400 text-2xl uppercase"
                     disabled={loading}
                     placeholder="YOUR REG"
                     {...field}
-                    defaultValue={initialData?.registrationNumber}
                   />
                   <FormMessage>{error.message}</FormMessage>
-                  <Button disabled={loading} type="submit">
-                    Save Changes
+                  <Button
+                    disabled={
+                      loading ||
+                      areEqual(
+                        field.value,
+                        initialData?.registrationNumber || ""
+                      )
+                    }
+                    type="submit"
+                  >
+                    {initialData ? "Update" : "Add"} Reg
                   </Button>
                 </CardContent>
               </FormItem>
