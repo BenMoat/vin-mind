@@ -214,7 +214,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                   Modifications
                 </p>
                 <CardDescription className="mb-2">
-                  You will still keep your modification types, but all
+                  You will still keep all of your modification types, but all
                   modifications including their associated files will be
                   deleted.
                 </CardDescription>
@@ -238,8 +238,8 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                   Modification Types
                 </p>
                 <CardDescription className="mb-2">
-                  If your vehicle has no modifications, you will be able to
-                  delete all modification types.
+                  If your vehicle has no modifications, you can delete all
+                  modification types.
                 </CardDescription>
                 <Button
                   type="button"
