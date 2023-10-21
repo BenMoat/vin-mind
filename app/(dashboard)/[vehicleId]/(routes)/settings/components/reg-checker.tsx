@@ -128,7 +128,8 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
                     className="max-w-[140px] font-UKNumberPlate text-center bg-yellow-400 text-2xl uppercase"
                     disabled={loading}
                     placeholder="YOUR REG"
-                    {...field}
+                    value={field.value || ""}
+                    onChange={field.onChange}
                   />
                   <FormMessage>{error.message}</FormMessage>
                   <Button
