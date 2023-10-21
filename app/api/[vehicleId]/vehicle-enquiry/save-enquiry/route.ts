@@ -16,7 +16,7 @@ export async function POST(
       taxStatus,
       taxDueDate,
       motStatus,
-      motExpiryDate = "No details held by DVLA", //DLVA UAT doesnt populate this
+      motExpiryDate = "2024-01-01", //DLVA UAT doesnt populate this
     } = body;
 
     if (!userId) {
@@ -69,7 +69,7 @@ export async function PATCH(
       taxStatus,
       taxDueDate,
       motStatus,
-      motExpiryDate = "No details held by DVLA",
+      motExpiryDate = "2024-01-01",
     } = body;
 
     if (!userId) {

@@ -94,9 +94,9 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
       await axios.delete(
         `/api/${params.vehicleId}/vehicle-enquiry/save-enquiry`
       );
-      toast.success("Registration removed");
-      form.reset();
       router.refresh();
+      form.reset();
+      toast.success("Registration removed");
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
@@ -141,7 +141,7 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
                 </CardHeader>
                 <CardContent className="space-y-2 !mt-[-12px]">
                   <Input
-                    className="max-w-[140px] font-UKNumberPlate text-center bg-yellow-400 text-2xl uppercase"
+                    className="max-w-[140px] font-UKNumberPlate text-black text-center bg-yellow-400 text-2xl uppercase"
                     disabled={loading}
                     placeholder="YOUR REG"
                     value={field.value || ""}
