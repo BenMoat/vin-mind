@@ -139,7 +139,7 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
                     .
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-2 !mt-[-12px]">
+                <CardContent className="space-y-4 !mt-[-12px]">
                   <Input
                     className="max-w-[140px] font-UKNumberPlate text-black text-center bg-yellow-400 text-2xl uppercase"
                     disabled={loading}

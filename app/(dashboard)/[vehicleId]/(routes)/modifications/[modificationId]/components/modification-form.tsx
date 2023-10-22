@@ -202,18 +202,18 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                 </FormItem>
               )}
             />
-            <div className="grid grid-rows-1 grid-flow-col gap-4">
-              <div className="row-span-3">
-                <FormField
-                  control={form.control}
-                  name="modificationTypeId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel aria-required>Modification Type</FormLabel>
-                      <FormDescription>
-                        What type of modification is this? (e.g. Engine,
-                        Wheels)...
-                      </FormDescription>
+            <div className="flex ">
+              <FormField
+                control={form.control}
+                name="modificationTypeId"
+                render={({ field }) => (
+                  <FormItem className="max-w-[400px] sm:w-[418px] ">
+                    <FormLabel aria-required>Modification Type</FormLabel>
+                    <FormDescription>
+                      What type of modification is this? (e.g. Engine,
+                      Wheels)...
+                    </FormDescription>
+                    <div className="sm:flex">
                       <Select
                         disabled={loading}
                         onValueChange={field.onChange}
@@ -239,38 +239,36 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                           ))}
                         </SelectContent>
                       </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="col-span-2 ..."></div>
-              <div className="row-span-2 col-span-2">
-                <Button
-                  type="button"
-                  className="ml-auto"
-                  onClick={() => {
-                    setTypeOpen(true);
-                  }}
-                >
-                  <PlusCircle className="mr-2 h-5 w-5" />
-                  New Type
-                </Button>
-              </div>
+                      <Button
+                        type="button"
+                        className=" ml-auto mt-2 sm:ml-2 sm:mt-0  w-[200px] !max-w-[140px]"
+                        onClick={() => {
+                          setTypeOpen(true);
+                        }}
+                      >
+                        <PlusCircle className="mr-2 h-5 w-5" />
+                        New Type
+                      </Button>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
             <FormField
               control={form.control}
               name="isObsolete"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 max-w-[420px]">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>Obsolete</FormLabel>
+                <FormItem className="max-w-[450px]">
+                  <FormLabel>Obsolete</FormLabel>
+                  <div className="iflex inline-flex items-start space-x-3 space-y-[-2px] rounded-md border p-4 ">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+
                     <FormDescription>
                       Tick the box if this modification is no longer in use.
                     </FormDescription>
@@ -282,12 +280,12 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               control={form.control}
               name="notes"
               render={({ field }) => (
-                <FormItem className="max-w-[420px]">
+                <FormItem className="max-w-[400px]">
                   <FormLabel>Notes</FormLabel>
                   <FormControl>
                     <Textarea
                       disabled={loading}
-                      placeholder="This cold air intake will add at least 170hp"
+                      placeholder="This cold air intake will add at least 170hp."
                       {...field}
                     />
                   </FormControl>

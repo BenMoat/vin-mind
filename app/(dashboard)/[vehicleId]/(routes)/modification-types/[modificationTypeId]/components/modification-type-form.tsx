@@ -5,7 +5,7 @@ import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { Modification, ModificationType } from "@prisma/client";
-import { ExternalLink, Info } from "lucide-react";
+import { Info, Link } from "lucide-react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
@@ -139,57 +139,61 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
         <Heading title={title} description={description} goBack />
       </div>
       <Separator />
-      <div className="flex flex-wrap">
-        <div className="w-full md:w-1/2 pr-4 flex items-center justify-center">
-          <Card className="h-full w-full flex flex-col justify-center items-center">
-            <CardContent>
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-6 w-full"
-                >
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Name</FormLabel>
-                        <FormControl>
-                          <Input
-                            disabled={loading}
-                            placeholder="Type of modification"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
+      {initialData ? (
+        <div className="flex flex-wrap">
+          <div className="w-full md:w-1/2 pr-4 flex items-center justify-center">
+            <Card className="h-full w-full flex flex-col justify-center items-center">
+              <CardContent>
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-6 w-full"
+                  >
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Name</FormLabel>
+                          <FormControl>
+                            <Input
+                              disabled={loading}
+                              placeholder="Type of modification"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    {initialData && (
+                      <Button
+                        type="button"
+                        disabled={loading || (modifications?.length ?? 0) > 0}
+                        className="mr-2"
+                        variant="destructive"
+                        onClick={() => {
+                          setOpen(true);
+                        }}
+                      >
+                        Delete
+                      </Button>
                     )}
-                  />
-                  {initialData && (
                     <Button
-                      type="button"
-                      disabled={loading || (modifications?.length ?? 0) > 0}
-                      className="mr-2"
-                      variant="destructive"
-                      onClick={() => {
-                        setOpen(true);
-                      }}
+                      disabled={loading}
+                      className="ml-auto"
+                      type="submit"
                     >
-                      Delete
+                      {action}
                     </Button>
-                  )}
-                  <Button disabled={loading} className="ml-auto" type="submit">
-                    {action}
-                  </Button>
-                </form>
-              </Form>
-            </CardContent>
-          </Card>
-        </div>
-        {initialData && (
+                  </form>
+                </Form>
+              </CardContent>
+            </Card>
+          </div>
           <div className="w-full md:w-1/2 pl-4">
             <Card>
-              <CardHeader>
+              <CardHeader className="pb-2">
                 <CardTitle className="inline-flex items-center">
                   <Info className="mr-2" size={25} />
                   {modifications?.length === 1
@@ -220,15 +224,51 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
                         {modification.name}
                       </a>
                       &nbsp;
-                      <ExternalLink size={14} className="inline-block" />
+                      <Link size={14} className="inline-block" />
                     </li>
                   ))}
                 </ul>
               </CardContent>
             </Card>
           </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="flex items-center justify-center">
+          <Card className="w-[407px]">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)}>
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <CardHeader className="pb-2">
+                        <CardTitle>Name</CardTitle>
+                        <CardDescription>
+                          Create a modification type to categorise your
+                          modifications. <br></br> What type of modification is
+                          this? (e.g. Engine, Wheels)...
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <Input
+                          disabled={loading}
+                          placeholder="Type of modification"
+                          {...field}
+                        />
+                        <FormMessage />
+                        <Button disabled={loading} type="submit">
+                          {action}
+                        </Button>
+                      </CardContent>
+                    </FormItem>
+                  )}
+                />
+              </form>
+            </Form>
+          </Card>
+        </div>
+      )}
     </>
   );
 };

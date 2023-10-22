@@ -171,7 +171,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                         the data attached to it.
                       </CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-2">
+                    <CardContent className="space-y-4">
                       <Input
                         disabled={loading}
                         placeholder="Vehicle Name"
