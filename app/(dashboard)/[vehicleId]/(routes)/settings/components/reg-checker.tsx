@@ -22,16 +22,12 @@ interface DvlaDataProps {
   initialData: DvlaData | null;
 }
 
-interface ErrorState {
-  message: string | null;
-}
-
 export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<ErrorState>({ message: null });
+  const [error, setError] = useState("");
 
   const { handleSubmit } = useForm();
   const form = useForm<DvlaDataProps>({
@@ -42,23 +38,20 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
 
   const onSubmit: SubmitHandler<FieldValues> = async () => {
     setLoading(true);
-    const registrationNumber =
-      form.getValues("initialData.registrationNumber") ||
-      initialData?.registrationNumber; // Use initialData if form value is empty
+    const registrationNumber = form.getValues("initialData.registrationNumber");
     const fetchData = async () => {
       try {
         const response = await axios.post(
           `/api/${params.vehicleId}/vehicle-enquiry`,
           { registrationNumber }
         );
+        response.data.registrationNumber = registrationNumber;
         await saveData(response.data);
-        setError({ message: null });
+        setError("");
         toast.success("Registration updated");
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
-          setError({
-            message: error.response.data.message,
-          });
+          setError(error.response.data.message);
         }
       } finally {
         setLoading(false);
@@ -80,9 +73,9 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
           data
         );
       }
-      router.refresh(); // Ensure latest data is displayed ASAP
+      router.refresh();
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error("Error saving the vehicle information. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -140,14 +133,23 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4 !mt-[-12px]">
-                  <Input
-                    className="max-w-[140px] font-UKNumberPlate text-black text-center bg-yellow-400 text-2xl uppercase"
-                    disabled={loading}
-                    placeholder="YOUR REG"
-                    value={field.value || ""}
-                    onChange={field.onChange}
-                  />
-                  <FormMessage>{error.message}</FormMessage>
+                  <div className="grid grid-cols-2 space-x-[-20px]">
+                    <Input
+                      className="max-w-[140px] font-UKNumberPlate text-black text-center bg-yellow-400 text-2xl uppercase"
+                      disabled={loading}
+                      placeholder="YOUR REG"
+                      value={field.value || ""}
+                      onChange={(event) => {
+                        field.onChange(event);
+                        if (event.target.value === "") {
+                          form.setValue("initialData.registrationNumber", "");
+                        }
+                      }}
+                    />
+                    <FormMessage className="flex items-center">
+                      {error}
+                    </FormMessage>
+                  </div>
                   <Button
                     disabled={
                       loading ||

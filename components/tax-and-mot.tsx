@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { CheckCircle, XCircle } from "lucide-react";
 import {
@@ -22,35 +22,38 @@ interface DvlaDataProps {
 
 export const TaxAndMOT: React.FC<DvlaDataProps> = ({ initialData }) => {
   const params = useParams();
+  const router = useRouter();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const registrationNumber = initialData.registrationNumber;
-  const now = new Date();
-  const updatedAt = new Date(initialData.updatedAt);
-  const hoursSinceUpdate =
-    (now.getTime() - updatedAt.getTime()) / (1000 * 60 * 60);
 
-  const fetchData = async () => {
-    try {
-      if (hoursSinceUpdate < 24) {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
         setLoading(true);
-        setError("");
         const response = await axios.post(
           `/api/${params.vehicleId}/vehicle-enquiry`,
           { registrationNumber }
         );
+        response.data.registrationNumber = registrationNumber;
         await saveData(response.data);
+        setError("");
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+          setError("Failed to fetch data from the DVLA.");
+        }
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        setError("Failed to fetch data from the DVLA.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+    const interval = setInterval(() => {
+      fetchData();
+    }, 20000);
+
+    return () => clearInterval(interval);
+  }, [initialData, registrationNumber]);
 
   async function saveData(data: DvlaDataProps) {
     try {
@@ -62,6 +65,7 @@ export const TaxAndMOT: React.FC<DvlaDataProps> = ({ initialData }) => {
           data
         );
       }
+      router.refresh();
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         setError("Failed to sync DVLA data with database.");
@@ -70,14 +74,6 @@ export const TaxAndMOT: React.FC<DvlaDataProps> = ({ initialData }) => {
       setLoading(false);
     }
   }
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const handleRetry = () => {
-    fetchData();
-  };
 
   return (
     <>
@@ -88,9 +84,7 @@ export const TaxAndMOT: React.FC<DvlaDataProps> = ({ initialData }) => {
               <XCircle className="w-8 h-8 text-red-500" />
             </span>
             <p className="text-sm">{error}</p>
-            <Button variant="outline" onClick={handleRetry}>
-              Retry
-            </Button>
+            <Button variant="outline">Retry</Button>
           </div>
         </div>
       ) : loading ? (
