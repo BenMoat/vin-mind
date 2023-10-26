@@ -135,7 +135,7 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
                 <CardContent className="space-y-4 !mt-[-12px]">
                   <div className="grid grid-cols-2 space-x-[-20px]">
                     <Input
-                      className="max-w-[140px] font-UKNumberPlate text-black text-center bg-yellow-400 text-2xl uppercase"
+                      className="max-w-[135px] font-UKNumberPlate text-black text-center bg-yellow-400 text-2xl uppercase"
                       disabled={loading}
                       placeholder="YOUR REG"
                       value={field.value || ""}

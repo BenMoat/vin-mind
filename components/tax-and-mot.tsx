@@ -48,11 +48,20 @@ export const TaxAndMOT: React.FC<DvlaDataProps> = ({ initialData }) => {
         setLoading(false);
       }
     };
-    const interval = setInterval(() => {
-      fetchData();
-    }, 20000);
 
-    return () => clearInterval(interval);
+    // Get the timestamp from local storage or use 0 if it doesn't exist
+    const storedTimestamp = parseInt(
+      localStorage.getItem("lastFetchTimestamp") || "0",
+      10
+    );
+    const currentTime = Date.now();
+
+    // Check if it has been 5 minutes since the stored timestamp
+    if (currentTime - storedTimestamp > 300000) {
+      fetchData();
+      // Update the stored timestamp in local storage
+      localStorage.setItem("lastFetchTimestamp", currentTime.toString());
+    }
   }, [initialData, registrationNumber]);
 
   async function saveData(data: DvlaDataProps) {
