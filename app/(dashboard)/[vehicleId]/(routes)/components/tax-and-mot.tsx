@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
+import { DvlaData } from "@prisma/client";
+import { useParams, useRouter } from "next/navigation";
+
 import { CheckCircle, XCircle } from "lucide-react";
 import {
   Card,
@@ -10,11 +12,11 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "./ui/card";
-import { DvlaData } from "@prisma/client";
-import { LastUpdatedBadge } from "./last-updated-badge";
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
 import CardSkeleton from "./card-skeleton";
-import { Button } from "./ui/button";
+import { LastUpdatedBadge } from "./last-updated-badge";
 
 interface DvlaDataProps {
   initialData: DvlaData;
@@ -49,17 +51,17 @@ export const TaxAndMOT: React.FC<DvlaDataProps> = ({ initialData }) => {
       }
     };
 
-    // Get the timestamp from local storage or use 0 if it doesn't exist
+    /* Cache a timestamp for when the data was last fetched. Compare it against the current time
+    to determine whether to fetch new data or not.*/
     const storedTimestamp = parseInt(
       localStorage.getItem("lastFetchTimestamp") || "0",
       10
     );
     const currentTime = Date.now();
+    const timeThreshold = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
-    // Check if it has been 5 minutes since the stored timestamp
-    if (currentTime - storedTimestamp > 300000) {
+    if (currentTime - storedTimestamp > timeThreshold) {
       fetchData();
-      // Update the stored timestamp in local storage
       localStorage.setItem("lastFetchTimestamp", currentTime.toString());
     }
   }, [initialData, registrationNumber]);

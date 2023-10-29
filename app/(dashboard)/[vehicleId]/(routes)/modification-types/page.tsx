@@ -1,6 +1,6 @@
+import prismadb from "@/lib/prismadb";
 import { format } from "date-fns";
 
-import prismadb from "@/lib/prismadb";
 import { ModificationTypesClient } from "./components/client";
 import { ModificationTypeColumn } from "./components/columns";
 

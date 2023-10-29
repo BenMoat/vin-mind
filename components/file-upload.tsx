@@ -1,5 +1,5 @@
-import { CldUploadWidget } from "next-cloudinary";
 import { useEffect, useState } from "react";
+import { CldUploadWidget } from "next-cloudinary";
 
 import { Button } from "@/components/ui/button";
 import Image from "next/image";

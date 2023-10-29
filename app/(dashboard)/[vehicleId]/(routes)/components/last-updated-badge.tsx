@@ -1,6 +1,10 @@
 import { HelpCircle } from "lucide-react";
-import { Badge } from "./ui/badge";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Badge } from "@/components/ui/badge";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface LastUpdatedBadgeProps {
   updatedAt: Date;

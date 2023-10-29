@@ -1,12 +1,15 @@
-import { getTotalModifications } from "@/actions/get-total-modifications";
-import { TaxAndMOT } from "@/components/tax-and-mot";
-import { Heading } from "@/components/heading";
-import { Mileage } from "@/components/mileage";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { formatter } from "@/lib/utils";
-import { CarIcon, Milestone, PoundSterling, Wallet } from "lucide-react";
 import prismadb from "@/lib/prismadb";
+import { formatter } from "@/lib/utils";
+
+import { getTotalModifications } from "@/actions/get-total-modifications";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Heading } from "@/components/heading";
+import { Separator } from "@/components/ui/separator";
+import { CarIcon, Milestone, PoundSterling, Wallet } from "lucide-react";
+
+import { TaxAndMOT } from "./components/tax-and-mot";
+import { Mileage } from "./components/mileage";
 
 interface DashboardPageProps {
   params: { vehicleId: string };

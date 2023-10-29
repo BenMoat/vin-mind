@@ -1,8 +1,9 @@
+import { redirect } from "next/navigation";
 import { UserButton, auth } from "@clerk/nextjs";
+import prismadb from "@/lib/prismadb";
+
 import { MainNav } from "@/components/main-nav";
 import VehicleSwitcher from "@/components/vehicle-switcher";
-import { redirect } from "next/navigation";
-import prismadb from "@/lib/prismadb";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 export const Navbar = async () => {
