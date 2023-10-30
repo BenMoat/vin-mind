@@ -89,7 +89,7 @@ export const TaxAndMOT: React.FC<DvlaDataProps> = ({ initialData }) => {
   return (
     <>
       {error ? (
-        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <>
           <div className="px-6 py-6 space-y-2 w-full rounded-lg border text-center">
             <span className="flex items-center justify-center">
               <XCircle className="w-8 h-8 text-red-500" />
@@ -97,15 +97,15 @@ export const TaxAndMOT: React.FC<DvlaDataProps> = ({ initialData }) => {
             <p className="text-sm">{error}</p>
             <Button variant="outline">Retry</Button>
           </div>
-        </div>
+        </>
       ) : loading ? (
-        <div className="grid gap-4 grid-cols-3">
+        <>
           <CardSkeleton />
           <CardSkeleton />
-        </div>
+        </>
       ) : (
         initialData && (
-          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          <>
             {initialData.taxStatus === "Taxed" ? (
               <Card className="relative px-6 space-y-2 text-center">
                 <LastUpdatedBadge tax updatedAt={initialData.updatedAt} />
@@ -185,7 +185,7 @@ export const TaxAndMOT: React.FC<DvlaDataProps> = ({ initialData }) => {
                 </CardHeader>
               </Card>
             )}
-          </div>
+          </>
         )
       )}
     </>

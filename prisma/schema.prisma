@@ -16,21 +16,38 @@ model Vehicle {
   name               String
   registrationNumber String?
   userId             String
-  modificationTypes  ModificationType[] @relation("VehicleToModificationType")
-  modifications      Modification[]     @relation("VehicleToModification")
   dvlaData           DvlaData?          @relation("VehicleToDvlaData")
+  insurance          Insurance?         @relation("VehicleToInsurance")
+  modifications      Modification[]     @relation("VehicleToModification")
+  modificationTypes  ModificationType[] @relation("VehicleToModificationType")
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt
 }
 
-model ModificationType {
-  id            String         @id @default(uuid())
-  vehicleId     String
-  vehicle       Vehicle        @relation("VehicleToModificationType", fields: [vehicleId], references: [id], onDelete: Cascade)
-  modifications Modification[] @relation("ModificationTypeToModification")
-  name          String
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+model DvlaData {
+  id                 String   @id @default(uuid())
+  vehicleId          String   @unique
+  vehicle            Vehicle  @relation("VehicleToDvlaData", fields: [vehicleId], references: [id], onDelete: Cascade)
+  registrationNumber String
+  taxStatus          String
+  taxDueDate         String
+  motStatus          String
+  motExpiryDate      String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([vehicleId])
+}
+
+model Insurance {
+  id        String   @id @default(uuid())
+  vehicleId String   @unique
+  vehicle   Vehicle  @relation("VehicleToInsurance", fields: [vehicleId], references: [id], onDelete: Cascade)
+  isInsured Boolean
+  startDate DateTime
+  endDate   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([vehicleId])
 }
@@ -64,17 +81,14 @@ model Files {
   @@index([modificationId])
 }
 
-model DvlaData {
-  id                 String   @id @default(uuid())
-  vehicleId          String   @unique
-  vehicle            Vehicle  @relation("VehicleToDvlaData", fields: [vehicleId], references: [id], onDelete: Cascade)
-  registrationNumber String
-  taxStatus          String
-  taxDueDate         String
-  motStatus          String
-  motExpiryDate      String
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+model ModificationType {
+  id            String         @id @default(uuid())
+  vehicleId     String
+  vehicle       Vehicle        @relation("VehicleToModificationType", fields: [vehicleId], references: [id], onDelete: Cascade)
+  modifications Modification[] @relation("ModificationTypeToModification")
+  name          String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   @@index([vehicleId])
 }

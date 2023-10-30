@@ -6,10 +6,11 @@ import { getTotalModifications } from "@/actions/get-total-modifications";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Heading } from "@/components/heading";
 import { Separator } from "@/components/ui/separator";
-import { CarIcon, Milestone, PoundSterling, Wallet } from "lucide-react";
+import { CarIcon, Milestone, PoundSterling } from "lucide-react";
 
 import { TaxAndMOT } from "./components/tax-and-mot";
 import { Mileage } from "./components/mileage";
+import { InsuranceCard } from "./components/insurance-card";
 
 interface DashboardPageProps {
   params: { vehicleId: string };
@@ -25,6 +26,7 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
     include: {
       modifications: true,
       dvlaData: true,
+      insurance: true,
     },
   });
 
@@ -44,7 +46,10 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
       <div className="flex-1 space-y-4 p-8 pt-6">
         <Heading title="Dashboard" description="An overview of your vehicle" />
         <Separator />
-        {vehicle.dvlaData && <TaxAndMOT initialData={vehicle.dvlaData} />}
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          {vehicle.dvlaData && <TaxAndMOT initialData={vehicle.dvlaData} />}
+          <InsuranceCard initialData={vehicle?.insurance} />
+        </div>
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
@@ -66,17 +71,6 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">11,897 miles</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0">
-              <CardTitle className="text-sm font-medium">
-                Insurance Due
-              </CardTitle>
-              <Wallet className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">01/03/04</div>
             </CardContent>
           </Card>
         </div>

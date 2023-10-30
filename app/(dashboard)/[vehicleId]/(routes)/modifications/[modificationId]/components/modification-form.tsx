@@ -243,7 +243,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                       </Select>
                       <Button
                         type="button"
-                        className=" ml-auto mt-2 sm:ml-2 sm:mt-0  w-[200px] !max-w-[140px]"
+                        className=" ml-auto mt-2 sm:ml-2 sm:mt-0 w-[200px] !max-w-[140px]"
                         onClick={() => {
                           setTypeOpen(true);
                         }}
