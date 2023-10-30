@@ -31,7 +31,7 @@ export async function POST(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    const modificationType = await prismadb.insurance.create({
+    const insurance = await prismadb.insurance.create({
       data: {
         startDate,
         endDate,
@@ -40,7 +40,7 @@ export async function POST(
       },
     });
 
-    return NextResponse.json(modificationType);
+    return NextResponse.json(insurance);
   } catch (error) {
     console.log("[INSURANCE_POST]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
@@ -72,7 +72,7 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    const modificationType = await prismadb.insurance.updateMany({
+    const insurance = await prismadb.insurance.updateMany({
       where: {
         vehicleId: params.vehicleId,
       },
@@ -83,9 +83,44 @@ export async function PATCH(
       },
     });
 
-    return NextResponse.json(modificationType);
+    return NextResponse.json(insurance);
   } catch (error) {
     console.log("INSURANCE_PATCH", error);
+    return new NextResponse("Internal server error", { status: 500 });
+  }
+}
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { vehicleId: string } }
+) {
+  try {
+    const { userId } = auth();
+
+    if (!userId) {
+      return new NextResponse("Unauthenticated", { status: 401 });
+    }
+
+    const vehicleByUserId = await prismadb.vehicle.findFirst({
+      where: {
+        id: params.vehicleId,
+        userId,
+      },
+    });
+
+    if (!vehicleByUserId) {
+      return new NextResponse("Unauthorized", { status: 403 });
+    }
+
+    const insurance = await prismadb.insurance.deleteMany({
+      where: {
+        vehicleId: params.vehicleId,
+      },
+    });
+
+    return NextResponse.json(insurance);
+  } catch (error) {
+    console.log("INSURANCE_DELETE", error);
     return new NextResponse("Internal server error", { status: 500 });
   }
 }

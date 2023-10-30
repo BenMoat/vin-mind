@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState } from "react";
 import { Insurance } from "@prisma/client";
 
-import { useParams, useRouter } from "next/navigation";
+import { LastUpdatedBadge } from "./last-updated-badge";
+import { InsuranceModal } from "./insurance-modal";
 
 import { CheckCircle, PlusCircle, XCircle } from "lucide-react";
 import {
@@ -15,9 +15,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-
-import { LastUpdatedBadge } from "./last-updated-badge";
-import { InsuranceModal } from "./insurance-modal";
 
 interface InsuranceCardProps {
   initialData: Insurance | null;
@@ -60,6 +57,8 @@ export const InsuranceCard: React.FC<InsuranceCardProps> = ({
               <CardContent className="pb-0 flex justify-between items-center">
                 <span>Due: {initialData.endDate.toLocaleDateString()}</span>
                 <Button
+                  variant="outline"
+                  className="h-6"
                   type="button"
                   onClick={() => {
                     setIsOpen(true);
@@ -83,7 +82,7 @@ export const InsuranceCard: React.FC<InsuranceCardProps> = ({
                     setIsOpen(true);
                   }}
                 >
-                  <PlusCircle className="h-9 w-9" />
+                  <PlusCircle className="h-8 w-8" />
                 </Button>
               </span>
             </CardDescription>

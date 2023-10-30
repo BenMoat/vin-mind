@@ -11,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Modification, ModificationType, Files } from "@prisma/client";
 
+import { PlusCircle } from "lucide-react";
 import { Heading } from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -36,7 +37,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import FileUpload from "@/components/file-upload";
 import { TypeModal } from "@/components/modals/type-modal";
-import { PlusCircle } from "lucide-react";
 import {
   Card,
   CardContent,
