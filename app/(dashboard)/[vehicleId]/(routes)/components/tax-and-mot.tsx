@@ -53,16 +53,13 @@ export const TaxAndMOT: React.FC<DvlaDataProps> = ({ initialData }) => {
 
     /* Cache a timestamp for when the data was last fetched. Compare it against the current time
     to determine whether to fetch new data or not.*/
-    const storedTimestamp = parseInt(
-      localStorage.getItem("lastFetchTimestamp") || "0",
-      10
-    );
+    const storedTimestamp = parseInt(localStorage.getItem("resTMS") || "0", 10);
     const currentTime = Date.now();
     const timeThreshold = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
     if (currentTime - storedTimestamp > timeThreshold) {
       fetchData();
-      localStorage.setItem("lastFetchTimestamp", currentTime.toString());
+      localStorage.setItem("resTMS", currentTime.toString());
     }
   }, [initialData, registrationNumber]);
 
@@ -89,15 +86,13 @@ export const TaxAndMOT: React.FC<DvlaDataProps> = ({ initialData }) => {
   return (
     <>
       {error ? (
-        <>
-          <div className="px-6 py-6 space-y-2 w-full rounded-lg border text-center">
-            <span className="flex items-center justify-center">
-              <XCircle className="w-8 h-8 text-red-500" />
-            </span>
-            <p className="text-sm">{error}</p>
-            <Button variant="outline">Retry</Button>
-          </div>
-        </>
+        <div className="px-6 py-6 space-y-2 w-full rounded-lg border text-center">
+          <span className="flex items-center justify-center">
+            <XCircle className="w-8 h-8 text-red-500" />
+          </span>
+          <p className="text-sm">{error}</p>
+          <Button variant="outline">Retry</Button>
+        </div>
       ) : loading ? (
         <>
           <CardSkeleton />
