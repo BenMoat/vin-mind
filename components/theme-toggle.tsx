@@ -10,7 +10,6 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -33,7 +32,7 @@ export function ThemeToggle() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuCheckboxItem
-          className={`cursor-pointer ${
+          className={`${
             resolvedTheme === "light" && !isHovering
               ? "bg-accent"
               : "hover:bg-accent"
@@ -47,7 +46,7 @@ export function ThemeToggle() {
           Light
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
-          className={`cursor-pointer ${
+          className={`${
             resolvedTheme === "dark" && !isHovering
               ? "bg-accent"
               : "hover:bg-accent"
@@ -60,9 +59,8 @@ export function ThemeToggle() {
           <Moon className="absolute left-2 h-4 w-4 mr-2" />
           Dark
         </DropdownMenuCheckboxItem>
-        <DropdownMenuSeparator />
         <DropdownMenuItem
-          className="cursor-pointer flex justify-center space-x-2 hover:bg-accent"
+          className="flex justify-center space-x-2 border-t"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
           onClick={() => setTheme("system")}

@@ -9,3 +9,6 @@ export const formatter = new Intl.NumberFormat("en-UK", {
   style: "currency",
   currency: "GBP",
 });
+
+export const formatLabelWithEllipsis = (label: string | undefined) =>
+  label && label.length > 19 ? `${label.slice(0, 19)}...` : label;

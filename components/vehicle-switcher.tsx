@@ -1,51 +1,35 @@
 "use client";
 
 import { useState } from "react";
+
 import { Vehicle } from "@prisma/client";
-
 import { useParams, useRouter } from "next/navigation";
-
 import { useStoreModal } from "@/hooks/use-store-modal";
+
 import { Button } from "@/components/ui/button";
 import { CarFront, ChevronDown, PlusCircle } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuSeparator,
+  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
+import { formatLabelWithEllipsis } from "@/lib/utils";
 interface VehicleSwitcherProps {
   items: Vehicle[];
 }
 
 export default function VehicleSwitcher({ items = [] }: VehicleSwitcherProps) {
-  const vehicleModal = useStoreModal();
+  const { onOpen: openVehicleModal } = useStoreModal();
   const params = useParams();
-  const router = useRouter();
-
-  const formattedItems = items.map((item) => ({
-    label: item.name,
-    value: item.id,
-  }));
-
-  const currentVehicle = formattedItems.find(
-    (item) => item.value === params.vehicleId
-  );
-
-  //Add ellipsis to label if it's above 19 chars
-  const label = currentVehicle?.label;
-  const formattedLabel =
-    label && label.length > 19 ? `${label.slice(0, 19)}...` : label;
+  const { push } = useRouter();
 
   const [open, setOpen] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
-  const onVehicleSelect = (vehicle: { label: string; value: string }) => {
-    setOpen(false);
-    router.push(`/${vehicle.value}`);
-  };
+  const currentVehicle = items.find((item) => item.id === params.vehicleId);
+  const formattedLabel = formatLabelWithEllipsis(currentVehicle?.name);
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -62,37 +46,28 @@ export default function VehicleSwitcher({ items = [] }: VehicleSwitcherProps) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[200px] p-0" align="end">
-        {formattedItems.map((vehicle) => {
-          const vehicleLabel =
-            vehicle.label && vehicle.label.length > 19
-              ? `${vehicle.label.slice(0, 19)}...`
-              : vehicle.label;
-
-          return (
-            <DropdownMenuCheckboxItem
-              key={vehicle.value}
-              checked={vehicle.value === params.vehicleId}
-              onSelect={() => onVehicleSelect(vehicle)}
-              className={`text-sm cursor-pointer truncate w-full ${
-                vehicle.value === params.vehicleId && hoveredItem === null
-                  ? "bg-accent"
-                  : ""
-              }`}
-              onMouseEnter={() => setHoveredItem(vehicle.value)}
-              onMouseLeave={() => setHoveredItem(null)}
-            >
-              <CarFront className="absolute left-2 mr-2 h-4 w-4" />
-              {vehicleLabel}
-            </DropdownMenuCheckboxItem>
-          );
-        })}
-        <DropdownMenuSeparator />
+        <DropdownMenuLabel>Vehicles</DropdownMenuLabel>
+        {items.map((vehicle) => (
+          <DropdownMenuCheckboxItem
+            key={vehicle.id}
+            checked={vehicle.id === params.vehicleId}
+            onSelect={() => {
+              setOpen(false);
+              push(`/${vehicle.id}`);
+            }}
+            className={`text-sm truncate w-full ${
+              vehicle.id === params.vehicleId && !hoveredItem ? "bg-accent" : ""
+            }`}
+            onMouseEnter={() => setHoveredItem(vehicle.id)}
+            onMouseLeave={() => setHoveredItem(null)}
+          >
+            <CarFront className="absolute left-2 mr-2 h-4 w-4" />
+            {formatLabelWithEllipsis(vehicle.name)}
+          </DropdownMenuCheckboxItem>
+        ))}
         <DropdownMenuCheckboxItem
-          className="cursor-pointer"
-          onSelect={() => {
-            setOpen(false);
-            vehicleModal.onOpen();
-          }}
+          className="border-t"
+          onSelect={openVehicleModal}
           onMouseEnter={() => setHoveredItem("addVehicle")}
           onMouseLeave={() => setHoveredItem(null)}
         >
