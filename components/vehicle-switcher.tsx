@@ -4,43 +4,23 @@ import { useState } from "react";
 import { Vehicle } from "@prisma/client";
 
 import { useParams, useRouter } from "next/navigation";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+
 import { useStoreModal } from "@/hooks/use-store-modal";
 import { Button } from "@/components/ui/button";
+import { CarFront, ChevronDown, PlusCircle } from "lucide-react";
 import {
-  CarFront,
-  CarFrontIcon,
-  Check,
-  ChevronsUpDown,
-  PlusCircle,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-} from "@/components/ui/command";
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
-type PopoverTriggerProps = React.ComponentPropsWithoutRef<
-  typeof PopoverTrigger
->;
-
-interface VehicleSwitcherProps extends PopoverTriggerProps {
+interface VehicleSwitcherProps {
   items: Vehicle[];
 }
 
-export default function VehicleSwitcher({
-  className,
-  items = [],
-}: VehicleSwitcherProps) {
+export default function VehicleSwitcher({ items = [] }: VehicleSwitcherProps) {
   const vehicleModal = useStoreModal();
   const params = useParams();
   const router = useRouter();
@@ -54,11 +34,13 @@ export default function VehicleSwitcher({
     (item) => item.value === params.vehicleId
   );
 
+  //Add ellipsis to label if it's above 19 chars
   const label = currentVehicle?.label;
   const formattedLabel =
-    label && label.length > 15 ? `${label.slice(0, 15)}...` : label;
+    label && label.length > 19 ? `${label.slice(0, 19)}...` : label;
 
   const [open, setOpen] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const onVehicleSelect = (vehicle: { label: string; value: string }) => {
     setOpen(false);
@@ -66,64 +48,58 @@ export default function VehicleSwitcher({
   };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
+      <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
           size="sm"
-          role="combobox"
-          aria-expanded={open}
           aria-label="Select a Vehicle"
-          className={cn("w-[70px] sm:w-[200px] justify-between", className)}
+          className="w-[70px] sm:w-[200px] justify-between"
         >
-          <CarFrontIcon className="mr-2 h-4 w-4" />
-          <span className="hidden sm:block">{formattedLabel}</span>
-          <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+          <CarFront className="mr-2 h-4 w-4" />
+          <span className="hidden truncate sm:block">{formattedLabel}</span>
+          <ChevronDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <Command>
-          <CommandList>
-            <CommandInput placeholder="Search vehicles" />
-            <CommandEmpty>No vehicle found</CommandEmpty>
-            <CommandGroup heading="Vehicles">
-              {formattedItems.map((vehicle) => (
-                <CommandItem
-                  key={vehicle.value}
-                  onSelect={() => onVehicleSelect(vehicle)}
-                  className="text-sm cursor-pointer"
-                >
-                  <CarFront className="mr-2 h-4 w-4" />
-                  {vehicle.label}
-                  <Check
-                    className={cn(
-                      "ml-auto h-4 w-4",
-                      currentVehicle?.value === vehicle.value
-                        ? "opacity-100"
-                        : "opacity-0"
-                    )}
-                  />
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-          <CommandSeparator />
-          <CommandList>
-            <CommandGroup>
-              <CommandItem
-                className="cursor-pointer"
-                onSelect={() => {
-                  setOpen(false);
-                  vehicleModal.onOpen();
-                }}
-              >
-                <PlusCircle className="mr-2 h-5 w-5" />
-                Add a Vehicle
-              </CommandItem>
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-[200px] p-0" align="end">
+        {formattedItems.map((vehicle) => {
+          const vehicleLabel =
+            vehicle.label && vehicle.label.length > 19
+              ? `${vehicle.label.slice(0, 19)}...`
+              : vehicle.label;
+
+          return (
+            <DropdownMenuCheckboxItem
+              key={vehicle.value}
+              checked={vehicle.value === params.vehicleId}
+              onSelect={() => onVehicleSelect(vehicle)}
+              className={`text-sm cursor-pointer truncate w-full ${
+                vehicle.value === params.vehicleId && hoveredItem === null
+                  ? "bg-accent"
+                  : ""
+              }`}
+              onMouseEnter={() => setHoveredItem(vehicle.value)}
+              onMouseLeave={() => setHoveredItem(null)}
+            >
+              <CarFront className="absolute left-2 mr-2 h-4 w-4" />
+              {vehicleLabel}
+            </DropdownMenuCheckboxItem>
+          );
+        })}
+        <DropdownMenuSeparator />
+        <DropdownMenuCheckboxItem
+          className="cursor-pointer"
+          onSelect={() => {
+            setOpen(false);
+            vehicleModal.onOpen();
+          }}
+          onMouseEnter={() => setHoveredItem("addVehicle")}
+          onMouseLeave={() => setHoveredItem(null)}
+        >
+          <PlusCircle className="mr-2 h-5 w-5" />
+          Add a Vehicle
+        </DropdownMenuCheckboxItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
