@@ -61,13 +61,19 @@ export const InsuranceCard: React.FC<InsuranceCardProps> = ({
 
     /* Cache a timestamp for when the data was last fetched. Compare it against the current time
     to determine whether to fetch new data or not.*/
-    const storedTimestamp = parseInt(localStorage.getItem("insTMS") || "0", 10);
+    const storedTimestamp = parseInt(
+      localStorage.getItem(`insTMS-${params.vehicleId}`) || "0",
+      10
+    );
     const currentTime = Date.now();
     const timeThreshold = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
     if (currentTime - storedTimestamp > timeThreshold) {
       fetchData();
-      localStorage.setItem("insTMS", currentTime.toString());
+      localStorage.setItem(
+        `insTMS-${params.vehicleId}`,
+        currentTime.toString()
+      );
     }
   }, [initialData]);
 

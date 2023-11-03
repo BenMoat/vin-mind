@@ -53,13 +53,19 @@ export const TaxAndMOT: React.FC<DvlaDataProps> = ({ initialData }) => {
 
     /* Cache a timestamp for when the data was last fetched. Compare it against the current time
     to determine whether to fetch new data or not.*/
-    const storedTimestamp = parseInt(localStorage.getItem("resTMS") || "0", 10);
+    const storedTimestamp = parseInt(
+      localStorage.getItem(`resTMS-${params.vehicleId}`) || "0",
+      10
+    );
     const currentTime = Date.now();
     const timeThreshold = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
     if (currentTime - storedTimestamp > timeThreshold) {
       fetchData();
-      localStorage.setItem("resTMS", currentTime.toString());
+      localStorage.setItem(
+        `resTMS-${params.vehicleId}`,
+        currentTime.toString()
+      );
     }
   }, [initialData, registrationNumber]);
 
