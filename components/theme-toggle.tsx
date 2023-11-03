@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ChevronDown, Moon, Sun } from "lucide-react";
+import { Moon, Sun, ChevronDown } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,13 @@ export function ThemeToggle() {
     window.matchMedia("(prefers-color-scheme: dark)").matches;
 
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
+    <DropdownMenu
+      open={open}
+      onOpenChange={(e) => {
+        setIsHovering(false);
+        setOpen(e);
+      }}
+    >
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
@@ -52,7 +58,6 @@ export function ThemeToggle() {
           onMouseLeave={() => setIsHovering(false)}
           checked={resolvedTheme === "light"}
           onClick={() => setTheme("light")}
-          onSelect={() => setOpen(false)}
         >
           <Sun className="absolute left-2 h-4 w-4 mr-2" />
           Light
