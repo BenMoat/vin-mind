@@ -42,7 +42,11 @@ export default function VehicleSwitcher({ items = [] }: VehicleSwitcherProps) {
         >
           <CarFront className="mr-2 h-4 w-4" />
           <span className="hidden truncate sm:block">{formattedLabel}</span>
-          <ChevronDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+          <ChevronDown
+            className={`ml-auto h-4 w-4 shrink-0 opacity-50 transition-transform duration-300 ${
+              open ? "transform rotate-180" : ""
+            }`}
+          />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[200px] p-0" align="end">

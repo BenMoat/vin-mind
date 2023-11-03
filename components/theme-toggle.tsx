@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Moon, Sun } from "lucide-react";
+import { ChevronDown, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import {
 
 export function ThemeToggle() {
   const { setTheme, resolvedTheme } = useTheme();
+  const [open, setOpen] = React.useState(false);
   const [isHovering, setIsHovering] = React.useState(false);
 
   const defaultMode =
@@ -22,11 +23,21 @@ export function ThemeToggle() {
     window.matchMedia("(prefers-color-scheme: dark)").matches;
 
   return (
-    <DropdownMenu onOpenChange={() => setIsHovering(false)}>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
-          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+        <Button
+          variant="outline"
+          size="icon"
+          className="w-[60px] justify-center"
+        >
+          <Sun className="mr-4 absolute h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="mr-4 absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <ChevronDown
+            className={`ml-6 h-4 w-4 shrink-0 opacity-50 transition-transform duration-300 ${
+              open ? "transform rotate-180" : ""
+            }`}
+          />
+
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
@@ -41,6 +52,7 @@ export function ThemeToggle() {
           onMouseLeave={() => setIsHovering(false)}
           checked={resolvedTheme === "light"}
           onClick={() => setTheme("light")}
+          onSelect={() => setOpen(false)}
         >
           <Sun className="absolute left-2 h-4 w-4 mr-2" />
           Light
