@@ -90,8 +90,8 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
         `/api/${params.vehicleId}/vehicle-enquiry/save-enquiry`
       );
       localStorage.removeItem(`resTMS-${params.vehicleId}`);
+      form.setValue("initialData.registrationNumber", "");
       router.refresh();
-      form.reset();
       toast.success("Registration removed");
     } catch (error) {
       toast.error("Something went wrong");
@@ -156,6 +156,7 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
                   <Button
                     disabled={
                       loading ||
+                      !field.value ||
                       areEqual(
                         field.value,
                         initialData?.registrationNumber || ""
