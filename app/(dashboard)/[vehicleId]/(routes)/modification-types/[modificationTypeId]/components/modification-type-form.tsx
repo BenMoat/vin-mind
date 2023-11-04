@@ -209,7 +209,7 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
                   <br />
                   {(modifications?.length ?? 0) > 0 && (
                     <b className="dark:text-white text-black">
-                      Click on a mod to edit it
+                      Click on a mod to view or edit it
                     </b>
                   )}
                 </CardDescription>

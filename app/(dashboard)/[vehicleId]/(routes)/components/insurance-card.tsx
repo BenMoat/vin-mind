@@ -125,7 +125,7 @@ export const InsuranceCard: React.FC<InsuranceCardProps> = ({
                     </span>
                   ) : (
                     <span className="flex items-center justify-center">
-                      <XCircle className="w-8 h-8 mr-2 text-[#fa1d1d]" />
+                      <XCircle className="w-8 h-8 mr-2 text-[#a92727]" />
                       Not Insured
                     </span>
                   )}

@@ -89,6 +89,7 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
       await axios.delete(
         `/api/${params.vehicleId}/vehicle-enquiry/save-enquiry`
       );
+      localStorage.removeItem(`resTMS-${params.vehicleId}`);
       router.refresh();
       form.reset();
       toast.success("Registration removed");

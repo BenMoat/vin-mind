@@ -90,6 +90,7 @@ export const InsuranceModal: React.FC<InsuranceModalProps> = ({
     try {
       setLoading(true);
       await axios.delete(`/api/${params.vehicleId}/insurance`);
+      localStorage.removeItem(`insTMS-${params.vehicleId}`);
       router.refresh();
       toast.success("Insurance Reminder Deleted");
     } catch (error) {

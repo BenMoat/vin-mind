@@ -118,12 +118,14 @@ export const TaxAndMOT: React.FC<DvlaDataProps> = ({ initialData }) => {
                       {initialData.taxStatus}
                     </span>
                   </CardDescription>
-                  <CardContent className="pb-0">
-                    Due:{" "}
-                    {new Date(initialData.taxDueDate).toLocaleDateString(
-                      "en-GB"
-                    )}
-                  </CardContent>
+                  {initialData.taxDueDate && (
+                    <CardContent className="pb-0">
+                      Due:{" "}
+                      {new Date(initialData.taxDueDate).toLocaleDateString(
+                        "en-GB"
+                      )}
+                    </CardContent>
+                  )}
                 </CardHeader>
               </Card>
             ) : (
@@ -137,12 +139,14 @@ export const TaxAndMOT: React.FC<DvlaDataProps> = ({ initialData }) => {
                       {initialData.taxStatus}
                     </span>
                   </CardDescription>
-                  <CardContent className="pb-0">
-                    Due:{" "}
-                    {new Date(initialData.taxDueDate).toLocaleDateString(
-                      "en-GB"
-                    )}
-                  </CardContent>
+                  {initialData.taxDueDate && (
+                    <CardContent className="pb-0">
+                      Due:{" "}
+                      {new Date(initialData.taxDueDate).toLocaleDateString(
+                        "en-GB"
+                      )}
+                    </CardContent>
+                  )}
                 </CardHeader>
               </Card>
             )}
@@ -158,12 +162,14 @@ export const TaxAndMOT: React.FC<DvlaDataProps> = ({ initialData }) => {
                       {initialData.motStatus}
                     </span>
                   </CardDescription>
-                  <CardContent className="pb-0">
-                    Expires:{" "}
-                    {new Date(initialData.motExpiryDate).toLocaleDateString(
-                      "en-GB"
-                    )}
-                  </CardContent>
+                  {initialData.motExpiryDate && (
+                    <CardContent className="pb-0">
+                      Due:{" "}
+                      {new Date(initialData.motExpiryDate).toLocaleDateString(
+                        "en-GB"
+                      )}
+                    </CardContent>
+                  )}
                 </CardHeader>
               </Card>
             ) : (
@@ -173,16 +179,18 @@ export const TaxAndMOT: React.FC<DvlaDataProps> = ({ initialData }) => {
                   <CardTitle>MOT</CardTitle>
                   <CardDescription>
                     <span className="flex items-center justify-center">
-                      <XCircle className="w-8 h-8 mr-2 text-[#7f1d1d]" />
+                      <XCircle className="w-8 h-8 mr-2 text-[#a92727]" />
                       {initialData.motStatus}
                     </span>
                   </CardDescription>
-                  <CardContent className="pb-0">
-                    Expires:{" "}
-                    {new Date(initialData.motExpiryDate).toLocaleDateString(
-                      "en-GB"
-                    )}
-                  </CardContent>
+                  {initialData.motExpiryDate && (
+                    <CardContent className="pb-0">
+                      Due:{" "}
+                      {new Date(initialData.motExpiryDate).toLocaleDateString(
+                        "en-GB"
+                      )}
+                    </CardContent>
+                  )}
                 </CardHeader>
               </Card>
             )}

@@ -8,7 +8,14 @@ export async function POST(req: Request) {
     const { userId } = auth();
     const body = await req.json();
 
-    const { name, registrationNumber } = body;
+    const {
+      name,
+      registrationNumber,
+      taxStatus,
+      taxDueDate,
+      motStatus,
+      motExpiryDate,
+    } = body;
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -18,13 +25,32 @@ export async function POST(req: Request) {
       return new NextResponse("Vehicle name is required", { status: 400 });
     }
 
-    const vehicle = await prismadb.vehicle.create({
-      data: {
-        name,
-        registrationNumber,
-        userId,
-      },
-    });
+    let vehicle;
+
+    if (!registrationNumber) {
+      vehicle = await prismadb.vehicle.create({
+        data: {
+          name,
+          userId,
+        },
+      });
+    } else {
+      vehicle = await prismadb.vehicle.create({
+        data: {
+          name,
+          userId,
+          dvlaData: {
+            create: {
+              registrationNumber,
+              taxStatus,
+              taxDueDate,
+              motStatus,
+              motExpiryDate,
+            },
+          },
+        },
+      });
+    }
 
     return NextResponse.json(vehicle);
   } catch (error) {

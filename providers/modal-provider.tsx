@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { StoreModal } from "@/components/modals/store-modal";
+import { VehicleModal } from "@/components/modals/vehicle-modal";
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -15,7 +15,7 @@ export const ModalProvider = () => {
 
   return (
     <>
-      <StoreModal />
+      <VehicleModal />
     </>
   );
 };
