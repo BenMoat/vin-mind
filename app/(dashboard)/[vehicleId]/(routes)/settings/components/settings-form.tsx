@@ -159,7 +159,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
       </div>
       <Separator />
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-        <Card className="max-w-full md:max-w-[407px] md:ml-auto">
+        <Card className="max-w-full md:max-w-[400px] md:ml-auto">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
@@ -198,8 +198,8 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
         </Card>
         <RegChecker initialData={dvlaData} />
       </div>
-      <div className="flex justify-center ">
-        <Card className="border-destructive max-w-[850px]">
+      <div className="flex justify-center">
+        <Card className="border-destructive max-w-[804px]">
           <CardHeader>
             <CardTitle className="inline-flex items-center">
               <AlertTriangle className="mr-2" size={25} /> Danger Zone

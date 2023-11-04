@@ -111,7 +111,7 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
   }
 
   return (
-    <Card className="max-w-full md:max-w-[407px]">
+    <Card className="max-w-full md:max-w-[400px]">
       <Form {...form}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormField

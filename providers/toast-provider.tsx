@@ -7,7 +7,7 @@ import { Check, X } from "lucide-react";
 export const ToastProvider = () => {
   const { resolvedTheme } = useTheme();
   const fontColour = resolvedTheme === "dark" ? "#ffffff" : "#000000";
-  const bgColour = resolvedTheme === "dark" ? "#020817" : "#ffffff";
+  const bgColour = resolvedTheme === "dark" ? "#060609" : "#ffffff";
 
   return (
     <Toaster
