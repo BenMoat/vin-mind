@@ -101,8 +101,8 @@ export const columns: ColumnDef<ModificationColumn>[] = [
     header: "Notes",
     cell: ({ row }) => {
       return (
-        <div className="max-w-[250px] whitespace-nowrap">
-          {row.original.notes.slice(0, 50)}...
+        <div className="max-w-[300px] whitespace-nowrap truncate">
+          {row.original.notes.slice(0, 95)}
         </div>
       );
     },
