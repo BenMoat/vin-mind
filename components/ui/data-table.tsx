@@ -57,6 +57,9 @@ export function DataTable<TData, TValue>({
   const params = useParams();
   const router = useRouter();
 
+  const [typeOpen, setTypeOpen] = useState(false);
+  const [obosleteOpen, setObsoleteOpen] = useState(false);
+
   const [obsoleteText, setObsoleteText] = useState("Obsolete?");
   const [typeText, setTypeText] = useState("Mod Type");
   const [showResetButton, setShowResetButton] = useState(false);
@@ -95,6 +98,7 @@ export function DataTable<TData, TValue>({
         />
         {modType && (
           <Select
+            onOpenChange={setTypeOpen}
             value={
               (table.getColumn("type")?.getFilterValue() || "all") as string
             }
@@ -111,8 +115,11 @@ export function DataTable<TData, TValue>({
             }}
             defaultValue="all"
           >
-            <SelectTrigger className="w-[150px] ml-2">
-              <SelectValue placeholder={typeText}>
+            <SelectTrigger open={typeOpen} className="w-[150px] ml-2">
+              <SelectValue
+                placeholder={typeText}
+                className="flex justify-between items-center"
+              >
                 {resetButtonPressed ? null : typeText}
               </SelectValue>
             </SelectTrigger>
@@ -131,6 +138,7 @@ export function DataTable<TData, TValue>({
         )}
         {isObsolete && (
           <Select
+            onOpenChange={setObsoleteOpen}
             value={
               table.getColumn("isObsolete")?.getFilterValue() === true
                 ? "true"
@@ -155,7 +163,7 @@ export function DataTable<TData, TValue>({
             }}
             defaultValue="all"
           >
-            <SelectTrigger className="w-[150px] ml-2">
+            <SelectTrigger open={obosleteOpen} className="w-[150px] ml-2">
               <SelectValue placeholder={obsoleteText}>
                 {resetButtonPressed ? null : obsoleteText}
               </SelectValue>

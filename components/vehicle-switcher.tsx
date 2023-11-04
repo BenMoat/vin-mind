@@ -50,7 +50,7 @@ export default function VehicleSwitcher({ items = [] }: VehicleSwitcherProps) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[200px] p-0" align="end">
-        <DropdownMenuLabel>Vehicles</DropdownMenuLabel>
+        <DropdownMenuLabel>Garage</DropdownMenuLabel>
         {items.map((vehicle) => (
           <DropdownMenuCheckboxItem
             key={vehicle.id}

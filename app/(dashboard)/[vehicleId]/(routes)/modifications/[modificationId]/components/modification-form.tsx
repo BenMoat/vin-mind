@@ -76,6 +76,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
 
   const [alertOpen, setAlertOpen] = useState(false);
   const [typeOpen, setTypeOpen] = useState(false);
+  const [selectOpen, setSelectOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const title = initialData
@@ -218,12 +219,13 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                     <div className="sm:flex">
                       <Select
                         disabled={loading}
+                        onOpenChange={setSelectOpen}
                         onValueChange={field.onChange}
                         value={field.value}
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger open={selectOpen}>
                             <SelectValue
                               defaultValue={field.value}
                               placeholder="---"

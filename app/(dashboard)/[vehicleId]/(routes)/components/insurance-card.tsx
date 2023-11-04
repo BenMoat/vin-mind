@@ -130,13 +130,13 @@ export const InsuranceCard: React.FC<InsuranceCardProps> = ({
                     </span>
                   )}
                 </CardDescription>
-                <CardContent className="pb-0 flex justify-between items-center">
+                <CardContent className="pb-0 inline-flex justify-center">
                   <span className="whitespace-nowrap mr-2">
                     Due: {initialData.endDate.toLocaleDateString()}
                   </span>
                   <Button
                     variant="outline"
-                    className="h-6 "
+                    className="h-6"
                     type="button"
                     onClick={() => {
                       setIsOpen(true);

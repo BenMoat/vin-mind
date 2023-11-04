@@ -108,10 +108,28 @@ export const VehicleModal = () => {
     }
   };
 
+  const renderDescription = () => {
+    return (
+      <>
+        <a className="mb-4 mt-2 block">Add a vehicle to your garage.</a>
+        Additionally, enter your vehicle's number plate to view its up-to-date
+        tax and MOT status, directly sourced from the{" "}
+        <a
+          className="underline font-bold hover:text-primary transition-colors"
+          href="https://dvladigital.blog.gov.uk/2020/03/12/dvlas-new-api-developer-portal-launch-first-api-vehicle-enquiry-service-ves-on-gov-uk/"
+          target="_blank"
+        >
+          DVLA
+        </a>
+        .
+      </>
+    );
+  };
+
   return (
     <Modal
       title="Add a Vehicle"
-      description="Add a new vehicle to your garage"
+      description={renderDescription()}
       isOpen={storeModal.isOpen}
       onClose={storeModal.onClose}
     >
