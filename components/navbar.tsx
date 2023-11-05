@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { UserButton, auth } from "@clerk/nextjs";
+import { UserButton, ClerkLoading, ClerkLoaded, auth } from "@clerk/nextjs";
 import prismadb from "@/lib/prismadb";
 
 import { Gauge } from "lucide-react";
@@ -7,6 +7,7 @@ import { Gauge } from "lucide-react";
 import { MainNav } from "@/components/main-nav";
 import VehicleSwitcher from "@/components/vehicle-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Skeleton } from "./ui/skeleton";
 
 export const Navbar = async () => {
   const { userId } = auth();
@@ -24,13 +25,18 @@ export const Navbar = async () => {
   return (
     <div className="border-b">
       <div className="flex h-16 items-center px-4 cursor-default">
-        <Gauge className="ml-4 w-5 h-5" />
+        <Gauge className="ml-4 w-5 h-5 invisible sm:visible" />
         <p className="text-xl font-bold ml-2 mr-6">VinMind</p>
         <VehicleSwitcher items={vehicles} />
         <MainNav className="mx-6" />
         <div className="ml-auto flex items-center space-x-4">
           <ThemeToggle />
-          <UserButton afterSignOutUrl="/" />
+          <ClerkLoading>
+            <Skeleton className="w-8 h-8 mr-2 rounded-full" />
+          </ClerkLoading>
+          <ClerkLoaded>
+            <UserButton afterSignOutUrl="/" />
+          </ClerkLoaded>
         </div>
       </div>
     </div>

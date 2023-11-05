@@ -51,24 +51,28 @@ export default function VehicleSwitcher({ items = [] }: VehicleSwitcherProps) {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[200px] p-0" align="end">
         <DropdownMenuLabel>Garage</DropdownMenuLabel>
-        {items.map((vehicle) => (
-          <DropdownMenuCheckboxItem
-            key={vehicle.id}
-            checked={vehicle.id === params.vehicleId}
-            onSelect={() => {
-              setOpen(false);
-              push(`/${vehicle.id}`);
-            }}
-            className={`text-sm truncate w-full ${
-              vehicle.id === params.vehicleId && !hoveredItem ? "bg-accent" : ""
-            }`}
-            onMouseEnter={() => setHoveredItem(vehicle.id)}
-            onMouseLeave={() => setHoveredItem(null)}
-          >
-            <CarFront className="absolute left-2 mr-2 h-4 w-4" />
-            {formatLabelWithEllipsis(vehicle.name)}
-          </DropdownMenuCheckboxItem>
-        ))}
+        {items
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map((vehicle) => (
+            <DropdownMenuCheckboxItem
+              key={vehicle.id}
+              checked={vehicle.id === params.vehicleId}
+              onSelect={() => {
+                setOpen(false);
+                push(`/${vehicle.id}`);
+              }}
+              className={`text-sm truncate w-full ${
+                vehicle.id === params.vehicleId && !hoveredItem
+                  ? "bg-accent"
+                  : ""
+              }`}
+              onMouseEnter={() => setHoveredItem(vehicle.id)}
+              onMouseLeave={() => setHoveredItem(null)}
+            >
+              <CarFront className="absolute left-2 mr-2 h-4 w-4" />
+              {formatLabelWithEllipsis(vehicle.name)}
+            </DropdownMenuCheckboxItem>
+          ))}
         <DropdownMenuCheckboxItem
           className="border-t"
           onSelect={openVehicleModal}

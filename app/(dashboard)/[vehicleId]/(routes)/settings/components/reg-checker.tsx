@@ -126,7 +126,7 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
                     and MOT status in the <b>Overview</b> tab. This is directly
                     sourced from the{" "}
                     <a
-                      className="underline font-bold"
+                      className="underline font-bold hover:text-primary transition-colors"
                       href="https://dvladigital.blog.gov.uk/2020/03/12/dvlas-new-api-developer-portal-launch-first-api-vehicle-enquiry-service-ves-on-gov-uk/"
                       target="_blank"
                     >

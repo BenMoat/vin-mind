@@ -101,6 +101,12 @@ export const InsuranceModal: React.FC<InsuranceModalProps> = ({
     }
   };
 
+  const closeAndReset = () => {
+    onClose();
+    form.reset();
+    router.refresh();
+  };
+
   //Ensure that the form is reset when the modal is closed
   useEffect(() => {
     if (initialData) {
@@ -124,7 +130,7 @@ export const InsuranceModal: React.FC<InsuranceModalProps> = ({
         title="Renewal Reminder"
         description="Set a reminder for when your insurance is due."
         isOpen={isOpen}
-        onClose={onClose}
+        onClose={closeAndReset}
       >
         <Form {...form}>
           <form
@@ -237,7 +243,7 @@ export const InsuranceModal: React.FC<InsuranceModalProps> = ({
                 disabled={loading}
                 type="button"
                 variant="outline"
-                onClick={onClose}
+                onClick={closeAndReset}
               >
                 Cancel
               </Button>

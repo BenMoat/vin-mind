@@ -108,6 +108,14 @@ export const VehicleModal = () => {
     }
   };
 
+  const { reset } = form;
+
+  const closeModal = () => {
+    reset();
+    storeModal.onClose();
+    setError("");
+  };
+
   const renderDescription = () => {
     return (
       <>
@@ -131,7 +139,7 @@ export const VehicleModal = () => {
       title="Add a Vehicle"
       description={renderDescription()}
       isOpen={storeModal.isOpen}
-      onClose={storeModal.onClose}
+      onClose={closeModal}
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -177,11 +185,10 @@ export const VehicleModal = () => {
 
           <div className="pt-6 space-x-2 flex items-center justify-end w-full">
             <Button
+              type="button"
               disabled={loading}
               variant="outline"
-              onClick={() => {
-                storeModal.onClose();
-              }}
+              onClick={closeModal}
             >
               Cancel
             </Button>
