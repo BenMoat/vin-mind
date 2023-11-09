@@ -35,13 +35,14 @@ export const ModificationClient: React.FC<ModificationClientProps> = ({
         />
         <Button
           onClick={() => router.push(`/${params.vehicleId}/modifications/new`)}
+          className="flex items-center"
         >
-          <Plus className="mr-2 h-4 w-4" />
-          Add New
+          <Plus className="sm:mr-2 h-4 w-4" />
+          <span className="hidden sm:block">Add New</span>
         </Button>
       </div>
       <Separator />
-      <Tabs defaultValue="modifications" className="w-[400px]">
+      <Tabs defaultValue="modifications" className="sm:w-[400px]">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger asChild value="modifications">
             <Link href={`/${params.vehicleId}/modifications`}>Mods</Link>

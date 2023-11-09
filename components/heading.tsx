@@ -18,7 +18,7 @@ export const Heading: React.FC<HeadingProps> = ({
   const router = useRouter();
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center pt-2">
       {goBack && (
         <Button
           className="mr-4 flex-shrink-0 h-14"

@@ -35,12 +35,12 @@ export const ModificationTypesClient: React.FC<
             router.push(`/${params.vehicleId}/modification-types/new`)
           }
         >
-          <Plus className="mr-2 h-4 w-4" />
-          Add New
+          <Plus className="sm:mr-2 h-4 w-4" />
+          <span className="hidden sm:block">Add New</span>
         </Button>
       </div>
       <Separator />
-      <Tabs defaultValue="modification-types" className="w-[400px]">
+      <Tabs defaultValue="modification-types">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger asChild value="modifications" className="!space-x-10">
             <Link href={`/${params.vehicleId}/modifications`}>Mods</Link>

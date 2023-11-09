@@ -25,11 +25,13 @@ export const Navbar = async () => {
   return (
     <div className="border-b">
       <div className="flex h-16 items-center px-4 cursor-default">
-        <Gauge className="ml-4 w-5 h-5 invisible sm:visible" />
-        <p className="text-xl font-bold ml-2 mr-6">VinMind</p>
+        <Gauge className="sm:w-5 sm:h-5 mr-2 sm:mr-0" />
+        <p className="sm:text-xl font-bold ml-2 mr-4 flex-shrink-0 hidden sm:block">
+          VinMind
+        </p>
         <VehicleSwitcher items={vehicles} />
-        <MainNav className="mx-6" />
-        <div className="ml-auto flex items-center space-x-4">
+        <MainNav className="flex-grow mx-6" />
+        <div className="ml-auto flex items-center space-x-2">
           <ThemeToggle />
           <ClerkLoading>
             <Skeleton className="w-8 h-8 mr-2 rounded-full" />

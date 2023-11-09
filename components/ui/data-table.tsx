@@ -86,122 +86,151 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <div className="flex items-center pt-4">
-        <Input
-          className="max-w-sm"
-          placeholder="Search"
-          value={(table.getColumn(filterKey)?.getFilterValue() as string) ?? ""}
-          onChange={(event) => {
-            table.getColumn(filterKey)?.setFilterValue(event.target.value);
-            setShowResetButton(!!event.target.value);
-          }}
-        />
-        {modType && (
-          <Select
-            onOpenChange={setTypeOpen}
+      <div className="pt-4 grid grid-cols-1 gap-2 sm:grid-cols-3 sm:items-center">
+        <div className="col-span-1 sm:col-span-1 flex">
+          <Input
+            className="w-full sm:max-w-sm"
+            placeholder="Search"
             value={
-              (table.getColumn("type")?.getFilterValue() || "all") as string
+              (table.getColumn(filterKey)?.getFilterValue() as string) ?? ""
             }
-            onValueChange={(value) => {
-              if (value === "all") {
-                table.getColumn("type")?.setFilterValue("");
-                setTypeText("Mod Type");
-                setShowResetButton(false);
-              } else {
-                table.getColumn("type")?.setFilterValue(value || "");
-                setTypeText(value || "Mod Type");
-                setShowResetButton(true);
-              }
+            onChange={(event) => {
+              table.getColumn(filterKey)?.setFilterValue(event.target.value);
+              setShowResetButton(!!event.target.value);
             }}
-            defaultValue="all"
-          >
-            <SelectTrigger
-              open={typeOpen}
-              className="w-[150px] ml-2"
-              aria-label="Select a modification type"
-            >
-              <SelectValue
-                placeholder={typeText}
-                className="flex justify-between items-center"
+          />
+          {showResetButton && (
+            <div className="block sm:hidden">
+              <Button
+                className="ml-2"
+                variant="outline"
+                onClick={() => {
+                  setResetButtonPressed(true);
+                  table.getColumn("isObsolete")?.setFilterValue("");
+                  setObsoleteText("Obsolete?");
+                  table.getColumn("type")?.setFilterValue("");
+                  setTypeText("Mod Type");
+                  table.getColumn(filterKey)?.setFilterValue("");
+                  setTimeout(() => setResetButtonPressed(false), 0);
+                  setShowResetButton(false);
+                }}
               >
-                {resetButtonPressed ? null : typeText}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              {modType.map((modificationType) => (
-                <SelectItem
-                  key={modificationType.id}
-                  value={modificationType.name}
-                >
-                  {modificationType.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
-        {isObsolete && (
-          <Select
-            onOpenChange={setObsoleteOpen}
-            value={
-              table.getColumn("isObsolete")?.getFilterValue() === true
-                ? "true"
-                : table.getColumn("isObsolete")?.getFilterValue() === false
-                ? "false"
-                : "all"
-            }
-            onValueChange={(value) => {
-              if (value === "all") {
-                table.getColumn("isObsolete")?.setFilterValue("");
-                setObsoleteText("Obsolete?");
-                setShowResetButton(false);
-              } else if (value === "true") {
-                table.getColumn("isObsolete")?.setFilterValue(true ?? "");
-                setObsoleteText("Yes");
-                setShowResetButton(true);
-              } else {
-                table.getColumn("isObsolete")?.setFilterValue(false ?? "");
-                setObsoleteText("No");
-                setShowResetButton(true);
+                Reset
+                <RotateCcw size={18} className="ml-2" />
+              </Button>
+            </div>
+          )}
+        </div>
+        <div className="col-span-1 sm:col-span-1 flex">
+          {modType && (
+            <Select
+              onOpenChange={setTypeOpen}
+              value={
+                (table.getColumn("type")?.getFilterValue() || "all") as string
               }
-            }}
-            defaultValue="all"
-          >
-            <SelectTrigger
-              open={obosleteOpen}
-              className="w-[150px] ml-2"
-              aria-label="Filter obsolete modifications"
+              onValueChange={(value) => {
+                if (value === "all") {
+                  table.getColumn("type")?.setFilterValue("");
+                  setTypeText("Mod Type");
+                  setShowResetButton(false);
+                } else {
+                  table.getColumn("type")?.setFilterValue(value || "");
+                  setTypeText(value || "Mod Type");
+                  setShowResetButton(true);
+                }
+              }}
+              defaultValue="all"
             >
-              <SelectValue placeholder={obsoleteText}>
-                {resetButtonPressed ? null : obsoleteText}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="true">Yes</SelectItem>
-              <SelectItem value="false">No</SelectItem>
-            </SelectContent>
-          </Select>
-        )}
-        {showResetButton && (
-          <Button
-            className="ml-2"
-            variant="outline"
-            onClick={() => {
-              setResetButtonPressed(true);
-              table.getColumn("isObsolete")?.setFilterValue("");
-              setObsoleteText("Obsolete?");
-              table.getColumn("type")?.setFilterValue("");
-              setTypeText("Mod Type");
-              table.getColumn(filterKey)?.setFilterValue("");
-              setTimeout(() => setResetButtonPressed(false), 0);
-              setShowResetButton(false);
-            }}
-          >
-            Reset
-            <RotateCcw size={18} className="ml-2" />
-          </Button>
-        )}
+              <SelectTrigger
+                open={typeOpen}
+                className="w-full mr-1 sm:w-[150px] sm:flex-shrink-0"
+                aria-label="Select a modification type"
+              >
+                <SelectValue
+                  placeholder={typeText}
+                  className="flex justify-between items-center"
+                >
+                  {resetButtonPressed ? null : typeText}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Types</SelectItem>
+                {modType.map((modificationType) => (
+                  <SelectItem
+                    key={modificationType.id}
+                    value={modificationType.name}
+                  >
+                    {modificationType.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+          {isObsolete && (
+            <Select
+              onOpenChange={setObsoleteOpen}
+              value={
+                table.getColumn("isObsolete")?.getFilterValue() === true
+                  ? "true"
+                  : table.getColumn("isObsolete")?.getFilterValue() === false
+                  ? "false"
+                  : "all"
+              }
+              onValueChange={(value) => {
+                if (value === "all") {
+                  table.getColumn("isObsolete")?.setFilterValue("");
+                  setObsoleteText("Obsolete?");
+                  setShowResetButton(false);
+                } else if (value === "true") {
+                  table.getColumn("isObsolete")?.setFilterValue(true ?? "");
+                  setObsoleteText("Yes");
+                  setShowResetButton(true);
+                } else {
+                  table.getColumn("isObsolete")?.setFilterValue(false ?? "");
+                  setObsoleteText("No");
+                  setShowResetButton(true);
+                }
+              }}
+              defaultValue="all"
+            >
+              <SelectTrigger
+                open={obosleteOpen}
+                className="w-full ml-1 sm:w-[150px] sm:flex-shrink-0"
+                aria-label="Filter obsolete modifications"
+              >
+                <SelectValue placeholder={obsoleteText}>
+                  {resetButtonPressed ? null : obsoleteText}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="true">Yes</SelectItem>
+                <SelectItem value="false">No</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+          {showResetButton && (
+            <div className="hidden sm:block">
+              <Button
+                className="ml-2"
+                variant="outline"
+                onClick={() => {
+                  setResetButtonPressed(true);
+                  table.getColumn("isObsolete")?.setFilterValue("");
+                  setObsoleteText("Obsolete?");
+                  table.getColumn("type")?.setFilterValue("");
+                  setTypeText("Mod Type");
+                  table.getColumn(filterKey)?.setFilterValue("");
+                  setTimeout(() => setResetButtonPressed(false), 0);
+                  setShowResetButton(false);
+                }}
+              >
+                Reset
+                <RotateCcw size={18} className="ml-2" />
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
       <div className="rounded-md border !mt-2">
         <Table>
