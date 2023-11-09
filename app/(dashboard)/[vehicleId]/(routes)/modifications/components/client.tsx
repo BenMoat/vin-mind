@@ -1,20 +1,20 @@
 "use client";
 
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
 
 import { Heading } from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ModificationColumn, columns } from "./columns";
+import { ModificationType } from "@prisma/client";
 import { DataTable } from "@/components/ui/data-table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
 
 interface ModificationClientProps {
   data: ModificationColumn[];
-  modificationTypes: any[];
+  modificationTypes: ModificationType[];
 }
 
 export const ModificationClient: React.FC<ModificationClientProps> = ({
@@ -23,20 +23,6 @@ export const ModificationClient: React.FC<ModificationClientProps> = ({
 }) => {
   const params = useParams();
   const router = useRouter();
-  const pathname = usePathname();
-
-  const routes = [
-    {
-      href: `/${params.vehicleId}/modifications`,
-      label: "Modifications",
-      active: pathname === `/${params.vehicleId}/modifications`,
-    },
-    {
-      href: `/${params.vehicleId}/modification-types`,
-      label: "Modification Types",
-      active: pathname === `/${params.vehicleId}/modification-types`,
-    },
-  ];
 
   return (
     <>

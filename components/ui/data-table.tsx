@@ -85,8 +85,8 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div>
-      <div className="flex items-center py-4">
+    <>
+      <div className="flex items-center pt-4">
         <Input
           className="max-w-sm"
           placeholder="Search"
@@ -115,7 +115,11 @@ export function DataTable<TData, TValue>({
             }}
             defaultValue="all"
           >
-            <SelectTrigger open={typeOpen} className="w-[150px] ml-2">
+            <SelectTrigger
+              open={typeOpen}
+              className="w-[150px] ml-2"
+              aria-label="Select a modification type"
+            >
               <SelectValue
                 placeholder={typeText}
                 className="flex justify-between items-center"
@@ -163,7 +167,11 @@ export function DataTable<TData, TValue>({
             }}
             defaultValue="all"
           >
-            <SelectTrigger open={obosleteOpen} className="w-[150px] ml-2">
+            <SelectTrigger
+              open={obosleteOpen}
+              className="w-[150px] ml-2"
+              aria-label="Filter obsolete modifications"
+            >
               <SelectValue placeholder={obsoleteText}>
                 {resetButtonPressed ? null : obsoleteText}
               </SelectValue>
@@ -195,7 +203,7 @@ export function DataTable<TData, TValue>({
           </Button>
         )}
       </div>
-      <div className="rounded-md border">
+      <div className="rounded-md border !mt-2">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -273,6 +281,6 @@ export function DataTable<TData, TValue>({
           Next
         </Button>
       </div>
-    </div>
+    </>
   );
 }

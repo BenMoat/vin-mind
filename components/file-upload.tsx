@@ -57,6 +57,7 @@ const FileUpload: React.FC<ImageUploadProps> = ({
               </>
               <div className="z-10 absolute bottom-2 right-2">
                 <Button
+                  aria-label="Remove file"
                   type="button"
                   variant="destructive"
                   onClick={() => onRemove(url)}

@@ -37,15 +37,19 @@ export default function VehicleSwitcher({ items = [] }: VehicleSwitcherProps) {
         <Button
           variant="outline"
           size="sm"
-          aria-label="Select a Vehicle"
+          aria-haspopup="true"
+          aria-expanded={open}
           className="w-[70px] sm:w-[200px] justify-between"
         >
-          <CarFront className="mr-2 h-4 w-4" />
-          <span className="hidden truncate sm:block">{formattedLabel}</span>
+          <CarFront className="mr-2 h-4 w-4" aria-hidden="true" />
+          <span id="vehicleButtonLabel" className="hidden truncate sm:block">
+            {formattedLabel}
+          </span>
           <ChevronDown
             className={`ml-auto h-4 w-4 shrink-0 opacity-50 transition-transform duration-300 ${
               open ? "transform rotate-180" : ""
             }`}
+            aria-hidden="true"
           />
         </Button>
       </DropdownMenuTrigger>

@@ -211,7 +211,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                 name="modificationTypeId"
                 render={({ field }) => (
                   <FormItem className="max-w-[400px] sm:w-[418px] ">
-                    <FormLabel aria-required>Modification Type</FormLabel>
+                    <FormLabel>Modification Type</FormLabel>
                     <FormDescription>
                       What type of modification is this? (e.g. Engine,
                       Wheels)...
@@ -225,7 +225,10 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger open={selectOpen}>
+                          <SelectTrigger
+                            open={selectOpen}
+                            aria-label="Modification Type"
+                          >
                             <SelectValue
                               defaultValue={field.value}
                               placeholder="---"
@@ -265,9 +268,10 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               render={({ field }) => (
                 <FormItem className="max-w-[450px]">
                   <FormLabel>Obsolete</FormLabel>
-                  <div className="iflex inline-flex items-start space-x-3 space-y-[-2px] rounded-md border p-4 ">
+                  <div className="inline-flex items-start space-x-3 space-y-[-2px] rounded-md border p-4">
                     <FormControl>
                       <Checkbox
+                        aria-label="It is obsolete"
                         checked={field.value}
                         onCheckedChange={field.onChange}
                       />
