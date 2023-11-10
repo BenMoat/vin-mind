@@ -9,7 +9,7 @@ export default function Footer() {
           {new Date().getFullYear()} VinMind &nbsp;&middot;&nbsp; All Rights
           Reserved &nbsp;&middot;&nbsp; Built by{" "}
           <a
-            href="https://github.com/BenMoat"
+            href="https://benmoat.dev"
             target="_blank"
             className="underline hover:text-primary transition-colors"
           >

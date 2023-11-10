@@ -86,10 +86,10 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <div className="pt-4 grid grid-cols-1 gap-2 sm:grid-cols-3 sm:items-center">
+      <div className="pt-4 grid grid-cols-1 gap-2 sm:grid-cols-4 sm:items-center">
         <div className="col-span-1 sm:col-span-1 flex">
           <Input
-            className="w-full sm:max-w-sm"
+            className="w-full"
             placeholder="Search"
             value={
               (table.getColumn(filterKey)?.getFilterValue() as string) ?? ""

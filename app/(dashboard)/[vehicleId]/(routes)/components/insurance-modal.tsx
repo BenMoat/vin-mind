@@ -58,6 +58,7 @@ export const InsuranceModal: React.FC<InsuranceModalProps> = ({
 
   const params = useParams();
   const router = useRouter();
+  const { formState } = form;
 
   const [loading, setLoading] = useState(false);
   const [isStartDateOpen, setIsStartDateOpen] = useState(false);
@@ -247,7 +248,7 @@ export const InsuranceModal: React.FC<InsuranceModalProps> = ({
               >
                 Cancel
               </Button>
-              <Button disabled={loading} type="submit">
+              <Button disabled={loading || !formState.isDirty} type="submit">
                 {initialData ? "Update" : "Create"}
               </Button>
             </div>

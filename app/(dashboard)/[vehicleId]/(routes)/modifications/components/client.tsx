@@ -42,7 +42,7 @@ export const ModificationClient: React.FC<ModificationClientProps> = ({
         </Button>
       </div>
       <Separator />
-      <Tabs defaultValue="modifications" className="sm:w-[400px]">
+      <Tabs className="sm:w-[400px]" defaultValue="modifications">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger asChild value="modifications">
             <Link href={`/${params.vehicleId}/modifications`}>Mods</Link>

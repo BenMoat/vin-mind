@@ -198,8 +198,8 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
         </Card>
         <RegChecker initialData={dvlaData} />
       </div>
-      <div className="flex justify-center">
-        <Card className="border-destructive max-w-[804px]">
+      <div className="flex justify-center !mt-[10px]">
+        <Card className="border-destructive max-w-[807px]">
           <CardHeader>
             <CardTitle className="inline-flex items-center">
               <AlertTriangle className="mr-2" size={25} /> Danger Zone

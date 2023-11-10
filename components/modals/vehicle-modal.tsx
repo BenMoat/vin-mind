@@ -57,6 +57,8 @@ export const VehicleModal = () => {
     },
   });
 
+  const { formState } = form;
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoading(true);
     const registrationNumber = values.registrationNumber;
@@ -192,7 +194,7 @@ export const VehicleModal = () => {
             >
               Cancel
             </Button>
-            <Button disabled={loading} type="submit">
+            <Button disabled={loading || !formState.isDirty} type="submit">
               Continue
             </Button>
           </div>

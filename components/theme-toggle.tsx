@@ -34,7 +34,7 @@ export function ThemeToggle() {
         <Button
           variant="outline"
           size="sm"
-          className="w-[60px] ml-2 justify-center"
+          className="w-[60px] mr-2 justify-center"
         >
           <Sun className="mr-4 absolute h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="mr-4 absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
