@@ -143,12 +143,12 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
       {initialData ? (
         <div className="flex flex-wrap">
           <div className="w-full md:w-1/2 pr-4 flex items-center justify-center">
-            <Card className="h-full w-full flex flex-col justify-center items-center">
+            <Card className="h-full w-full flex flex-col justify-center items-center min-h-[200px]">
               <CardContent>
                 <Form {...form}>
                   <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-6 w-full"
+                    className="space-y-4 w-full"
                   >
                     <FormField
                       control={form.control}
@@ -167,10 +167,10 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
                         </FormItem>
                       )}
                     />
-                    {initialData && (
+                    {modifications?.length == 0 && (
                       <Button
                         type="button"
-                        disabled={loading || (modifications?.length ?? 0) > 0}
+                        disabled={loading}
                         className="mr-2"
                         variant="destructive"
                         onClick={() => {
@@ -181,7 +181,10 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
                       </Button>
                     )}
                     <Button
-                      disabled={loading}
+                      disabled={
+                        loading ||
+                        form.getValues("name").trim() === initialData?.name
+                      }
                       className="ml-auto"
                       type="submit"
                     >
@@ -192,8 +195,8 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
               </CardContent>
             </Card>
           </div>
-          <div className="w-full md:w-1/2 pl-4">
-            <Card>
+          <div className="w-full md:w-1/2">
+            <Card className="min-h-[200px]">
               <CardHeader className="pb-2">
                 <CardTitle className="inline-flex items-center">
                   <Info className="mr-2" size={25} />
