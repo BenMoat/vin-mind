@@ -175,7 +175,9 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               name="name"
               render={({ field }) => (
                 <FormItem className="max-w-[300px]">
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>
+                    <span className="text-red-600">*</span> Name
+                  </FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
@@ -193,7 +195,9 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               name="price"
               render={({ field }) => (
                 <FormItem className="max-w-[120px]">
-                  <FormLabel>Price</FormLabel>
+                  <FormLabel>
+                    <span className="text-red-600">*</span> Price
+                  </FormLabel>
                   <FormControl>
                     <Input
                       type="number"
@@ -213,7 +217,9 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                 name="modificationTypeId"
                 render={({ field }) => (
                   <FormItem className="max-w-[400px] sm:w-[418px] ">
-                    <FormLabel>Modification Type</FormLabel>
+                    <FormLabel>
+                      <span className="text-red-600">*</span> Modification Type
+                    </FormLabel>
                     <FormDescription>
                       What type of modification is this? (e.g. Engine,
                       Wheels)...
@@ -354,9 +360,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
             </Button>
           )}
           <Button
-            disabled={
-              loading || !form.formState.isValid || !form.formState.isDirty
-            }
+            disabled={loading || !form.formState.isDirty}
             className="ml-auto"
             type="submit"
           >
