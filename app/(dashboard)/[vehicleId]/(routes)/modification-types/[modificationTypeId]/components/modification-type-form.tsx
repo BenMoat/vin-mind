@@ -257,7 +257,8 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
                       <CardContent className="space-y-4">
                         <Input
                           disabled={loading}
-                          placeholder="Type of modification"
+                          className="placeholder:italic"
+                          placeholder="Performance"
                           {...field}
                         />
                         <FormMessage />

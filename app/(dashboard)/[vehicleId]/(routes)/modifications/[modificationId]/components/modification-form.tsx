@@ -179,6 +179,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                   <FormControl>
                     <Input
                       disabled={loading}
+                      className="placeholder:italic"
                       placeholder="Cold Air Intake"
                       {...field}
                     />
@@ -197,6 +198,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                     <Input
                       type="number"
                       disabled={loading}
+                      className="placeholder:italic"
                       placeholder="149.99"
                       {...field}
                     />
@@ -293,6 +295,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                   <FormControl>
                     <Textarea
                       disabled={loading}
+                      className="placeholder:italic"
                       placeholder="This cold air intake will add at least 170hp."
                       {...field}
                     />
@@ -350,7 +353,13 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               Delete
             </Button>
           )}
-          <Button disabled={loading} className="ml-auto" type="submit">
+          <Button
+            disabled={
+              loading || !form.formState.isValid || !form.formState.isDirty
+            }
+            className="ml-auto"
+            type="submit"
+          >
             {action}
           </Button>
         </form>
