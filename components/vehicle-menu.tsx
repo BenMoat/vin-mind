@@ -13,7 +13,7 @@ import {
 } from "./ui/select";
 import { useState } from "react";
 
-export function MainNav({
+export function VehicleMenu({
   className,
   ...props
 }: React.HtmlHTMLAttributes<HTMLDivElement>) {
@@ -37,6 +37,11 @@ export function MainNav({
           `/${params.vehicleId}/modifications/${params.modificationId}` ||
         pathname ===
           `/${params.vehicleId}/modification-types/${params.modificationTypeId}`,
+    },
+    {
+      href: `/${params.vehicleId}/servicing`,
+      label: "Servicing",
+      active: pathname === `/${params.vehicleId}/servicing`,
     },
     {
       href: `/${params.vehicleId}/settings`,

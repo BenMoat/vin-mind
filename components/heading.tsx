@@ -23,7 +23,7 @@ export const Heading: React.FC<HeadingProps> = ({
         <Button
           className="mr-4 flex-shrink-0 h-14"
           type="button"
-          variant="secondary"
+          variant="outline"
           aria-label="Go back"
           onClick={() => router.back()}
         >

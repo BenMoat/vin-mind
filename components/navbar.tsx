@@ -4,7 +4,7 @@ import prismadb from "@/lib/prismadb";
 
 import { Gauge } from "lucide-react";
 
-import { MainNav } from "@/components/main-nav";
+import { VehicleMenu } from "@/components/vehicle-menu";
 import VehicleSwitcher from "@/components/vehicle-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Skeleton } from "./ui/skeleton";
@@ -30,7 +30,7 @@ export const Navbar = async () => {
           VinMind
         </p>
         <VehicleSwitcher items={vehicles} />
-        <MainNav className="flex-grow mx-6" />
+        <VehicleMenu className="flex-grow mx-6" />
         <div className="ml-auto flex items-center space-x-2">
           <ThemeToggle />
           <ClerkLoading>
