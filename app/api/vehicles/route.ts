@@ -52,6 +52,17 @@ export async function POST(req: Request) {
       });
     }
 
+    //Create dashboard configuration with all info cards visible
+    await prismadb.dashboardConfigure.create({
+      data: {
+        vehicleId: vehicle.id,
+        taxAndMot: true,
+        insurance: true,
+        totalModifications: true,
+        mileage: true,
+      },
+    });
+
     return NextResponse.json(vehicle);
   } catch (error) {
     console.log("[VEHICLES_POST]", error);

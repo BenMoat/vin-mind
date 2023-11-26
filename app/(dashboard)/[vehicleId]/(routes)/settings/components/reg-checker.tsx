@@ -22,9 +22,15 @@ import {
 
 interface DvlaDataProps {
   initialData: DvlaData | null;
+  isModal?: boolean;
+  onClose?: () => void;
 }
 
-export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
+export const RegChecker: React.FC<DvlaDataProps> = ({
+  initialData,
+  isModal,
+  onClose,
+}) => {
   const params = useParams();
   const router = useRouter();
 
@@ -80,6 +86,9 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
       toast.error("Error saving the vehicle information. Please try again.");
     } finally {
       setLoading(false);
+      if (onClose) {
+        onClose();
+      }
     }
   }
 
@@ -111,7 +120,13 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
   }
 
   return (
-    <Card className="max-w-full md:max-w-[400px]">
+    <Card
+      className={
+        isModal
+          ? "border-none ml-[-22px] mt-[-15px] bg-transparent"
+          : "max-w-full md:max-w-[400px]"
+      }
+    >
       <Form {...form}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormField
@@ -120,8 +135,12 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
             render={({ field }) => (
               <FormItem>
                 <CardHeader>
-                  <CardTitle>Number Plate</CardTitle>
-                  <CardDescription>
+                  <CardTitle
+                    className={isModal ? "text-md font-medium mt-[-10px]" : ""}
+                  >
+                    Number Plate
+                  </CardTitle>
+                  <CardDescription className={isModal ? "hidden" : ""}>
                     Enter your vehicle's number plate to view its up-to-date tax
                     and MOT status in the <b>Overview</b> tab. This is directly
                     sourced from the{" "}
@@ -136,7 +155,13 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4 !mt-[-12px]">
-                  <div className="grid grid-cols-2 space-x-[-20px]">
+                  <div
+                    className={
+                      isModal
+                        ? "grid grid-cols-2 space-x-[-60px]"
+                        : "grid grid-cols-2 space-x-[-20px]"
+                    }
+                  >
                     <Input
                       className="max-w-[135px] font-UKNumberPlate text-black text-center bg-yellow-400 text-2xl uppercase"
                       disabled={loading}
@@ -153,28 +178,42 @@ export const RegChecker: React.FC<DvlaDataProps> = ({ initialData }) => {
                       {error}
                     </FormMessage>
                   </div>
-                  <Button
-                    disabled={
-                      loading ||
-                      !field.value ||
-                      areEqual(
-                        field.value,
-                        initialData?.registrationNumber || ""
-                      )
-                    }
-                    type="submit"
-                  >
-                    {initialData ? "Update" : "Add"} Reg
-                  </Button>
-                  {initialData && (
+                  {isModal ? (
+                    <div className="space-x-2 flex items-center justify-end w-full ml-[25px] !mb-[-25px]">
+                      <Button
+                        className="ml-2"
+                        type="button"
+                        variant="outline"
+                        onClick={onClose}
+                      >
+                        Cancel
+                      </Button>
+                      <Button disabled={loading || !field.value} type="submit">
+                        Add Reg
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button
+                      disabled={
+                        loading ||
+                        !field.value ||
+                        areEqual(
+                          field.value,
+                          initialData?.registrationNumber || ""
+                        )
+                      }
+                      type="submit"
+                    >
+                      {initialData ? "Update" : "Add"} Reg
+                    </Button>
+                  )}
+                  {initialData && !isModal && (
                     <Button
                       className="ml-2"
                       type="button"
                       variant="destructive"
                       disabled={loading}
-                      onClick={() => {
-                        onDelete();
-                      }}
+                      onClick={onDelete}
                     >
                       Remove Reg
                     </Button>
