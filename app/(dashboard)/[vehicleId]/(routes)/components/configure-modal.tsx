@@ -36,13 +36,13 @@ export const ConfigureModal: React.FC<ConfigureModalProps> = ({
 
   const [loading, setLoading] = useState(false);
 
-  const { handleSubmit } = useForm();
-
   const form = useForm<ConfigureModalProps>({
     defaultValues: {
       initialData: initialData,
     },
   });
+
+  const { handleSubmit } = form;
 
   const onSubmit: SubmitHandler<FieldValues> = async () => {
     try {
@@ -59,11 +59,18 @@ export const ConfigureModal: React.FC<ConfigureModalProps> = ({
     }
   };
 
-  const closeAndReset = () => {
-    onClose();
+  const onCloseModal = () => {
     form.reset();
-    router.refresh();
+    onClose();
   };
+
+  useEffect(() => {
+    if (isOpen) {
+      form.reset({
+        initialData: initialData,
+      });
+    }
+  }, [isOpen, initialData, form]);
 
   //Define the form field names
   type CardName = "taxAndMot" | "insurance" | "totalModifications" | "mileage";
@@ -112,46 +119,45 @@ export const ConfigureModal: React.FC<ConfigureModalProps> = ({
       title="Show or Hide Info Cards"
       description={renderDescription()}
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={onCloseModal}
     >
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full space-y-6"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
           <div className="space-y-4">
-            {cards.map((card) => (
-              <FormField
-                key={card.name}
-                control={form.control}
-                name={`initialData.${card.name}`}
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                    <div className="space-y-2">
-                      <FormLabel className="text-base">
-                        {card.formattedName}
-                      </FormLabel>
-                      <FormDescription className="mr-1">
-                        {card.description}
-                      </FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            ))}
+            {cards
+              .sort((a, b) => a.formattedName.localeCompare(b.formattedName))
+              .map((card) => (
+                <FormField
+                  key={card.name}
+                  control={form.control}
+                  name={`initialData.${card.name}`}
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                      <div className="space-y-2">
+                        <FormLabel className="text-base">
+                          {card.formattedName}
+                        </FormLabel>
+                        <FormDescription className="mr-1">
+                          {card.description}
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              ))}
           </div>
           <div className="space-x-2 flex items-center justify-end w-full">
             <Button
               disabled={loading}
               type="button"
               variant="outline"
-              onClick={closeAndReset}
+              onClick={onClose}
             >
               Cancel
             </Button>

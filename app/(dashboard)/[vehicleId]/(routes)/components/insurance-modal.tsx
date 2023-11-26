@@ -78,12 +78,12 @@ export const InsuranceModal: React.FC<InsuranceModalProps> = ({
         await axios.patch(`/api/${params.vehicleId}/insurance`, values);
       }
       router.refresh();
-      toast.success("Insurance Reminder Added");
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
       onClose();
       setLoading(false);
+      toast.success("Insurance Reminder Added");
     }
   };
 
