@@ -11,6 +11,7 @@ import { CarIcon, Milestone, PoundSterling } from "lucide-react";
 import { TaxAndMOT } from "./components/tax-and-mot";
 import { Mileage } from "./components/mileage";
 import { InsuranceCard } from "./components/insurance-card";
+import { Configure } from "./components/configure";
 
 interface DashboardPageProps {
   params: { vehicleId: string };
@@ -27,6 +28,7 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
       modifications: true,
       dvlaData: true,
       insurance: true,
+      dashboardConfigure: true,
     },
   });
 
@@ -44,13 +46,19 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-2">
-        <Heading title="Dashboard" description="An overview of your vehicle" />
+        <div className="flex items-center justify-between">
+          <Heading
+            title="Dashboard"
+            description="An overview of your vehicle"
+          />
+          {vehicle.dashboardConfigure && (
+            <Configure initialData={vehicle.dashboardConfigure} />
+          )}
+        </div>
         <Separator />
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {vehicle.dvlaData && <TaxAndMOT initialData={vehicle.dvlaData} />}
           <InsuranceCard initialData={vehicle?.insurance} />
-        </div>
-        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
               <CardTitle className="text-sm font-medium">
@@ -64,15 +72,17 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
               </div>
             </CardContent>
           </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0">
-              <CardTitle className="text-sm font-medium">Mileage</CardTitle>
-              <Milestone className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">11,897 miles</div>
-            </CardContent>
-          </Card>
+          {vehicle.dashboardConfigure?.mileage && (
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0">
+                <CardTitle className="text-sm font-medium">Mileage</CardTitle>
+                <Milestone className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold">11,897 miles</div>
+              </CardContent>
+            </Card>
+          )}
         </div>
         <Card className="col-span-4">
           <CardHeader>Annual Mileage</CardHeader>

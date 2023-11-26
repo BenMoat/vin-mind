@@ -12,15 +12,16 @@ datasource db {
 }
 
 model Vehicle {
-  id                String             @id @default(uuid())
-  name              String
-  userId            String
-  dvlaData          DvlaData?          @relation("VehicleToDvlaData")
-  insurance         Insurance?         @relation("VehicleToInsurance")
-  modifications     Modification[]     @relation("VehicleToModification")
-  modificationTypes ModificationType[] @relation("VehicleToModificationType")
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
+  id                 String              @id @default(uuid())
+  name               String
+  userId             String
+  dvlaData           DvlaData?           @relation("VehicleToDvlaData")
+  insurance          Insurance?          @relation("VehicleToInsurance")
+  modifications      Modification[]      @relation("VehicleToModification")
+  modificationTypes  ModificationType[]  @relation("VehicleToModificationType")
+  dashboardConfigure DashboardConfigure? @relation("VehicleToDashboardConfigure")
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
 }
 
 model DvlaData {
@@ -88,6 +89,20 @@ model ModificationType {
   name          String
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
+
+  @@index([vehicleId])
+}
+
+model DashboardConfigure {
+  id                 String   @id @default(uuid())
+  vehicleId          String   @unique
+  vehicle            Vehicle  @relation("VehicleToDashboardConfigure", fields: [vehicleId], references: [id], onDelete: Cascade)
+  taxAndMot          Boolean  @default(true)
+  insurance          Boolean  @default(true)
+  totalModifications Boolean  @default(true)
+  mileage            Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   @@index([vehicleId])
 }
