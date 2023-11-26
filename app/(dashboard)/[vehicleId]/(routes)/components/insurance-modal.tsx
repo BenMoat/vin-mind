@@ -136,7 +136,7 @@ export const InsuranceModal: React.FC<InsuranceModalProps> = ({
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-2 w-full"
+            className="w-full space-y-6"
           >
             <div className="grid grid-cols-2 gap-2">
               <FormField
@@ -229,7 +229,7 @@ export const InsuranceModal: React.FC<InsuranceModalProps> = ({
                 )}
               />
             </div>
-            <div className="pt-6 space-x-2 flex items-center justify-end w-full">
+            <div className="space-x-2 flex items-center justify-end w-full">
               <div className="flex justify-start w-full">
                 <Button
                   disabled={loading || initialData?.vehicleId === undefined}

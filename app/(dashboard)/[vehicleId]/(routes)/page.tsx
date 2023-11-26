@@ -57,21 +57,27 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
         </div>
         <Separator />
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {vehicle.dvlaData && <TaxAndMOT initialData={vehicle.dvlaData} />}
-          <InsuranceCard initialData={vehicle?.insurance} />
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0">
-              <CardTitle className="text-sm font-medium">
-                Total of {vehicle.modifications.length} Modifications
-              </CardTitle>
-              <PoundSterling className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold">
-                {formatter.format(totalModifications)}
-              </div>
-            </CardContent>
-          </Card>
+          {vehicle.dashboardConfigure?.taxAndMot && (
+            <TaxAndMOT initialData={vehicle.dvlaData} />
+          )}
+          {vehicle.dashboardConfigure?.insurance && (
+            <InsuranceCard initialData={vehicle?.insurance} />
+          )}
+          {vehicle.dashboardConfigure?.totalModifications && (
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0">
+                <CardTitle className="text-sm font-medium">
+                  Total of {vehicle.modifications.length} Modifications
+                </CardTitle>
+                <PoundSterling className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold">
+                  {formatter.format(totalModifications)}
+                </div>
+              </CardContent>
+            </Card>
+          )}
           {vehicle.dashboardConfigure?.mileage && (
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0">

@@ -10,7 +10,7 @@ export async function PATCH(
     const { userId } = auth();
     const body = await req.json();
 
-    const { name, registrationNumber } = body;
+    const { name } = body;
 
     if (!userId) {
       return new NextResponse("Unauthorised", { status: 401 });
@@ -31,7 +31,6 @@ export async function PATCH(
       },
       data: {
         name,
-        registrationNumber,
       },
     });
 

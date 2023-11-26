@@ -19,7 +19,7 @@ import CardSkeleton from "./card-skeleton";
 import { LastUpdatedBadge } from "./last-updated-badge";
 
 interface DvlaDataProps {
-  initialData: DvlaData;
+  initialData: DvlaData | null;
 }
 
 export const TaxAndMOT: React.FC<DvlaDataProps> = ({ initialData }) => {
@@ -29,7 +29,7 @@ export const TaxAndMOT: React.FC<DvlaDataProps> = ({ initialData }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const registrationNumber = initialData.registrationNumber;
+  const registrationNumber = initialData?.registrationNumber;
 
   useEffect(() => {
     const fetchData = async () => {
