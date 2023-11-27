@@ -47,7 +47,7 @@ export async function POST(
     const { userId } = auth();
     const body = await req.json();
 
-    const { name, price, modificationTypeId, isObsolete, notes, files } = body;
+    let { name, price, modificationTypeId, isObsolete, notes, files } = body;
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 401 });
@@ -58,7 +58,7 @@ export async function POST(
     }
 
     if (!price) {
-      return new NextResponse("Price is required", { status: 400 });
+      price = 0;
     }
 
     if (!modificationTypeId) {

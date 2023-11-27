@@ -57,9 +57,7 @@ interface ModificationFormProps {
 
 const formSchema = z.object({
   name: z.string().min(1, "Modification name is required"),
-  price: z.coerce
-    .number()
-    .min(0.01, "Please add the price of the modification"),
+  price: z.coerce.number().optional(),
   modificationTypeId: z.string().min(1, "Select a modification type"),
   isObsolete: z.boolean().default(false).optional(),
   notes: z.string().optional(),
@@ -195,18 +193,19 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               control={form.control}
               name="price"
               render={({ field }) => (
-                <FormItem className="max-w-[120px]">
-                  <FormLabel>
-                    <span className="text-red-600">*</span> Price
-                  </FormLabel>
+                <FormItem className="max-w-[140px]">
+                  <FormLabel>Price</FormLabel>
                   <FormControl>
-                    <Input
-                      type="number"
-                      disabled={loading}
-                      className="placeholder:italic"
-                      placeholder="149.99"
-                      {...field}
-                    />
+                    <div className="flex items-center pl-3 border rounded-md">
+                      <div className="border-r pr-2">£</div>
+                      <Input
+                        type="number"
+                        disabled={loading}
+                        className="placeholder:italic border-none h-full"
+                        placeholder="149.99"
+                        {...field}
+                      />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

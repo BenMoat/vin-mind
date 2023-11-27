@@ -38,7 +38,7 @@ export async function PATCH(
     const { userId } = auth();
     const body = await req.json();
 
-    const { name, price, modificationTypeId, isObsolete, notes, files } = body;
+    let { name, price, modificationTypeId, isObsolete, notes, files } = body;
 
     if (!userId) {
       return new NextResponse("Unauthorised", { status: 401 });
@@ -49,7 +49,7 @@ export async function PATCH(
     }
 
     if (!price) {
-      return new NextResponse("Price is required", { status: 400 });
+      price = 0;
     }
 
     if (!modificationTypeId) {
