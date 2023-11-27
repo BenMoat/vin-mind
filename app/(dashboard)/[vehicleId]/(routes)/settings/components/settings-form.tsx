@@ -26,7 +26,7 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import { RegChecker } from "./reg-checker";
+import { RegChecker } from "@/components/reg-checker";
 
 interface SettingsFormProps {
   initialData: Vehicle;

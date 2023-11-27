@@ -35,8 +35,7 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
-import FileUpload from "@/components/file-upload";
-import { TypeModal } from "@/components/modals/type-modal";
+
 import {
   Card,
   CardContent,
@@ -44,6 +43,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { TypeModal } from "./type-modal";
+import FileUpload from "./file-upload";
 
 interface ModificationFormProps {
   initialData:

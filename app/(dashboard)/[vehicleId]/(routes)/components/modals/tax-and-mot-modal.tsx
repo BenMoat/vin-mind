@@ -1,8 +1,8 @@
-import { Modal } from "@/components/ui/modal";
 import React from "react";
-import { RegChecker } from "../settings/components/reg-checker";
 import { DvlaData } from "@prisma/client";
-import { Button } from "@/components/ui/button";
+
+import { Modal } from "@/components/ui/modal";
+import { RegChecker } from "@/components/reg-checker";
 
 interface TaxAndMotModalProps {
   initialData: DvlaData | null;

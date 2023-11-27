@@ -1,7 +1,13 @@
 "use client";
 
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useParams, useRouter } from "next/navigation";
 import { SubmitHandler, FieldValues } from "react-hook-form";
+import toast from "react-hot-toast";
+
+import { DashboardConfigure } from "@prisma/client";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -13,12 +19,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
-import { useEffect, useState } from "react";
 import { Modal } from "@/components/ui/modal";
-import { DashboardConfigure } from "@prisma/client";
-import axios from "axios";
-import { useParams, useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 
 interface ConfigureModalProps {
   initialData: DashboardConfigure;
@@ -109,7 +110,7 @@ export const ConfigureModal: React.FC<ConfigureModalProps> = ({
         <a className="mb-2 mt-2 block">
           Select which info cards you would like to see in your Overview tab.
         </a>
-        <a className="italic">Hiding a card will not remove it's data.</a>
+        <a className="italic">(Hiding a card will not remove it's data.)</a>
       </>
     );
   };

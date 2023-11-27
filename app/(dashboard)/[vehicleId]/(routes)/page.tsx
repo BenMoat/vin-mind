@@ -8,10 +8,10 @@ import { Heading } from "@/components/heading";
 import { Separator } from "@/components/ui/separator";
 import { CarIcon, Milestone, PoundSterling } from "lucide-react";
 
-import { TaxAndMOT } from "./components/tax-and-mot";
+import { TaxAndMOTCards } from "./components/cards/tax-and-mot-cards";
 import { Mileage } from "./components/mileage";
-import { InsuranceCard } from "./components/insurance-card";
-import { Configure } from "./components/configure";
+import { InsuranceCard } from "./components/cards/insurance-card";
+import { ConfigureBtn } from "./components/configure-btn";
 
 interface DashboardPageProps {
   params: { vehicleId: string };
@@ -52,13 +52,13 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
             description="An overview of your vehicle"
           />
           {vehicle.dashboardConfigure && (
-            <Configure initialData={vehicle.dashboardConfigure} />
+            <ConfigureBtn initialData={vehicle.dashboardConfigure} />
           )}
         </div>
         <Separator />
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {vehicle.dashboardConfigure?.taxAndMot && (
-            <TaxAndMOT initialData={vehicle.dvlaData} />
+            <TaxAndMOTCards initialData={vehicle.dvlaData} />
           )}
           {vehicle.dashboardConfigure?.insurance && (
             <InsuranceCard initialData={vehicle?.insurance} />

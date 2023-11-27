@@ -16,14 +16,14 @@ import {
 import { Button } from "@/components/ui/button";
 
 import CardSkeleton from "./card-skeleton";
-import { LastUpdatedBadge } from "./last-updated-badge";
-import { TaxAndMOTModal } from "./tax-and-mot-modal";
+import { LastUpdatedBadge } from "../last-updated-badge";
+import { TaxAndMOTModal } from "../modals/tax-and-mot-modal";
 
 interface DvlaDataProps {
   initialData: DvlaData | null;
 }
 
-export const TaxAndMOT: React.FC<DvlaDataProps> = ({ initialData }) => {
+export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 

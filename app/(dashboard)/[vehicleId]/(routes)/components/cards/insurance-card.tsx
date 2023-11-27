@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { Insurance } from "@prisma/client";
 
-import { LastUpdatedBadge } from "./last-updated-badge";
-import { InsuranceModal } from "./insurance-modal";
+import { LastUpdatedBadge } from "../last-updated-badge";
+import { InsuranceModal } from "../modals/insurance-modal";
 
 import { CheckCircle, PlusCircle, XCircle } from "lucide-react";
 import {

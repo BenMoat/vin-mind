@@ -1,16 +1,18 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Settings } from "lucide-react";
 import { useState } from "react";
-import { ConfigureModal } from "./configure-modal";
+
 import { DashboardConfigure } from "@prisma/client";
+import { Settings } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { ConfigureModal } from "./modals/configure-modal";
 
 interface ConfigureProps {
   initialData: DashboardConfigure;
 }
 
-export const Configure: React.FC<ConfigureProps> = ({ initialData }) => {
+export const ConfigureBtn: React.FC<ConfigureProps> = ({ initialData }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
