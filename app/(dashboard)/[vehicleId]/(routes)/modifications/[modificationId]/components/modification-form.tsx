@@ -101,7 +101,6 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
           name: "",
           modificationTypeId: "",
           isObsolete: false,
-          notes: "",
           files: [],
         },
   });

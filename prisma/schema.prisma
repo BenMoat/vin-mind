@@ -17,6 +17,7 @@ model Vehicle {
   userId             String
   dvlaData           DvlaData?           @relation("VehicleToDvlaData")
   insurance          Insurance?          @relation("VehicleToInsurance")
+  serviceHistory     ServiceHistory[]    @relation("VehicleToServiceHistory")
   modifications      Modification[]      @relation("VehicleToModification")
   modificationTypes  ModificationType[]  @relation("VehicleToModificationType")
   dashboardConfigure DashboardConfigure? @relation("VehicleToDashboardConfigure")
@@ -48,6 +49,23 @@ model Insurance {
   endDate   DateTime
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([vehicleId])
+}
+
+model ServiceHistory {
+  id              String    @id @default(uuid())
+  vehicleId       String
+  vehicle         Vehicle   @relation("VehicleToServiceHistory", fields: [vehicleId], references: [id], onDelete: Cascade)
+  provider        String
+  type            String
+  mileage         Int
+  details         String?
+  cost            Decimal
+  serviceDate     DateTime
+  nextServiceDate DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   @@index([vehicleId])
 }
