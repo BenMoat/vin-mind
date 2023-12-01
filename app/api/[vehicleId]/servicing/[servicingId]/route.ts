@@ -2,64 +2,34 @@ import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
 
-export async function GET(
-  req: Request,
-  { params }: { params: { modificationId: string } }
-) {
-  try {
-    if (!params.modificationId) {
-      return new NextResponse("Modification ID is required", {
-        status: 400,
-      });
-    }
-
-    const modification = await prismadb.modification.findUnique({
-      where: {
-        id: params.modificationId,
-      },
-      include: {
-        modificationType: true,
-        files: true,
-      },
-    });
-
-    return NextResponse.json(modification);
-  } catch (error) {
-    console.log("MODIFICATION_GET", error);
-    return new NextResponse("Internal server error", { status: 500 });
-  }
-}
-
 export async function PATCH(
   req: Request,
-  { params }: { params: { vehicleId: string; modificationId: string } }
+  { params }: { params: { vehicleId: string; servicingId: string } }
 ) {
   try {
     const { userId } = auth();
     const body = await req.json();
 
-    let { name, price, modificationTypeId, isObsolete, notes, files } = body;
+    let {
+      provider,
+      type,
+      mileage,
+      details,
+      cost,
+      serviceDate,
+      nextServiceDate,
+    } = body;
 
     if (!userId) {
       return new NextResponse("Unauthorised", { status: 401 });
     }
 
-    if (!name) {
-      return new NextResponse("Vehicle name is required", { status: 400 });
+    if (!cost) {
+      cost = 0;
     }
 
-    if (!price) {
-      price = 0;
-    }
-
-    if (!modificationTypeId) {
-      return new NextResponse("Modification Type ID is required", {
-        status: 400,
-      });
-    }
-
-    if (!params.modificationId) {
-      return new NextResponse("Modification ID is required", {
+    if (!params.vehicleId) {
+      return new NextResponse("Vehicle ID is required", {
         status: 400,
       });
     }
@@ -75,45 +45,32 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    await prismadb.modification.update({
+    const servicing = await prismadb.serviceHistory.update({
       where: {
-        id: params.modificationId,
+        id: params.servicingId,
       },
       data: {
-        name,
-        price,
-        modificationTypeId,
-        isObsolete,
-        notes,
-        files: {
-          deleteMany: {},
-        },
+        vehicleId: params.vehicleId,
+        provider,
+        type,
+        mileage,
+        details,
+        cost,
+        serviceDate,
+        nextServiceDate,
       },
     });
 
-    const modification = await prismadb.modification.update({
-      where: {
-        id: params.modificationId,
-      },
-      data: {
-        files: {
-          createMany: {
-            data: [...files.map((file: { url: string }) => file)],
-          },
-        },
-      },
-    });
-
-    return NextResponse.json(modification);
+    return NextResponse.json(servicing);
   } catch (error) {
-    console.log("MODIFICATION_PATCH", error);
+    console.log("SERVICING_PATCH", error);
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { vehicleId: string; modificationId: string } }
+  { params }: { params: { vehicleId: string; servicingId: string } }
 ) {
   try {
     const { userId } = auth();
@@ -122,8 +79,8 @@ export async function DELETE(
       return new NextResponse("Unauthenticated", { status: 401 });
     }
 
-    if (!params.modificationId) {
-      return new NextResponse("Modification ID is required", {
+    if (!params.servicingId) {
+      return new NextResponse("Servicing ID is required", {
         status: 400,
       });
     }
@@ -139,15 +96,15 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    const modification = await prismadb.modification.deleteMany({
+    const servicing = await prismadb.serviceHistory.deleteMany({
       where: {
-        id: params.modificationId,
+        id: params.servicingId,
       },
     });
 
-    return NextResponse.json(modification);
+    return NextResponse.json(servicing);
   } catch (error) {
-    console.log("MODIFICATION_DELETE", error);
+    console.log("SERVICING_DELETE", error);
     return new NextResponse("Internal server error", { status: 500 });
   }
 }

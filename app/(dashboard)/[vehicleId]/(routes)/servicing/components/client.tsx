@@ -39,19 +39,43 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
           className="flex items-center"
         >
           <Plus className="sm:mr-2 h-4 w-4" />
-          <span className="hidden sm:block">Add New</span>
+          <span className="hidden sm:block">Add Servicing</span>
         </Button>
       </div>
       <Separator />
-      {data.map((item, index) => (
-        <Card key={index}>
-          <CardHeader>
-            <CardTitle>{item?.provider}</CardTitle>
-            <CardDescription>{item?.details}</CardDescription>
-          </CardHeader>
-          <CardContent>tset</CardContent>
-          <CardFooter>tset</CardFooter>
-        </Card>
+      {data.map((service, index) => (
+        <div
+          className={`!mb-20 relative flex items-center justify-center ${
+            index === data.length - 1
+          }`}
+          key={index}
+        >
+          <div className="absolute left-10 border rounded-md p-4 text-center w-[180px] h-[50px] flex items-center justify-center">
+            Date: {service.serviceDate.toLocaleDateString()}
+          </div>
+          <Card key={index} className="w-[600px] mx-auto">
+            <CardHeader>
+              <CardTitle className="flex justify-center">
+                {service.type}
+              </CardTitle>
+              <CardDescription className="flex justify-center">
+                {service.provider}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex justify-center">
+              {service.details}
+            </CardContent>
+            <CardFooter className="flex justify-center">
+              {new Intl.NumberFormat("en-GB", {
+                style: "currency",
+                currency: "GBP",
+              }).format(+service.cost)}
+            </CardFooter>
+          </Card>
+          {index < data.length - 1 && (
+            <div className="absolute left-1/2 bottom-[-80px] transform -translate-x-1/2 h-20 w-0.5 bg-secondary"></div>
+          )}
+        </div>
       ))}
     </>
   );

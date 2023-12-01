@@ -31,6 +31,8 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 
 import { format } from "date-fns";
+import { AlertModal } from "@/components/modals/alert-modal";
+import { Textarea } from "@/components/ui/textarea";
 
 interface ServiceFormProps {
   initialData: ServiceHistory;
@@ -52,6 +54,7 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
   const params = useParams();
   const router = useRouter();
 
+  const [alertOpen, setAlertOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const title = initialData
@@ -91,7 +94,7 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
       setLoading(true);
       if (initialData) {
         await axios.patch(
-          `/api/${params.vehicleId}/modifications/${params.servicingId}`,
+          `/api/${params.vehicleId}/servicing/${params.servicingId}`,
           data
         );
       } else {
@@ -107,8 +110,34 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
     }
   };
 
+  const onDelete = async () => {
+    try {
+      setLoading(true);
+      await axios.delete(
+        `/api/${params.vehicleId}/servicing/${params.modificationId}`
+      );
+      router.refresh();
+      router.push(`/${params.vehicleId}/servicing`);
+      toast.success("Servicing record deleted");
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
+      setAlertOpen(false);
+    }
+  };
+
   return (
     <>
+      <AlertModal
+        isOpen={alertOpen}
+        onClose={() => {
+          setAlertOpen(false);
+        }}
+        onConfirm={onDelete}
+        loading={loading}
+        service={initialData?.provider}
+      />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} goBack />
       </div>
@@ -116,148 +145,203 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-4 w-full"
+          className="space-y-6 w-full"
         >
-          <FormField
-            control={form.control}
-            name="provider"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Provider</FormLabel>
-                <FormControl>
-                  <Input placeholder="Auto Center" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="type"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Type</FormLabel>
-                <FormControl>
-                  <Input placeholder="Intermediate Service" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="mileage"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Mileage</FormLabel>
-                <FormControl>
-                  <Input type="number" placeholder="19,254" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="details"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Details</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Oil change and wheel realignment"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="cost"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Cost</FormLabel>
-                <FormControl>
-                  <Input type="number" placeholder="£200.00" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="serviceDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Service Date</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant={"outline"}
-                      className="w-[280px] justify-start text-left font-normal"
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {field.value ? (
-                        format(field.value, "PPP")
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar
-                      mode="single"
-                      selected={initialData?.serviceDate}
-                      onSelect={(e) => {
-                        field.onChange(e);
-                      }}
-                      initialFocus
+          <div className="grid grid-cols-1 gap-5">
+            <FormField
+              control={form.control}
+              name="type"
+              render={({ field }) => (
+                <FormItem className="max-w-[300px]">
+                  <FormLabel>
+                    <span className="text-red-600">*</span> Type
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      className="placeholder:italic"
+                      placeholder="Intermediate Service"
+                      {...field}
                     />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="nextServiceDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Service Date</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant={"outline"}
-                      className="w-[280px] justify-start text-left font-normal"
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {field.value ? (
-                        format(field.value, "PPP")
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar
-                      mode="single"
-                      selected={initialData?.nextServiceDate || undefined}
-                      onSelect={(e) => {
-                        field.onChange(e);
-                      }}
-                      initialFocus
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="provider"
+              render={({ field }) => (
+                <FormItem className="max-w-[300px]">
+                  <FormLabel>
+                    <span className="text-red-600">*</span> Provider
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      className="placeholder:italic"
+                      placeholder="Auto Center"
+                      {...field}
                     />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button className="ml-auto" type="submit">
-            Save
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="mileage"
+              render={({ field }) => (
+                <FormItem className="max-w-[100px]">
+                  <FormLabel>
+                    <span className="text-red-600">*</span> Mileage
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      className="placeholder:italic"
+                      placeholder="19,254"
+                      type="number"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="details"
+              render={({ field }) => (
+                <FormItem className="max-w-[500px]">
+                  <FormLabel>Details</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      disabled={loading}
+                      className="placeholder:italic"
+                      placeholder="Oil change and wheel realignment"
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="cost"
+              render={({ field }) => (
+                <FormItem className="max-w-[140px]">
+                  <FormLabel>Cost</FormLabel>
+                  <FormControl>
+                    <div className="flex items-center pl-3 border rounded-md">
+                      <div className="border-r pr-2">£</div>
+                      <Input
+                        type="number"
+                        disabled={loading}
+                        className="placeholder:italic border-none h-full"
+                        placeholder="149.99"
+                        {...field}
+                      />
+                    </div>
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <div className="flex gap-6 pt-2">
+              <FormField
+                control={form.control}
+                name="serviceDate"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>
+                      <span className="text-red-600">*</span> Service Date
+                    </FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          disabled={loading}
+                          variant="outline"
+                          className="w-[280px] justify-start text-left font-normal"
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          selected={initialData?.serviceDate}
+                          onSelect={(e) => {
+                            field.onChange(e);
+                          }}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="nextServiceDate"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Next Service Date</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          disabled={loading}
+                          variant="outline"
+                          className="w-[280px] justify-start text-left font-normal"
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          selected={initialData?.nextServiceDate || undefined}
+                          onSelect={(e) => {
+                            field.onChange(e);
+                          }}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          {initialData && (
+            <Button
+              type="button"
+              disabled={loading}
+              className="mr-2"
+              variant="destructive"
+              onClick={() => {
+                setAlertOpen(true);
+              }}
+            >
+              Delete
+            </Button>
+          )}
+          <Button
+            disabled={loading || !form.formState.isDirty}
+            className="ml-auto"
+            type="submit"
+          >
+            {action}
           </Button>
         </form>
       </Form>

@@ -85,16 +85,16 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    const modification = await prismadb.modification.deleteMany({
+    const servicing = await prismadb.serviceHistory.deleteMany({
       where: {
         vehicleId: params.vehicleId,
       },
     });
 
-    console.log(modification);
-    return NextResponse.json(modification);
+    console.log(servicing);
+    return NextResponse.json(servicing);
   } catch (error) {
-    console.log("MODIFICATIONS_DELETE", error);
+    console.log("SERVICING_DELETE", error);
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
