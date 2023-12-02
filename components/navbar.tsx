@@ -30,7 +30,7 @@ export const Navbar = async () => {
           VinMind
         </p>
         <VehicleSwitcher items={vehicles} />
-        <VehicleMenu className="flex-grow mx-6" />
+        <VehicleMenu className="flex-grow mx-4" />
         <div className="ml-auto flex items-center space-x-2">
           <ThemeToggle />
           <ClerkLoading>

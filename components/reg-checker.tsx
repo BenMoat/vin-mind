@@ -122,9 +122,7 @@ export const RegChecker: React.FC<DvlaDataProps> = ({
   return (
     <Card
       className={
-        isModal
-          ? "border-none ml-[-22px] mt-[-15px] bg-transparent"
-          : "max-w-full md:max-w-[400px]"
+        isModal ? "border-none ml-[-22px] mt-[-15px] bg-transparent" : ""
       }
     >
       <Form {...form}>
@@ -142,10 +140,10 @@ export const RegChecker: React.FC<DvlaDataProps> = ({
                   </CardTitle>
                   <CardDescription className={isModal ? "hidden" : ""}>
                     Enter your vehicle's number plate to view its up-to-date tax
-                    and MOT status in the <b>Overview</b> tab. This is directly
-                    sourced from the{" "}
+                    and MOT status in the <b className="boldText">Overview</b>{" "}
+                    tab. This is directly sourced from the{" "}
                     <a
-                      className="underline font-bold hover:text-primary transition-colors"
+                      className=" underline font-bold boldText hover:text-primary transition-colors"
                       href="https://dvladigital.blog.gov.uk/2020/03/12/dvlas-new-api-developer-portal-launch-first-api-vehicle-enquiry-service-ves-on-gov-uk/"
                       target="_blank"
                     >

@@ -49,13 +49,11 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
       <Separator />
 
       {data.length === 0 ? (
-        <div className="!mb-12 !mt-12 relative flex items-center justify-center">
+        <div className="relative flex items-center !justify-center">
           <Card className="w-[600px]">
-            <CardHeader className="flex-justify-center">
-              <CardTitle className="flex justify-center">
-                Servicing Log
-              </CardTitle>
-              <CardDescription className="flex-justify-center">
+            <CardHeader>
+              <CardTitle>Servicing Log</CardTitle>
+              <CardDescription>
                 Log your vehicle's services, and the list will automatically
                 update to display the most recent service at the top.
               </CardDescription>
@@ -64,7 +62,7 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
                   onClick={() =>
                     router.push(`/${params.vehicleId}/servicing/new`)
                   }
-                  className="max-w-[200px]"
+                  className="max-w-[200px] mt-2"
                 >
                   <Plus className="sm:mr-2 h-4 w-4" />
                   <span className="hidden sm:block">Add Servicing</span>
@@ -76,13 +74,13 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
       ) : (
         data.map((service, index) => (
           <div
-            className="!mb-12 !mt-12 relative flex items-center justify-center"
+            className="!mb-10 relative flex items-center justify-center"
             key={index}
           >
             <Link href={`/${params.vehicleId}/servicing/${service.id}`}>
               <Card
                 key={index}
-                className="w-[600px] mx-auto transition-colors hover:bg-secondary "
+                className="w-full sm:w-[400px] mx-auto transition-colors hover:bg-secondary lg:w-[600px]"
               >
                 <CardHeader>
                   <CardTitle className="flex justify-center">
@@ -95,16 +93,17 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
                 </CardHeader>
                 {service.details && (
                   <CardContent className="flex justify-center">
-                    <p>{service.details}</p>
+                    <p>"{service.details}"</p>
                   </CardContent>
                 )}
                 {service.nextServiceDate && (
                   <CardContent className="flex justify-center">
                     <p>
-                      {" "}
                       <InfoIcon className="mr-1 mb-1 h-5 inline-block" />
                       Next Service Due:{" "}
-                      <b>{service.nextServiceDate?.toLocaleDateString()}</b>
+                      <b className="boldText">
+                        {service.nextServiceDate?.toLocaleDateString()}
+                      </b>
                     </p>
                   </CardContent>
                 )}

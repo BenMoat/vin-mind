@@ -13,7 +13,8 @@ interface TaxAndMotModalProps {
 const description = (
   <>
     Enter your vehicle's number plate to view its up-to-date tax and MOT status
-    in the <b>Overview</b> tab. This is directly sourced from the{" "}
+    in the <b className="boldText">Overview</b> tab. This is directly sourced
+    from the{" "}
     <a
       className="underline font-bold hover:text-primary transition-colors"
       href="https://dvladigital.blog.gov.uk/2020/03/12/dvlas-new-api-developer-portal-launch-first-api-vehicle-enquiry-service-ves-on-gov-uk/"

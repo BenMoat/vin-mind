@@ -187,7 +187,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
       </div>
       <Separator />
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-        <Card className="max-w-full md:max-w-[400px] md:ml-auto">
+        <Card>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
@@ -202,7 +202,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                         the data attached to it.
                       </CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-4">
+                    <CardContent className="space-y-4 !mt-[-12px]">
                       <Input
                         disabled={loading}
                         placeholder="Vehicle Name"
@@ -226,20 +226,20 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
         </Card>
         <RegChecker initialData={dvlaData} />
       </div>
-      <div className="flex justify-center !mt-[10px]">
-        <Card className="border-destructive max-w-[807px]">
+      <div className="flex justify-center !mt-2">
+        <Card className="border-destructive">
           <CardHeader>
             <CardTitle className="inline-flex items-center">
               <AlertTriangle className="mr-2" size={25} /> Danger Zone
             </CardTitle>
             <CardDescription>
               Actions taken within the Danger Zone{" "}
-              <b className="text-black dark:text-white">cannot</b> be undone.
+              <b className="boldText">cannot</b> be undone.
             </CardDescription>
             <Separator className="!mt-4" />
           </CardHeader>
           <CardContent>
-            <p className="flex justify-center text-xl pt-0">Modifications</p>
+            <p className="flex justify-center text-xl">Modifications</p>
             <div className="grid grid-cols-1 gap-2 mt-2 sm:grid-cols-2">
               <Card>
                 <CardContent>
@@ -253,18 +253,16 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                     modifications including their associated files will be
                     deleted.
                   </CardDescription>
-                  <div className="!p-0">
-                    <Button
-                      type="button"
-                      disabled={loading || noOfModifications === 0}
-                      variant="destructive"
-                      onClick={() => {
-                        setmodificationsDeleteOpen(true);
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  </div>
+                  <Button
+                    type="button"
+                    disabled={loading || noOfModifications === 0}
+                    variant="destructive"
+                    onClick={() => {
+                      setmodificationsDeleteOpen(true);
+                    }}
+                  >
+                    Delete
+                  </Button>
                 </CardContent>
               </Card>
               <Card>

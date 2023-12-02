@@ -211,7 +211,7 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
                   <br />
                   <br />
                   {(modifications?.length ?? 0) > 0 && (
-                    <b className="dark:text-white text-black">
+                    <b className="boldText">
                       Click on a mod to view or edit it
                     </b>
                   )}
