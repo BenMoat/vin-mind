@@ -58,7 +58,7 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
   const [loading, setLoading] = useState(false);
 
   const title = initialData
-    ? `Edit Servicing: ${initialData.provider}`
+    ? `Edit Servicing: ${initialData.type}`
     : "Add a Servicing";
   const description = initialData
     ? "Edit the details of the selected servicing."
@@ -75,8 +75,10 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
           mileage: initialData.mileage,
           details: initialData.details || "",
           cost: parseFloat(String(initialData.cost)),
-          serviceDate: initialData.serviceDate,
-          nextServiceDate: initialData.nextServiceDate || new Date(),
+          serviceDate: new Date(initialData.serviceDate),
+          nextServiceDate: initialData.nextServiceDate
+            ? new Date(initialData.nextServiceDate)
+            : undefined,
         }
       : {
           provider: "",
@@ -84,8 +86,8 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
           mileage: 0,
           details: "",
           cost: 0,
-          serviceDate: new Date(),
-          nextServiceDate: new Date(),
+          serviceDate: undefined,
+          nextServiceDate: undefined,
         },
   });
 
@@ -100,13 +102,13 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
       } else {
         await axios.post(`/api/${params.vehicleId}/servicing`, data);
       }
-      router.refresh();
       router.push(`/${params.vehicleId}/servicing`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
+      router.refresh();
     }
   };
 
@@ -114,9 +116,8 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
     try {
       setLoading(true);
       await axios.delete(
-        `/api/${params.vehicleId}/servicing/${params.modificationId}`
+        `/api/${params.vehicleId}/servicing/${params.servicingId}`
       );
-      router.refresh();
       router.push(`/${params.vehicleId}/servicing`);
       toast.success("Servicing record deleted");
     } catch (error) {
@@ -124,6 +125,7 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
     } finally {
       setLoading(false);
       setAlertOpen(false);
+      router.refresh();
     }
   };
 
@@ -136,7 +138,7 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
         }}
         onConfirm={onDelete}
         loading={loading}
-        service={initialData?.provider}
+        service={initialData?.type}
       />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} goBack />
@@ -261,14 +263,16 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
                         <Button
                           disabled={loading}
                           variant="outline"
-                          className="w-[280px] justify-start text-left font-normal"
+                          className="w-full pl-3 text-left font-normal"
                         >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
                           {field.value ? (
-                            format(field.value, "PPP")
+                            format(field.value, "dd/MM/yyyy")
                           ) : (
-                            <span>Pick a date</span>
+                            <span className="text-muted-foreground">
+                              Pick a date
+                            </span>
                           )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0">

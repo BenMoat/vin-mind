@@ -12,7 +12,7 @@ const ModificationsPage = async ({
       vehicleId: params.vehicleId,
     },
     orderBy: {
-      createdAt: "desc",
+      serviceDate: "desc",
     },
   });
 
