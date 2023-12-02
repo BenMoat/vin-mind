@@ -4,13 +4,7 @@ import { useParams, usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
+import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
 import { useState } from "react";
 
 export function VehicleMenu({

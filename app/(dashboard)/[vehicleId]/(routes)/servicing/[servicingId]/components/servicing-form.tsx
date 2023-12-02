@@ -1,11 +1,23 @@
 "use client";
 
 import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useParams, useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { ServiceHistory } from "@prisma/client";
 
+import { format } from "date-fns";
+
+import { CalendarIcon } from "lucide-react";
+import { Heading } from "@/components/heading";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
   FormControl,
@@ -15,24 +27,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Heading } from "@/components/heading";
-import { Separator } from "@/components/ui/separator";
-import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import axios from "axios";
-import toast from "react-hot-toast";
+import { AlertModal } from "@/components/modals/alert-modal";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
-
-import { format } from "date-fns";
-import { AlertModal } from "@/components/modals/alert-modal";
-import { Textarea } from "@/components/ui/textarea";
 
 interface ServiceFormProps {
   initialData: ServiceHistory;
@@ -81,11 +82,6 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
             : undefined,
         }
       : {
-          provider: "",
-          type: "",
-          mileage: 0,
-          details: "",
-          cost: 0,
           serviceDate: undefined,
           nextServiceDate: undefined,
         },
@@ -263,7 +259,7 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
                         <Button
                           disabled={loading}
                           variant="outline"
-                          className="w-full pl-3 text-left font-normal"
+                          className="w-[130px] pl-3 text-left font-normal"
                         >
                           {field.value ? (
                             format(field.value, "dd/MM/yyyy")
@@ -301,14 +297,16 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
                         <Button
                           disabled={loading}
                           variant="outline"
-                          className="w-[280px] justify-start text-left font-normal"
+                          className="w-[130px] pl-3 text-left font-normal"
                         >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
                           {field.value ? (
-                            format(field.value, "PPP")
+                            format(field.value, "dd/MM/yyyy")
                           ) : (
-                            <span>Pick a date</span>
+                            <span className="text-muted-foreground">
+                              Pick a date
+                            </span>
                           )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0">

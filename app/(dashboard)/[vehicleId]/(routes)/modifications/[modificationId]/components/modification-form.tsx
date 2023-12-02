@@ -11,7 +11,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Modification, ModificationType, Files } from "@prisma/client";
 
+import { TypeModal } from "./type-modal";
+import FileUpload from "./file-upload";
+
 import { PlusCircle } from "lucide-react";
+
 import { Heading } from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -43,8 +47,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { TypeModal } from "./type-modal";
-import FileUpload from "./file-upload";
 
 interface ModificationFormProps {
   initialData:
