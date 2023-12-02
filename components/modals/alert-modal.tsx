@@ -14,6 +14,8 @@ interface AlertModalProps {
   allModificationTypes?: boolean;
   modification?: string;
   modificationType?: string;
+  allServices?: boolean;
+  service?: string;
 }
 
 export const AlertModal: React.FC<AlertModalProps> = ({
@@ -26,6 +28,8 @@ export const AlertModal: React.FC<AlertModalProps> = ({
   allModificationTypes,
   modification,
   modificationType,
+  allServices,
+  service,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
 
@@ -48,6 +52,10 @@ export const AlertModal: React.FC<AlertModalProps> = ({
           ? `Are you sure you want to delete "${modification}" from your modifications?`
           : modificationType
           ? `Are you sure you want to delete "${modificationType}" from your modification types?`
+          : allServices
+          ? `Are you sure you want to delete all services?`
+          : service
+          ? `Are you sure you want to delete "${service}" from your services?`
           : "Are you sure you want to delete this item?"
       }
       description="This action cannot be undone."

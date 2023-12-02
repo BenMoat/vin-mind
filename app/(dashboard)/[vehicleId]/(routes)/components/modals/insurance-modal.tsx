@@ -153,7 +153,7 @@ export const InsuranceModal: React.FC<InsuranceModalProps> = ({
                         <FormControl>
                           <Button
                             disabled={loading}
-                            variant={"outline"}
+                            variant="outline"
                             className="w-full pl-3 text-left font-normal"
                           >
                             {field.value ? (
@@ -196,7 +196,7 @@ export const InsuranceModal: React.FC<InsuranceModalProps> = ({
                         <FormControl>
                           <Button
                             disabled={loading}
-                            variant={"outline"}
+                            variant="outline"
                             className="w-full pl-3 text-left font-normal"
                           >
                             {field.value ? (

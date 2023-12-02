@@ -1,43 +1,28 @@
 import prismadb from "@/lib/prismadb";
 
-import { auth } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
-import { ServiceHistory } from "./components/service-history";
+import { ServiceHistoryClient } from "./components/client";
 
-interface SettingsPageProps {
-  params: {
-    vehicleId: string;
-  };
-}
-
-const SettingsPage: React.FC<SettingsPageProps> = async ({ params }) => {
-  const { userId } = auth();
-
-  if (!userId) {
-    redirect("/sign-in");
-  }
-
-  const vehicle = await prismadb.vehicle.findFirst({
+const ModificationsPage = async ({
+  params,
+}: {
+  params: { vehicleId: string };
+}) => {
+  const serviceHistory = await prismadb.serviceHistory.findMany({
     where: {
-      id: params.vehicleId,
-      userId,
+      vehicleId: params.vehicleId,
     },
-    include: {
-      dvlaData: true,
+    orderBy: {
+      serviceDate: "desc",
     },
   });
-
-  if (!vehicle) {
-    redirect("/");
-  }
 
   return (
     <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-2">
-        <ServiceHistory initialData={vehicle} />
+        <ServiceHistoryClient data={serviceHistory} />
       </div>
     </div>
   );
 };
 
-export default SettingsPage;
+export default ModificationsPage;
