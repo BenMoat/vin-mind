@@ -53,7 +53,7 @@ export const LastUpdatedBadge: React.FC<LastUpdatedBadgeProps> = ({
         </p>
         <p className="text-muted-foreground text-sm pl-5">
           {`If your ${getStatusText()} status has recently changed, please allow up to `}
-          <strong className="font-bold">24 hours</strong>
+          <b className="font-bold">24 hours</b>
           {` for this to take effect.`}
         </p>
       </PopoverContent>

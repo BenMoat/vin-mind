@@ -104,9 +104,7 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
                       {" "}
                       <InfoIcon className="mr-1 mb-1 h-5 inline-block" />
                       Next Service Due:{" "}
-                      <strong>
-                        {service.nextServiceDate?.toLocaleDateString()}
-                      </strong>
+                      <b>{service.nextServiceDate?.toLocaleDateString()}</b>
                     </p>
                   </CardContent>
                 )}

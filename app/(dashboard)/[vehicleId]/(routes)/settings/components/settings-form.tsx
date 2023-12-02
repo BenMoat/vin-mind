@@ -9,7 +9,7 @@ import { useParams, useRouter } from "next/navigation";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { DvlaData, Vehicle } from "@prisma/client";
+import { DvlaData, ServiceHistory, Vehicle } from "@prisma/client";
 
 import { AlertTriangle } from "lucide-react";
 
@@ -25,6 +25,7 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
+  CardFooter,
 } from "@/components/ui/card";
 import { RegChecker } from "@/components/reg-checker";
 
@@ -33,6 +34,7 @@ interface SettingsFormProps {
   dvlaData: DvlaData | null;
   noOfModifications: number;
   noOfModificationTypes: number;
+  noOfServices: number;
 }
 
 const formSchema = z.object({
@@ -49,6 +51,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
   dvlaData,
   noOfModifications,
   noOfModificationTypes,
+  noOfServices,
 }) => {
   const params = useParams();
   const router = useRouter();
@@ -56,6 +59,8 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
   const [vehicleDeleteOpen, setvehicleDeleteOpen] = useState(false);
   const [modificationsDeleteOpen, setmodificationsDeleteOpen] = useState(false);
   const [modificationTypesDeleteOpen, setmodificationTypesDeleteOpen] =
+    useState(false);
+  const [serviceHistoryDeleteOpen, setserviceHistoryDeleteOpen] =
     useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -122,6 +127,20 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
     }
   };
 
+  const onServiceHistoryDelete = async () => {
+    try {
+      setLoading(true);
+      await axios.delete(`/api/${params.vehicleId}/servicing`);
+      router.refresh();
+      toast.success("Service history deleted");
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
+      setserviceHistoryDeleteOpen(false);
+    }
+  };
+
   return (
     <>
       <AlertModal
@@ -150,6 +169,15 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
         onConfirm={onModificationTypesDelete}
         loading={loading}
         allModificationTypes
+      />
+      <AlertModal
+        isOpen={serviceHistoryDeleteOpen}
+        onClose={() => {
+          setserviceHistoryDeleteOpen(false);
+        }}
+        onConfirm={onServiceHistoryDelete}
+        loading={loading}
+        allServices
       />
       <div className="flex items-center justify-between">
         <Heading
@@ -208,61 +236,92 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
               Actions taken within the Danger Zone{" "}
               <b className="text-black dark:text-white">cannot</b> be undone.
             </CardDescription>
+            <Separator className="!mt-4" />
           </CardHeader>
           <CardContent>
+            <p className="flex justify-center text-xl pt-0">Modifications</p>
+            <div className="grid grid-cols-1 gap-2 mt-2 sm:grid-cols-2">
+              <Card>
+                <CardContent>
+                  <p className="mt-5 mb-2">
+                    Delete All{" "}
+                    {noOfModifications > 0 ? noOfModifications : null}{" "}
+                    Modifications
+                  </p>
+                  <CardDescription className="mb-2">
+                    You will still keep all of your modification types, but all
+                    modifications including their associated files will be
+                    deleted.
+                  </CardDescription>
+                  <div className="!p-0">
+                    <Button
+                      type="button"
+                      disabled={loading || noOfModifications === 0}
+                      variant="destructive"
+                      onClick={() => {
+                        setmodificationsDeleteOpen(true);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent>
+                  <p className="mt-5 mb-2">
+                    Delete All{" "}
+                    {noOfModificationTypes > 0 ? noOfModificationTypes : null}{" "}
+                    Modification Types
+                  </p>
+                  <CardDescription className="mb-2">
+                    If your vehicle has no modifications, you can delete all
+                    modification types.
+                  </CardDescription>
+                  <div className="!pl-0 pt-5">
+                    <Button
+                      type="button"
+                      disabled={
+                        loading ||
+                        noOfModificationTypes === 0 ||
+                        noOfModifications > 0
+                      }
+                      variant="destructive"
+                      onClick={() => {
+                        setmodificationTypesDeleteOpen(true);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+            <p className="flex justify-center text-xl mt-6 mb-2">Servicing</p>
+            <Card>
+              <CardContent>
+                <p className="mt-5 mb-2">Delete Service History</p>
+                <CardDescription className="mb-2">
+                  You can delete your vehicle's service history at any time.
+                </CardDescription>
+                <Button
+                  type="button"
+                  disabled={loading || noOfServices === 0}
+                  variant="destructive"
+                  onClick={() => {
+                    setserviceHistoryDeleteOpen(true);
+                  }}
+                >
+                  Delete
+                </Button>
+              </CardContent>
+            </Card>
+            <p className="flex justify-center text-xl mt-6 mb-2">Vehicle </p>
             <Card>
               <CardContent>
                 <p className="mt-5 mb-2">
-                  Delete All {noOfModifications > 0 ? noOfModifications : null}{" "}
-                  Modifications
+                  Delete "<b>{initialData.name}</b>"
                 </p>
-                <CardDescription className="mb-2">
-                  You will still keep all of your modification types, but all
-                  modifications including their associated files will be
-                  deleted.
-                </CardDescription>
-                <Button
-                  type="button"
-                  disabled={loading || noOfModifications === 0}
-                  variant="destructive"
-                  onClick={() => {
-                    setmodificationsDeleteOpen(true);
-                  }}
-                >
-                  Delete
-                </Button>
-              </CardContent>
-            </Card>
-            <Card className="mt-2">
-              <CardContent>
-                <p className="mt-5 mb-2">
-                  Delete All{" "}
-                  {noOfModificationTypes > 0 ? noOfModificationTypes : null}{" "}
-                  Modification Types
-                </p>
-                <CardDescription className="mb-2">
-                  If your vehicle has no modifications, you can delete all
-                  modification types.
-                </CardDescription>
-                <Button
-                  type="button"
-                  disabled={
-                    loading ||
-                    noOfModificationTypes === 0 ||
-                    noOfModifications > 0
-                  }
-                  variant="destructive"
-                  onClick={() => {
-                    setmodificationTypesDeleteOpen(true);
-                  }}
-                >
-                  Delete
-                </Button>
-              </CardContent>
-            </Card>
-            <Card className="mt-2">
-              <CardContent>
-                <p className="mt-5 mb-2">Delete Vehicle</p>
                 <CardDescription className="mb-2">
                   You can delete your vehicle and all of it's associated data at
                   any time.

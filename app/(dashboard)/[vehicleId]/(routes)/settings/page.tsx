@@ -39,6 +39,12 @@ const SettingsPage: React.FC<SettingsPageProps> = async ({ params }) => {
     },
   });
 
+  const noOfServices = await prismadb.serviceHistory.count({
+    where: {
+      vehicleId: params.vehicleId,
+    },
+  });
+
   if (!vehicle) {
     redirect("/");
   }
@@ -51,6 +57,7 @@ const SettingsPage: React.FC<SettingsPageProps> = async ({ params }) => {
           dvlaData={vehicle.dvlaData}
           noOfModifications={noOfModifications}
           noOfModificationTypes={noOfModificationTypes}
+          noOfServices={noOfServices}
         />
       </div>
     </div>
