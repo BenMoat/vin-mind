@@ -4,16 +4,18 @@ import { useParams, usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
-import { useState } from "react";
+
+interface VehicleMenuProps extends React.HtmlHTMLAttributes<HTMLDivElement> {
+  onClick?: () => void;
+}
 
 export function VehicleMenu({
   className,
+  onClick,
   ...props
-}: React.HtmlHTMLAttributes<HTMLDivElement>) {
+}: VehicleMenuProps) {
   const pathname = usePathname();
   const params = useParams();
-  const [isOpen, setIsOpen] = useState(false);
 
   const routes = [
     {
@@ -43,25 +45,22 @@ export function VehicleMenu({
       active: pathname === `/${params.vehicleId}/settings`,
     },
   ];
-  const currentRoute = routes.find((route) => route.active);
 
   return (
-    <nav
-      className={cn(
-        "sm:flex items-center space-x-4 lg:space-x-6 hidden",
-        className
-      )}
-    >
+    <nav className={cn("items-center lg:space-x-6", className)}>
       {routes.map((route) => (
         <Link
           key={route.href}
           href={route.href}
           className={cn(
-            "text-sm font-medium transition-colors hover:text-primary",
+            "font-medium transition-colors hover:text-primary",
             route.active
               ? "text-black dark:text-white"
               : "text-muted-foreground"
           )}
+          onClick={() => {
+            if (onClick) onClick();
+          }}
         >
           {route.label}
         </Link>

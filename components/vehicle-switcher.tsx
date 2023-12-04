@@ -15,13 +15,19 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { formatLabelWithEllipsis } from "@/lib/utils";
+import { cn, formatLabelWithEllipsis } from "@/lib/utils";
 
 export interface VehicleSwitcherProps {
   items: Vehicle[];
+  className?: string;
+  onClick?: () => void;
 }
 
-export default function VehicleSwitcher({ items = [] }: VehicleSwitcherProps) {
+export default function VehicleSwitcher({
+  items = [],
+  className,
+  ...props
+}: VehicleSwitcherProps) {
   const { onOpen: openVehicleModal } = useStoreModal();
   const params = useParams();
   const { push } = useRouter();
@@ -40,10 +46,10 @@ export default function VehicleSwitcher({ items = [] }: VehicleSwitcherProps) {
           size="sm"
           aria-haspopup="true"
           aria-expanded={open}
-          className="w-[70px] sm:w-[200px] justify-between"
+          className={cn("flex w-[200px] justify-between", className)}
         >
           <CarFront className="mr-2 h-4 w-4" aria-hidden="true" />
-          <span id="vehicleButtonLabel" className="hidden truncate sm:block">
+          <span id="vehicleButtonLabel" className="truncate">
             {formattedLabel}
           </span>
           <ChevronDown
