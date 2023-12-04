@@ -14,11 +14,15 @@ export default async function SetupLayout({
     redirect("/sign-in");
   }
 
-  const vehicle = await prismadb.vehicle.findFirst({
+  //Sort vehicles by name and redirect to the first one
+  const vehicles = await prismadb.vehicle.findMany({
     where: {
       userId,
     },
+    orderBy: { name: "asc" },
   });
+
+  const vehicle = vehicles[0];
 
   if (vehicle) {
     redirect(`/${vehicle.id}`);
