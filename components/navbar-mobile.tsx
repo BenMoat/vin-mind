@@ -2,6 +2,11 @@
 
 import { useState } from "react";
 
+import { Vehicle } from "@prisma/client";
+
+import { Menu } from "lucide-react";
+import VehicleSwitcher from "@/components/vehicle-switcher";
+import { VehicleMenu } from "@/components/vehicle-menu";
 import {
   Sheet,
   SheetContent,
@@ -9,11 +14,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Button } from "./ui/button";
-import { Menu } from "lucide-react";
-import { Vehicle } from "@prisma/client";
-import VehicleSwitcher from "./vehicle-switcher";
-import { VehicleMenu } from "./vehicle-menu";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 interface NavbarMobileProps {
   items: Vehicle[];
@@ -28,7 +30,7 @@ export const NavbarMobile: React.FC<NavbarMobileProps> = ({ items }) => {
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetTrigger className="sm:hidden" asChild>
+      <SheetTrigger className="md:hidden" asChild>
         <Button
           variant="outline"
           onClick={() => setIsOpen(true)}
@@ -39,8 +41,9 @@ export const NavbarMobile: React.FC<NavbarMobileProps> = ({ items }) => {
       </SheetTrigger>
       <SheetContent side="left" className="w-[240px]">
         <SheetHeader>
-          <div className="!ml-[-4px] space-y-6">
-            <SheetTitle>Menu</SheetTitle>
+          <SheetTitle>Menu</SheetTitle>
+          <Separator className="!mb-3" />
+          <div className="!ml-[-4px] space-y-3">
             <VehicleSwitcher
               items={items}
               onClick={handleItemClick}

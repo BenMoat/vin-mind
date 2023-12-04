@@ -3,8 +3,8 @@ import { Copyright, GithubIcon } from "lucide-react";
 export default function Footer() {
   return (
     <footer className="mt-auto">
-      <div className="flex items-center justify-center border-t h-16 text-xs sm:text-sm font-medium text-muted-foreground">
-        <p>
+      <div className="flex items-center justify-center border-t h-16 text-xs sm:text-sm font-medium text-muted-foreground flex-wrap">
+        <p className="w-full text-center">
           <Copyright className="inline-block mr-1 align-middle" size={16} />
           {new Date().getFullYear()} VinMind &nbsp;&middot;&nbsp; All Rights
           Reserved &nbsp;&middot;&nbsp; Built by{" "}
