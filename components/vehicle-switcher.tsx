@@ -16,7 +16,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { formatLabelWithEllipsis } from "@/lib/utils";
-interface VehicleSwitcherProps {
+
+export interface VehicleSwitcherProps {
   items: Vehicle[];
 }
 

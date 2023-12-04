@@ -118,13 +118,13 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
       } else {
         await axios.post(`/api/${params.vehicleId}/modifications`, data);
       }
-      router.refresh();
       router.push(`/${params.vehicleId}/modifications`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
+      router.refresh();
     }
   };
 
@@ -134,7 +134,6 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
       await axios.delete(
         `/api/${params.vehicleId}/modifications/${params.modificationId}`
       );
-      router.refresh();
       router.push(`/${params.vehicleId}/modifications`);
       toast.success("Modification Type deleted");
     } catch (error) {
@@ -142,6 +141,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
     } finally {
       setLoading(false);
       setAlertOpen(false);
+      router.refresh();
     }
   };
 

@@ -8,6 +8,7 @@ import { VehicleMenu } from "@/components/vehicle-menu";
 import VehicleSwitcher from "@/components/vehicle-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Skeleton } from "./ui/skeleton";
+import NavbarMobile from "./navbar-mobile";
 
 export const Navbar = async () => {
   const { userId } = auth();
@@ -29,6 +30,7 @@ export const Navbar = async () => {
         <p className="sm:text-xl font-bold ml-2 mr-4 flex-shrink-0 hidden sm:block">
           VinMind
         </p>
+        <NavbarMobile />
         <VehicleSwitcher items={vehicles} />
         <VehicleMenu className="flex-grow mx-4" />
         <div className="ml-auto flex items-center space-x-2">
