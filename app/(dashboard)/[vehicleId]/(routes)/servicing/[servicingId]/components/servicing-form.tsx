@@ -12,6 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ServiceHistory } from "@prisma/client";
 
 import { format } from "date-fns";
+import { formatCost, formatMileage } from "@/lib/utils";
 
 import { CalendarIcon } from "lucide-react";
 import { Heading } from "@/components/heading";
@@ -43,8 +44,8 @@ const formSchema = z.object({
   provider: z.string().min(1, "Service Provider is required"),
   type: z.string().min(1, "Service Type is required"),
   mileage: z.string().min(1, "Mileage is required"),
+  cost: z.string().optional(),
   details: z.string().optional(),
-  cost: z.coerce.number().optional(),
   serviceDate: z.date({
     required_error: "Service Date is required.",
   }),
@@ -52,17 +53,6 @@ const formSchema = z.object({
 });
 
 type ServiceCardValues = z.infer<typeof formSchema>;
-
-function formatNumberWithCommas(x: string | number): string {
-  // First, convert the input to a string if it's a number
-  const str = typeof x === "number" ? x.toString() : x;
-
-  // Remove any characters that aren't digits
-  const numericOnly = str.replace(/[^\d]/g, "");
-
-  // Format the string with commas
-  return numericOnly.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
 
 export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
   const params = useParams();
@@ -86,9 +76,9 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
       ? {
           provider: initialData.provider,
           type: initialData.type,
-          mileage: formatNumberWithCommas(initialData.mileage),
+          mileage: formatMileage(initialData.mileage),
+          cost: formatCost(initialData.cost.toString()),
           details: initialData.details || "",
-          cost: parseFloat(String(initialData.cost)),
           serviceDate: new Date(initialData.serviceDate),
           nextServiceDate: initialData.nextServiceDate
             ? new Date(initialData.nextServiceDate)
@@ -107,7 +97,8 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
       setLoading(true);
       //Ensure mileage set to a number
       const mileage = Number(data.mileage.replace(/,/g, ""));
-      const formData = { ...data, mileage };
+      const cost = Number(data.cost?.replace(/,/g, ""));
+      const formData = { ...data, mileage, cost };
       if (initialData) {
         await axios.patch(
           `/api/${params.vehicleId}/servicing/${params.servicingId}`,
@@ -219,12 +210,36 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
                       placeholder="19,254"
                       {...field}
                       onChange={(e) => {
-                        const formattedValue = formatNumberWithCommas(
-                          e.target.value
-                        );
+                        const formattedValue = formatMileage(e.target.value);
                         field.onChange(formattedValue);
                       }}
                     />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="cost"
+              render={({ field }) => (
+                <FormItem className="max-w-[300px]">
+                  <FormLabel>Cost</FormLabel>
+                  <FormControl>
+                    <div className="flex items-center pl-3 border rounded-md">
+                      <div className="border-r pr-2">£</div>
+                      <Input
+                        type="text" // Use text type to handle formatted input
+                        disabled={loading}
+                        className="placeholder:italic border-none"
+                        placeholder="20,000.32"
+                        {...field}
+                        onChange={(e) => {
+                          const formattedValue = formatCost(e.target.value);
+                          field.onChange(formattedValue);
+                        }}
+                      />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -243,27 +258,6 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
                       placeholder="Oil change and wheel realignment"
                       {...field}
                     />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="cost"
-              render={({ field }) => (
-                <FormItem className="max-w-[140px]">
-                  <FormLabel>Cost</FormLabel>
-                  <FormControl>
-                    <div className="flex items-center pl-3 border rounded-md">
-                      <div className="border-r pr-2">£</div>
-                      <Input
-                        type="number"
-                        disabled={loading}
-                        className="placeholder:italic border-none h-full"
-                        placeholder="149.99"
-                        {...field}
-                      />
-                    </div>
                   </FormControl>
                 </FormItem>
               )}

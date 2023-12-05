@@ -202,7 +202,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                       <Input
                         type="number"
                         disabled={loading}
-                        className="placeholder:italic border-none h-full"
+                        className="placeholder:italic border-none"
                         placeholder="149.99"
                         {...field}
                       />
