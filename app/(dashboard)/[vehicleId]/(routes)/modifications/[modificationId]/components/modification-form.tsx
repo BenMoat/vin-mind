@@ -47,6 +47,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { formatCost } from "@/lib/utils";
 
 interface ModificationFormProps {
   initialData:
@@ -59,7 +60,7 @@ interface ModificationFormProps {
 
 const formSchema = z.object({
   name: z.string().min(1, "Modification name is required"),
-  price: z.coerce.number().optional(),
+  price: z.string().optional(),
   modificationTypeId: z.string().min(1, "Select a modification type"),
   isObsolete: z.boolean().default(false).optional(),
   notes: z.string().optional(),
@@ -96,7 +97,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
     defaultValues: initialData
       ? {
           ...initialData,
-          price: parseFloat(String(initialData?.price)),
+          price: formatCost(initialData?.price.toString()),
           notes: initialData?.notes ?? "",
         }
       : {
@@ -110,13 +111,15 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
   const onSubmit = async (data: ModificationFormValues) => {
     try {
       setLoading(true);
+      const price = Number(data.price?.replace(/,/g, ""));
+      const formData = { ...data, price };
       if (initialData) {
         await axios.patch(
           `/api/${params.vehicleId}/modifications/${params.modificationId}`,
-          data
+          formData
         );
       } else {
-        await axios.post(`/api/${params.vehicleId}/modifications`, data);
+        await axios.post(`/api/${params.vehicleId}/modifications`, formData);
       }
       router.push(`/${params.vehicleId}/modifications`);
       toast.success(toastMessage);
@@ -200,11 +203,15 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                     <div className="flex items-center pl-3 border rounded-md">
                       <div className="border-r pr-2">£</div>
                       <Input
-                        type="number"
+                        type="text"
                         disabled={loading}
                         className="placeholder:italic border-none"
                         placeholder="149.99"
                         {...field}
+                        onChange={(e) => {
+                          const formattedValue = formatCost(e.target.value);
+                          field.onChange(formattedValue);
+                        }}
                       />
                     </div>
                   </FormControl>

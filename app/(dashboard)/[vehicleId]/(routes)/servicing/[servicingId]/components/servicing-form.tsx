@@ -229,10 +229,10 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
                     <div className="flex items-center pl-3 border rounded-md">
                       <div className="border-r pr-2">£</div>
                       <Input
-                        type="text" // Use text type to handle formatted input
+                        type="text"
                         disabled={loading}
                         className="placeholder:italic border-none"
-                        placeholder="20,000.32"
+                        placeholder="500.00"
                         {...field}
                         onChange={(e) => {
                           const formattedValue = formatCost(e.target.value);
