@@ -88,7 +88,7 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
                   </CardTitle>
                   <CardDescription className="flex justify-center">
                     {service.provider} ·{" "}
-                    {service.serviceDate.toLocaleDateString()}
+                    {new Date(service.serviceDate).toLocaleDateString()}
                   </CardDescription>
                 </CardHeader>
                 {service.details && (
@@ -102,7 +102,7 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
                       <InfoIcon className="mr-1 mb-1 h-5 inline-block" />
                       Next Service Due:{" "}
                       <b className="boldText">
-                        {service.nextServiceDate?.toLocaleDateString()}
+                        {new Date(service.nextServiceDate).toLocaleDateString()}
                       </b>
                     </p>
                   </CardContent>
