@@ -6,7 +6,7 @@ import { getTotalModifications } from "@/actions/get-total-modifications";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Heading } from "@/components/heading";
 import { Separator } from "@/components/ui/separator";
-import { CarIcon, Eye, Milestone, PoundSterling } from "lucide-react";
+import { CarIcon, Eye } from "lucide-react";
 
 import { TaxAndMOTCards } from "./components/cards/tax-and-mot-cards";
 import { Mileage } from "./components/mileage";
@@ -23,7 +23,9 @@ interface DashboardPageProps {
   params: { vehicleId: string };
 }
 
-const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
+export const DashboardPage: React.FC<DashboardPageProps> = async ({
+  params,
+}) => {
   const totalModifications = await getTotalModifications(params.vehicleId);
 
   const vehicle = await prismadb.vehicle.findFirst({
@@ -89,7 +91,6 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
                 <CardTitle className="text-sm font-medium">
                   Total of {vehicle.modifications.length} Modifications
                 </CardTitle>
-                <PoundSterling className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold">
@@ -102,7 +103,6 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0">
                 <CardTitle className="text-sm font-medium">Mileage</CardTitle>
-                <Milestone className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold">11,897 miles</div>

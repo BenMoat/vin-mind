@@ -3,12 +3,13 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, File, Files } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { formatter } from "@/lib/utils";
 
 export type ModificationColumn = {
   id: string;
   name: string;
   type: string;
-  price: string;
+  price: number;
   isObsolete: boolean;
   notes: string;
   createdAt: string;
@@ -76,13 +77,11 @@ export const columns: ColumnDef<ModificationColumn>[] = [
       );
     },
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("price"));
-      const formatted = new Intl.NumberFormat("en-UK", {
-        style: "currency",
-        currency: "GBP",
-      }).format(amount);
-
-      return <div className="text-center font-medium">{formatted}</div>;
+      return (
+        <div className="text-center font-medium">
+          {formatter.format(row.original.price)}
+        </div>
+      );
     },
   },
   {
