@@ -47,7 +47,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { formatCost } from "@/lib/utils";
+import { formatFormCurrency } from "@/lib/utils";
 
 interface ModificationFormProps {
   initialData:
@@ -97,7 +97,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
     defaultValues: initialData
       ? {
           ...initialData,
-          price: formatCost(initialData?.price.toString()),
+          price: formatFormCurrency(initialData?.price.toString()),
           notes: initialData?.notes ?? "",
         }
       : {
@@ -209,7 +209,9 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                         placeholder="149.99"
                         {...field}
                         onChange={(e) => {
-                          const formattedValue = formatCost(e.target.value);
+                          const formattedValue = formatFormCurrency(
+                            e.target.value
+                          );
                           field.onChange(formattedValue);
                         }}
                       />

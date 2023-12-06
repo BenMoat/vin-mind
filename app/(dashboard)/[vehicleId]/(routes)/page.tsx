@@ -1,5 +1,5 @@
 import prismadb from "@/lib/prismadb";
-import { formatter } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
 
 import { getTotalModifications } from "@/actions/get-total-modifications";
 
@@ -94,7 +94,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold">
-                  {formatter.format(totalModifications)}
+                  {formatCurrency.format(totalModifications)}
                 </div>
               </CardContent>
             </Card>

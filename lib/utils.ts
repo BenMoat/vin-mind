@@ -14,60 +14,30 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Format a number as a currency
-export const formatter = new Intl.NumberFormat("en-UK", {
+export const formatCurrency = new Intl.NumberFormat("en-UK", {
   style: "currency",
   currency: "GBP",
 });
 
-// Calculate the difference between two dates
-export function calculateTimeDifference(date1: Date, date2: Date) {
+// Calculate the difference between two dates and return it as a string
+export function calculateAndFormatTimeDifference(
+  date1: Date,
+  date2: Date
+): string {
   const years = differenceInYears(date2, date1);
-
-  // Adjust date1 by the calculated years
   const dateAfterYears = addYears(date1, years);
-  const months = differenceInMonths(date2, dateAfterYears);
 
-  // Adjust date1 again by the calculated months
+  const months = differenceInMonths(date2, dateAfterYears);
   const dateAfterMonths = addMonths(dateAfterYears, months);
+
   const days = differenceInDays(date2, dateAfterMonths);
 
-  return { years, months, days };
-}
-
-interface TimeDifference {
-  years: number;
-  months: number;
-  days: number;
-}
-
-//Format the time difference as a string
-export function formatTimeDifference(
-  timeDifference: TimeDifference | null
-): string {
-  if (!timeDifference) {
-    return "";
-  }
-
   const yearsString =
-    timeDifference.years === 1
-      ? `${timeDifference.years} year`
-      : timeDifference.years > 1
-      ? `${timeDifference.years} years`
-      : "";
-
+    years === 1 ? `${years} year` : years > 1 ? `${years} years` : "";
   const monthsString =
-    timeDifference.months === 1
-      ? `${timeDifference.months} month`
-      : timeDifference.months > 1
-      ? `${timeDifference.months} months`
-      : "";
-
+    months === 1 ? `${months} month` : months > 1 ? `${months} months` : "";
   const daysString =
-    timeDifference.days === 1
-      ? `${timeDifference.days} day`
-      : timeDifference.days > 1
-      ? `${timeDifference.days} days`
-      : "";
+    days === 1 ? `${days} day` : days > 1 ? `${days} days` : "";
 
   return [yearsString, monthsString, daysString]
     .filter((part) => part)
@@ -91,11 +61,11 @@ export function formatMileage(x: string | number): string {
 }
 
 // Format a price using commas and a decimal point
-export function formatCost(value: string): string {
-  // Strip out any characters that aren't digits or a period
+export function formatFormCurrency(value: string): string {
+  // Strip out any characters that aren't digits or a fullstop
   let cleanValue = value.replace(/[^\d.]/g, "");
 
-  // Check if there's a period in the input
+  // Check if there's a fullstop in the input
   const hasDecimal = cleanValue.includes(".");
 
   // Split the input into integer and decimal parts

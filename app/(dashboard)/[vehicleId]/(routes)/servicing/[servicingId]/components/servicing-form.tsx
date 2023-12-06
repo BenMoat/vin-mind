@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ServiceHistory } from "@prisma/client";
 
 import { format } from "date-fns";
-import { formatCost, formatMileage } from "@/lib/utils";
+import { formatFormCurrency, formatMileage } from "@/lib/utils";
 
 import { CalendarIcon } from "lucide-react";
 import { Heading } from "@/components/heading";
@@ -77,7 +77,7 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
           provider: initialData.provider,
           type: initialData.type,
           mileage: formatMileage(initialData.mileage),
-          cost: formatCost(initialData.cost.toString()),
+          cost: formatFormCurrency(initialData.cost.toString()),
           details: initialData.details || "",
           serviceDate: new Date(initialData.serviceDate),
           nextServiceDate: initialData.nextServiceDate
@@ -236,7 +236,9 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
                         placeholder="500.00"
                         {...field}
                         onChange={(e) => {
-                          const formattedValue = formatCost(e.target.value);
+                          const formattedValue = formatFormCurrency(
+                            e.target.value
+                          );
                           field.onChange(formattedValue);
                         }}
                       />

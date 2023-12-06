@@ -11,7 +11,7 @@ import { ModificationType } from "@prisma/client";
 import { DataTable } from "@/components/ui/data-table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
-import { formatter } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
 import {
   Popover,
   PopoverContent,
@@ -70,7 +70,7 @@ export const ModificationClient: React.FC<ModificationClientProps> = ({
           <>
             <a className="border rounded-md sm:py-2 sm:px-4 justify-end hidden sm:flex sm:col-span-1 sm:justify-start">
               Total:&nbsp;
-              <b className="boldText">{formatter.format(totalPrice)}</b>
+              <b className="boldText">{formatCurrency.format(totalPrice)}</b>
             </a>
             <Popover>
               <PopoverTrigger asChild className="sm:hidden">
@@ -80,7 +80,7 @@ export const ModificationClient: React.FC<ModificationClientProps> = ({
               </PopoverTrigger>
               <PopoverContent side="left" className="w-auto">
                 Total:&nbsp;{" "}
-                <b className="boldText">{formatter.format(totalPrice)}</b>
+                <b className="boldText">{formatCurrency.format(totalPrice)}</b>
               </PopoverContent>
             </Popover>
           </>

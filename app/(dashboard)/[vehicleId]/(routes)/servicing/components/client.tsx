@@ -8,10 +8,9 @@ import { Separator } from "@/components/ui/separator";
 import { ServiceHistory } from "@prisma/client";
 
 import {
-  calculateTimeDifference,
+  calculateAndFormatTimeDifference,
   formatMileage,
-  formatTimeDifference,
-  formatter,
+  formatCurrency,
 } from "@/lib/utils";
 
 import { InfoIcon, Plus } from "lucide-react";
@@ -88,11 +87,11 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
           // Calculate time difference between current service and next service
           const nextService = data[index + 1];
           const timeDifference = nextService
-            ? calculateTimeDifference(
+            ? calculateAndFormatTimeDifference(
                 new Date(nextService.serviceDate),
                 new Date(service.serviceDate)
               )
-            : null;
+            : "";
 
           return (
             <div
@@ -137,7 +136,7 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
                   )}
                   <CardFooter className="flex justify-center">
                     Cost:{" "}
-                    {formatter.format(parseFloat(service.cost.toString()))}
+                    {formatCurrency.format(parseFloat(service.cost.toString()))}
                   </CardFooter>
                 </Card>
               </Link>
@@ -150,7 +149,7 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
                         <p className="text-center">
                           {formatMileage(mileageDifference)}
                           &nbsp;miles&nbsp;&middot;&nbsp;
-                          {formatTimeDifference(timeDifference)}
+                          {timeDifference}
                         </p>
                       )}
                     </div>

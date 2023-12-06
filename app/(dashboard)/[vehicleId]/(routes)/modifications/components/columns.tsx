@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, File, Files } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { formatter } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
 
 export type ModificationColumn = {
   id: string;
@@ -79,7 +79,7 @@ export const columns: ColumnDef<ModificationColumn>[] = [
     cell: ({ row }) => {
       return (
         <div className="text-center font-medium">
-          {formatter.format(row.original.price)}
+          {formatCurrency.format(row.original.price)}
         </div>
       );
     },
