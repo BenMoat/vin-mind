@@ -7,7 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ServiceHistory } from "@prisma/client";
 
-import { formatMileage, formatter } from "@/lib/utils";
+import {
+  calculateTimeDifference,
+  formatMileage,
+  formatTimeDifference,
+  formatter,
+} from "@/lib/utils";
 
 import { InfoIcon, Plus } from "lucide-react";
 import {
@@ -30,11 +35,6 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
   const params = useParams();
   const router = useRouter();
 
-  const sortedData = data.sort(
-    (a, b) =>
-      new Date(b.serviceDate).getTime() - new Date(a.serviceDate).getTime()
-  );
-
   return (
     <>
       <div className="flex items-center justify-between">
@@ -42,7 +42,7 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
           title="Service History"
           description="Manage your vehicle's service history."
         />
-        {sortedData.length > 0 && (
+        {data.length > 0 && (
           <Button
             onClick={() => router.push(`/${params.vehicleId}/servicing/new`)}
             className="flex items-center"
@@ -54,7 +54,7 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
       </div>
       <Separator />
 
-      {sortedData.length === 0 ? (
+      {data.length === 0 ? (
         <div className="relative flex items-center !justify-center">
           <Card className="w-[600px]">
             <CardHeader>
@@ -78,22 +78,31 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
           </Card>
         </div>
       ) : (
-        sortedData.map((service, index) => {
-          // Calculate mileage difference
+        data.map((service, index) => {
+          // Calculate mileage difference between current service and next service
           const mileageDifference =
-            index < sortedData.length - 1
-              ? sortedData[index + 1].mileage - service.mileage
+            index < data.length - 1
+              ? data[index + 1].mileage - service.mileage
               : null;
+
+          // Calculate time difference between current service and next service
+          const nextService = data[index + 1];
+          const timeDifference = nextService
+            ? calculateTimeDifference(
+                new Date(nextService.serviceDate),
+                new Date(service.serviceDate)
+              )
+            : null;
 
           return (
             <div
-              className="!mb-10 relative flex items-center justify-center"
+              className="!mb-[130px] relative flex items-center justify-center"
               key={index}
             >
               <Link href={`/${params.vehicleId}/servicing/${service.id}`}>
                 <Card
                   key={index}
-                  className="w-[600px] transition-colors hover:bg-secondary"
+                  className="sm:w-[600px] transition-colors hover:bg-secondary"
                 >
                   <CardHeader>
                     <CardTitle className="flex justify-center">
@@ -107,12 +116,6 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
                   <CardContent className="flex justify-center">
                     Mileage:&nbsp;
                     <b className="boldText">{formatMileage(service.mileage)}</b>
-                    {mileageDifference !== null && (
-                      <p className="italic">
-                        &nbsp;(+{formatMileage(mileageDifference)} miles since
-                        last service)
-                      </p>
-                    )}
                   </CardContent>
                   {service.details && (
                     <CardContent className="flex justify-center">
@@ -138,8 +141,22 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
                   </CardFooter>
                 </Card>
               </Link>
-              {index < sortedData.length - 1 && (
-                <div className="absolute left-1/2 bottom-[-80px] transform -translate-x-1/2 h-20 w-0.5 bg-secondary"></div>
+              {index < data.length - 1 && (
+                <>
+                  <div className="w-[1px] bg-secondary absolute left-1/2 h-[29px] bottom-[-29px]"></div>
+                  <div className="absolute left-1/2 transform -translate-x-1/2 bottom-[-102px]">
+                    <div className="flex items-center justify-center border rounded-md p-6 min-w-[220px] max-h-[75px]">
+                      {mileageDifference !== null && (
+                        <p className="text-center">
+                          {formatMileage(mileageDifference)}
+                          &nbsp;miles&nbsp;&middot;&nbsp;
+                          {formatTimeDifference(timeDifference)}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="w-[1px] bg-secondary absolute left-1/2 h-[30px] bottom-[-132px]"></div>
+                </>
               )}
             </div>
           );
