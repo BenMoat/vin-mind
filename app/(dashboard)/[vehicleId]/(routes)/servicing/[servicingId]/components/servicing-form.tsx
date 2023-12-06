@@ -98,7 +98,8 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
       //Ensure mileage set to a number
       const mileage = Number(data.mileage.replace(/,/g, ""));
       const cost = Number(data.cost?.replace(/,/g, ""));
-      const formData = { ...data, mileage, cost };
+      const details = data.details?.trim();
+      const formData = { ...data, mileage, cost, details };
       if (initialData) {
         await axios.patch(
           `/api/${params.vehicleId}/servicing/${params.servicingId}`,

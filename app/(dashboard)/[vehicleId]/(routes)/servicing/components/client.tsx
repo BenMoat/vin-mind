@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ServiceHistory } from "@prisma/client";
 
-import { InfoIcon, Plus } from "lucide-react";
+import { formatMileage, formatter } from "@/lib/utils";
 
+import { InfoIcon, Plus } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -80,7 +81,7 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
             <Link href={`/${params.vehicleId}/servicing/${service.id}`}>
               <Card
                 key={index}
-                className="w-full sm:w-[400px] mx-auto transition-colors hover:bg-secondary lg:w-[600px]"
+                className="w-[600px] transition-colors hover:bg-secondary"
               >
                 <CardHeader>
                   <CardTitle className="flex justify-center">
@@ -91,6 +92,10 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
                     {new Date(service.serviceDate).toLocaleDateString()}
                   </CardDescription>
                 </CardHeader>
+                <CardContent className="flex justify-center">
+                  Mileage:&nbsp;
+                  <b className="boldText">{formatMileage(service.mileage)}</b>
+                </CardContent>
                 {service.details && (
                   <CardContent className="flex justify-center">
                     <p>"{service.details}"</p>
@@ -108,10 +113,7 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
                   </CardContent>
                 )}
                 <CardFooter className="flex justify-center">
-                  {new Intl.NumberFormat("en-GB", {
-                    style: "currency",
-                    currency: "GBP",
-                  }).format(+service.cost)}
+                  Cost: {formatter.format(parseFloat(service.cost.toString()))}
                 </CardFooter>
               </Card>
             </Link>
