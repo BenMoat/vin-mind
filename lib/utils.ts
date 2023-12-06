@@ -9,9 +9,7 @@ import {
   addMonths,
 } from "date-fns";
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+export const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
 // Format a number as a currency
 export const formatCurrency = new Intl.NumberFormat("en-UK", {
@@ -20,10 +18,10 @@ export const formatCurrency = new Intl.NumberFormat("en-UK", {
 });
 
 // Calculate the difference between two dates and return it as a string
-export function calculateAndFormatTimeDifference(
+export const calculateAndFormatTimeDifference = (
   date1: Date,
   date2: Date
-): string {
+): string => {
   const years = differenceInYears(date2, date1);
   const dateAfterYears = addYears(date1, years);
 
@@ -42,14 +40,14 @@ export function calculateAndFormatTimeDifference(
   return [yearsString, monthsString, daysString]
     .filter((part) => part)
     .join(" ");
-}
+};
 
 //Add an ellipsis to the end of a string if it's longer than 19 characters
 export const formatLabelWithEllipsis = (label: string | undefined) =>
   label && label.length > 19 ? `${label.slice(0, 19)}...` : label;
 
 // Format a number as a mileage
-export function formatMileage(x: string | number): string {
+export const formatMileage = (x: string | number): string => {
   // First, convert the input to a string if it's a number
   const str = typeof x === "number" ? x.toString() : x;
 
@@ -58,10 +56,10 @@ export function formatMileage(x: string | number): string {
 
   // Format the string with commas
   return numericOnly.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+};
 
 // Format a price using commas and a decimal point
-export function formatFormCurrency(value: string): string {
+export const formatFormCurrency = (value: string): string => {
   // Strip out any characters that aren't digits or a fullstop
   let cleanValue = value.replace(/[^\d.]/g, "");
 
@@ -81,4 +79,4 @@ export function formatFormCurrency(value: string): string {
   }
 
   return integerPart;
-}
+};
