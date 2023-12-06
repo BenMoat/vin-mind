@@ -30,6 +30,11 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
   const params = useParams();
   const router = useRouter();
 
+  const sortedData = data.sort(
+    (a, b) =>
+      new Date(b.serviceDate).getTime() - new Date(a.serviceDate).getTime()
+  );
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -37,7 +42,7 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
           title="Service History"
           description="Manage your vehicle's service history."
         />
-        {data.length > 0 && (
+        {sortedData.length > 0 && (
           <Button
             onClick={() => router.push(`/${params.vehicleId}/servicing/new`)}
             className="flex items-center"
@@ -49,7 +54,7 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
       </div>
       <Separator />
 
-      {data.length === 0 ? (
+      {sortedData.length === 0 ? (
         <div className="relative flex items-center !justify-center">
           <Card className="w-[600px]">
             <CardHeader>
@@ -73,55 +78,72 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
           </Card>
         </div>
       ) : (
-        data.map((service, index) => (
-          <div
-            className="!mb-10 relative flex items-center justify-center"
-            key={index}
-          >
-            <Link href={`/${params.vehicleId}/servicing/${service.id}`}>
-              <Card
-                key={index}
-                className="w-[600px] transition-colors hover:bg-secondary"
-              >
-                <CardHeader>
-                  <CardTitle className="flex justify-center">
-                    {service.type}
-                  </CardTitle>
-                  <CardDescription className="flex justify-center">
-                    {service.provider} ·{" "}
-                    {new Date(service.serviceDate).toLocaleDateString()}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="flex justify-center">
-                  Mileage:&nbsp;
-                  <b className="boldText">{formatMileage(service.mileage)}</b>
-                </CardContent>
-                {service.details && (
+        sortedData.map((service, index) => {
+          // Calculate mileage difference
+          const mileageDifference =
+            index < sortedData.length - 1
+              ? sortedData[index + 1].mileage - service.mileage
+              : null;
+
+          return (
+            <div
+              className="!mb-10 relative flex items-center justify-center"
+              key={index}
+            >
+              <Link href={`/${params.vehicleId}/servicing/${service.id}`}>
+                <Card
+                  key={index}
+                  className="w-[600px] transition-colors hover:bg-secondary"
+                >
+                  <CardHeader>
+                    <CardTitle className="flex justify-center">
+                      {service.type}
+                    </CardTitle>
+                    <CardDescription className="flex justify-center">
+                      {service.provider} ·{" "}
+                      {new Date(service.serviceDate).toLocaleDateString()}
+                    </CardDescription>
+                  </CardHeader>
                   <CardContent className="flex justify-center">
-                    <p>"{service.details}"</p>
+                    Mileage:&nbsp;
+                    <b className="boldText">{formatMileage(service.mileage)}</b>
+                    {mileageDifference !== null && (
+                      <p className="italic">
+                        &nbsp;(+{formatMileage(mileageDifference)} miles since
+                        last service)
+                      </p>
+                    )}
                   </CardContent>
-                )}
-                {service.nextServiceDate && (
-                  <CardContent className="flex justify-center">
-                    <p>
-                      <InfoIcon className="mr-1 mb-1 h-5 inline-block" />
-                      Next Service Due:{" "}
-                      <b className="boldText">
-                        {new Date(service.nextServiceDate).toLocaleDateString()}
-                      </b>
-                    </p>
-                  </CardContent>
-                )}
-                <CardFooter className="flex justify-center">
-                  Cost: {formatter.format(parseFloat(service.cost.toString()))}
-                </CardFooter>
-              </Card>
-            </Link>
-            {index < data.length - 1 && (
-              <div className="absolute left-1/2 bottom-[-80px] transform -translate-x-1/2 h-20 w-0.5 bg-secondary"></div>
-            )}
-          </div>
-        ))
+                  {service.details && (
+                    <CardContent className="flex justify-center">
+                      <p>"{service.details}"</p>
+                    </CardContent>
+                  )}
+                  {service.nextServiceDate && (
+                    <CardContent className="flex justify-center">
+                      <p>
+                        <InfoIcon className="mr-1 mb-1 h-5 inline-block" />
+                        Next Service Due:{" "}
+                        <b className="boldText">
+                          {new Date(
+                            service.nextServiceDate
+                          ).toLocaleDateString()}
+                        </b>
+                      </p>
+                    </CardContent>
+                  )}
+                  <CardFooter className="flex justify-center">
+                    Cost:{" "}
+                    {formatter.format(parseFloat(service.cost.toString()))}
+                  </CardFooter>
+                </Card>
+              </Link>
+              {index < sortedData.length - 1 && (
+                <div className="absolute left-1/2 bottom-[-80px] transform -translate-x-1/2 h-20 w-0.5 bg-secondary"></div>
+              )}
+            </div>
+          );
+        })
       )}
     </>
   );
