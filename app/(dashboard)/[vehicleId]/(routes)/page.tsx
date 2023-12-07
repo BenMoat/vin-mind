@@ -1,12 +1,12 @@
 import prismadb from "@/lib/prismadb";
-import { formatter } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
 
 import { getTotalModifications } from "@/actions/get-total-modifications";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Heading } from "@/components/heading";
 import { Separator } from "@/components/ui/separator";
-import { CarIcon, Eye, Milestone, PoundSterling } from "lucide-react";
+import { CarIcon, Eye } from "lucide-react";
 
 import { TaxAndMOTCards } from "./components/cards/tax-and-mot-cards";
 import { Mileage } from "./components/mileage";
@@ -23,7 +23,9 @@ interface DashboardPageProps {
   params: { vehicleId: string };
 }
 
-const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
+export const DashboardPage: React.FC<DashboardPageProps> = async ({
+  params,
+}) => {
   const totalModifications = await getTotalModifications(params.vehicleId);
 
   const vehicle = await prismadb.vehicle.findFirst({
@@ -51,7 +53,7 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
 
   return (
     <div className="flex-col">
-      <div className="flex-1 space-y-4 p-8 pt-2">
+      <div className="flex-1 space-y-4">
         <div className="flex items-center justify-between">
           <Heading
             title="Dashboard"
@@ -89,11 +91,10 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
                 <CardTitle className="text-sm font-medium">
                   Total of {vehicle.modifications.length} Modifications
                 </CardTitle>
-                <PoundSterling className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold">
-                  {formatter.format(totalModifications)}
+                  {formatCurrency.format(totalModifications)}
                 </div>
               </CardContent>
             </Card>
@@ -102,7 +103,6 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0">
                 <CardTitle className="text-sm font-medium">Mileage</CardTitle>
-                <Milestone className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold">11,897 miles</div>

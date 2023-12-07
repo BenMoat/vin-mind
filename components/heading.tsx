@@ -31,7 +31,9 @@ export const Heading: React.FC<HeadingProps> = ({
         </Button>
       )}
       <div className="flex flex-col">
-        <h2 className="text-3xl font-bold tracking-tight">{title}</h2>
+        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+          {title}
+        </h2>
         <p className="text-sm text-muted-foreground pt-1">{description}</p>
       </div>
     </div>

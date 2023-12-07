@@ -186,7 +186,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
         />
       </div>
       <Separator />
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Card>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -226,7 +226,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
         </Card>
         <RegChecker initialData={dvlaData} />
       </div>
-      <div className="flex justify-center !mt-2">
+      <div className="flex justify-center !mt-4">
         <Card className="border-destructive">
           <CardHeader>
             <CardTitle className="inline-flex items-center">

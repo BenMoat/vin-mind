@@ -18,7 +18,7 @@ const ModificationTypePage = async ({
 
   return (
     <div className="flex-col">
-      <div className="flex-1 space-y-4 p-8 pt-6">
+      <div className="flex-1 space-y-4">
         <ModificationTypeForm
           initialData={modificationType}
           modifications={JSON.parse(JSON.stringify(modifications))}

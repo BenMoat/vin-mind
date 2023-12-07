@@ -47,6 +47,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { formatCurrency, formatFormCurrency } from "@/lib/utils";
 
 interface ModificationFormProps {
   initialData:
@@ -59,7 +60,7 @@ interface ModificationFormProps {
 
 const formSchema = z.object({
   name: z.string().min(1, "Modification name is required"),
-  price: z.coerce.number().optional(),
+  price: z.string().optional(),
   modificationTypeId: z.string().min(1, "Select a modification type"),
   isObsolete: z.boolean().default(false).optional(),
   notes: z.string().optional(),
@@ -96,7 +97,9 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
     defaultValues: initialData
       ? {
           ...initialData,
-          price: parseFloat(String(initialData?.price)),
+          price: formatCurrency.format(
+            parseFloat(initialData.price.toString())
+          ),
           notes: initialData?.notes ?? "",
         }
       : {
@@ -110,21 +113,23 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
   const onSubmit = async (data: ModificationFormValues) => {
     try {
       setLoading(true);
+      const price = Number(data.price?.replace(/£|,/g, ""));
+      const formData = { ...data, price };
       if (initialData) {
         await axios.patch(
           `/api/${params.vehicleId}/modifications/${params.modificationId}`,
-          data
+          formData
         );
       } else {
-        await axios.post(`/api/${params.vehicleId}/modifications`, data);
+        await axios.post(`/api/${params.vehicleId}/modifications`, formData);
       }
-      router.refresh();
       router.push(`/${params.vehicleId}/modifications`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
+      router.refresh();
     }
   };
 
@@ -134,7 +139,6 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
       await axios.delete(
         `/api/${params.vehicleId}/modifications/${params.modificationId}`
       );
-      router.refresh();
       router.push(`/${params.vehicleId}/modifications`);
       toast.success("Modification Type deleted");
     } catch (error) {
@@ -142,6 +146,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
     } finally {
       setLoading(false);
       setAlertOpen(false);
+      router.refresh();
     }
   };
 
@@ -197,16 +202,19 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                 <FormItem className="max-w-[140px]">
                   <FormLabel>Price</FormLabel>
                   <FormControl>
-                    <div className="flex items-center pl-3 border rounded-md">
-                      <div className="border-r pr-2">£</div>
-                      <Input
-                        type="number"
-                        disabled={loading}
-                        className="placeholder:italic border-none h-full"
-                        placeholder="149.99"
-                        {...field}
-                      />
-                    </div>
+                    <Input
+                      type="text"
+                      disabled={loading}
+                      className="placeholder:italic"
+                      placeholder="149.99"
+                      {...field}
+                      onChange={(e) => {
+                        const formattedValue = formatFormCurrency(
+                          e.target.value
+                        );
+                        field.onChange(formattedValue);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
