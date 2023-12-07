@@ -9,8 +9,9 @@ import { ServiceHistory } from "@prisma/client";
 
 import {
   calculateAndFormatTimeDifference,
-  formatMileage,
+  compareMileage,
   formatCurrency,
+  formatMileage,
 } from "@/lib/utils";
 
 import { InfoIcon, Plus } from "lucide-react";
@@ -78,13 +79,13 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
         </div>
       ) : (
         data.map((service, index) => {
-          // Calculate mileage difference between current service and next service
-          const mileageDifference =
-            index < data.length - 1
-              ? data[index + 1].mileage - service.mileage
-              : null;
+          // Compare the mileage difference the current service and next service
+          const nextMilage = data[index + 1];
+          const mileageDifference = nextMilage
+            ? compareMileage(service.mileage, nextMilage.mileage)
+            : null;
 
-          // Calculate time difference between current service and next service
+          // Compare the time difference between the current service and next service
           const nextService = data[index + 1];
           const timeDifference = nextService
             ? calculateAndFormatTimeDifference(
@@ -147,9 +148,7 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
                     <div className="flex items-center justify-center border rounded-md p-6 min-w-[220px] max-h-[75px]">
                       {mileageDifference !== null && (
                         <p className="text-center">
-                          {formatMileage(mileageDifference)}
-                          &nbsp;miles&nbsp;&middot;&nbsp;
-                          {timeDifference}
+                          {`${mileageDifference} miles · ${timeDifference}`}
                         </p>
                       )}
                     </div>

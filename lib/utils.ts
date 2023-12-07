@@ -17,6 +17,34 @@ export const formatCurrency = new Intl.NumberFormat("en-UK", {
   currency: "GBP",
 });
 
+// Format a price using commas and a decimal point and return it as a string
+export const formatFormCurrency = (value: string): string => {
+  // Strip out any characters that aren't digits or a decimal
+  let cleanValue = value.replace(/[^\d.]/g, "");
+
+  // Check if there's a decimal in the input
+  const hasDecimal = cleanValue.includes(".");
+
+  // Split the input into integer and decimal parts
+  let [integerPart, decimalPart] = cleanValue.split(".");
+
+  integerPart = addThousandsSeparators(integerPart);
+
+  // Reassemble the formatted number
+  let formattedNumber = integerPart;
+  if (hasDecimal) {
+    // If there's a decimal part, include it, limiting to two digits
+    formattedNumber += `.${decimalPart ? decimalPart.substring(0, 2) : ""}`;
+  }
+
+  // Add the £ sign at the beginning
+  return `£${formattedNumber}`;
+};
+
+//Add an ellipsis to the end of a string if it's longer than 19 characters
+export const formatLabelWithEllipsis = (label: string | undefined) =>
+  label && label.length > 19 ? `${label.slice(0, 19)}...` : label;
+
 // Calculate the difference between two dates and return it as a string
 export const calculateAndFormatTimeDifference = (
   date1: Date,
@@ -42,11 +70,18 @@ export const calculateAndFormatTimeDifference = (
     .join(" ");
 };
 
-//Add an ellipsis to the end of a string if it's longer than 19 characters
-export const formatLabelWithEllipsis = (label: string | undefined) =>
-  label && label.length > 19 ? `${label.slice(0, 19)}...` : label;
+//RegEx for thousands separator
+const addThousandsSeparators = (input: string): string =>
+  input.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-// Format a number as a mileage
+// Compare two numbers and return the difference with thousands separators
+export const compareMileage = (x: number, y: number): string => {
+  const difference = x - y;
+
+  return addThousandsSeparators(difference.toString());
+};
+
+// Format mileage with thousands separators
 export const formatMileage = (x: string | number): string => {
   // First, convert the input to a string if it's a number
   const str = typeof x === "number" ? x.toString() : x;
@@ -54,29 +89,5 @@ export const formatMileage = (x: string | number): string => {
   // Remove any characters that aren't digits
   const numericOnly = str.replace(/[^\d]/g, "");
 
-  // Format the string with commas
-  return numericOnly.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
-
-// Format a price using commas and a decimal point
-export const formatFormCurrency = (value: string): string => {
-  // Strip out any characters that aren't digits or a fullstop
-  let cleanValue = value.replace(/[^\d.]/g, "");
-
-  // Check if there's a fullstop in the input
-  const hasDecimal = cleanValue.includes(".");
-
-  // Split the input into integer and decimal parts
-  let [integerPart, decimalPart] = cleanValue.split(".");
-
-  // Format the integer part with commas
-  integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-  // Reassemble the formatted number
-  if (hasDecimal) {
-    // If there's a decimal part, include it, limiting to two digits
-    return `${integerPart}.${decimalPart ? decimalPart.substring(0, 2) : ""}`;
-  }
-
-  return integerPart;
+  return addThousandsSeparators(numericOnly);
 };

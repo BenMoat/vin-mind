@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ServiceHistory } from "@prisma/client";
 
 import { format } from "date-fns";
-import { formatFormCurrency, formatMileage } from "@/lib/utils";
+import { formatCurrency, formatFormCurrency, formatMileage } from "@/lib/utils";
 
 import { CalendarIcon } from "lucide-react";
 import { Heading } from "@/components/heading";
@@ -77,7 +77,7 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
           provider: initialData.provider,
           type: initialData.type,
           mileage: formatMileage(initialData.mileage),
-          cost: formatFormCurrency(initialData.cost.toString()),
+          cost: formatCurrency.format(parseFloat(initialData.cost.toString())),
           details: initialData.details || "",
           serviceDate: new Date(initialData.serviceDate),
           nextServiceDate: initialData.nextServiceDate
@@ -97,7 +97,7 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
       setLoading(true);
       //Ensure mileage set to a number
       const mileage = Number(data.mileage.replace(/,/g, ""));
-      const cost = Number(data.cost?.replace(/,/g, ""));
+      const cost = Number(data.cost?.replace(/£|,/g, ""));
       const details = data.details?.trim();
       const formData = { ...data, mileage, cost, details };
       if (initialData) {
@@ -227,22 +227,19 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
                 <FormItem className="max-w-[300px]">
                   <FormLabel>Cost</FormLabel>
                   <FormControl>
-                    <div className="flex items-center pl-3 border rounded-md">
-                      <div className="border-r pr-2">£</div>
-                      <Input
-                        type="text"
-                        disabled={loading}
-                        className="placeholder:italic border-none"
-                        placeholder="500.00"
-                        {...field}
-                        onChange={(e) => {
-                          const formattedValue = formatFormCurrency(
-                            e.target.value
-                          );
-                          field.onChange(formattedValue);
-                        }}
-                      />
-                    </div>
+                    <Input
+                      type="text"
+                      disabled={loading}
+                      className="placeholder:italic"
+                      placeholder="£500.00"
+                      {...field}
+                      onChange={(e) => {
+                        const formattedValue = formatFormCurrency(
+                          e.target.value
+                        );
+                        field.onChange(formattedValue);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -47,7 +47,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { formatFormCurrency } from "@/lib/utils";
+import { formatCurrency, formatFormCurrency } from "@/lib/utils";
 
 interface ModificationFormProps {
   initialData:
@@ -97,7 +97,9 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
     defaultValues: initialData
       ? {
           ...initialData,
-          price: formatFormCurrency(initialData?.price.toString()),
+          price: formatCurrency.format(
+            parseFloat(initialData.price.toString())
+          ),
           notes: initialData?.notes ?? "",
         }
       : {
@@ -111,7 +113,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
   const onSubmit = async (data: ModificationFormValues) => {
     try {
       setLoading(true);
-      const price = Number(data.price?.replace(/,/g, ""));
+      const price = Number(data.price?.replace(/£|,/g, ""));
       const formData = { ...data, price };
       if (initialData) {
         await axios.patch(
@@ -200,22 +202,19 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                 <FormItem className="max-w-[140px]">
                   <FormLabel>Price</FormLabel>
                   <FormControl>
-                    <div className="flex items-center pl-3 border rounded-md">
-                      <div className="border-r pr-2">£</div>
-                      <Input
-                        type="text"
-                        disabled={loading}
-                        className="placeholder:italic border-none"
-                        placeholder="149.99"
-                        {...field}
-                        onChange={(e) => {
-                          const formattedValue = formatFormCurrency(
-                            e.target.value
-                          );
-                          field.onChange(formattedValue);
-                        }}
-                      />
-                    </div>
+                    <Input
+                      type="text"
+                      disabled={loading}
+                      className="placeholder:italic"
+                      placeholder="149.99"
+                      {...field}
+                      onChange={(e) => {
+                        const formattedValue = formatFormCurrency(
+                          e.target.value
+                        );
+                        field.onChange(formattedValue);
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
