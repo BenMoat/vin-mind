@@ -10,7 +10,8 @@ export async function PATCH(
     const { userId } = auth();
     const body = await req.json();
 
-    const { insurance, mileage, taxAndMot, totalModifications } = body;
+    const { insurance, mileage, taxAndMot, totalModifications, servicing } =
+      body;
 
     if (!userId) {
       return new NextResponse("Unauthorised", { status: 401 });
@@ -36,6 +37,7 @@ export async function PATCH(
         mileage,
         taxAndMot,
         totalModifications,
+        servicing,
       },
     });
 

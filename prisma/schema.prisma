@@ -119,6 +119,7 @@ model DashboardConfigure {
   insurance          Boolean  @default(true)
   totalModifications Boolean  @default(true)
   mileage            Boolean  @default(true)
+  servicing          Boolean  @default(true)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
 

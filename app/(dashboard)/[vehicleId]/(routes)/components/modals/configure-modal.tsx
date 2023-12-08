@@ -68,7 +68,12 @@ export const ConfigureModal: React.FC<ConfigureModalProps> = ({
   };
 
   //Define the form field names
-  type CardName = "taxAndMot" | "insurance" | "totalModifications" | "mileage";
+  type CardName =
+    | "taxAndMot"
+    | "insurance"
+    | "totalModifications"
+    | "mileage"
+    | "servicing";
 
   //Map over each form field with the name, formatted name and description
   const cards: {
@@ -95,6 +100,11 @@ export const ConfigureModal: React.FC<ConfigureModalProps> = ({
       name: "totalModifications",
       formattedName: "Total Modifications",
       description: "The total number of modifications on your vehicle.",
+    },
+    {
+      name: "servicing",
+      formattedName: "Servicing",
+      description: "Your latest servicing record.",
     },
   ];
 

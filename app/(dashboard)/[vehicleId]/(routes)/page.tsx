@@ -96,9 +96,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
           {vehicle.dashboardConfigure?.insurance && (
             <InsuranceCard initialData={vehicle.insurance} />
           )}
-
-          <ServicingCard initialData={mostRecentService} />
-
+          {vehicle.dashboardConfigure?.servicing && (
+            <ServicingCard initialData={mostRecentService} />
+          )}
           {vehicle.dashboardConfigure?.totalModifications && (
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0">

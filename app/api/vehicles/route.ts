@@ -60,6 +60,7 @@ export async function POST(req: Request) {
         insurance: true,
         totalModifications: true,
         mileage: true,
+        servicing: true,
       },
     });
 
