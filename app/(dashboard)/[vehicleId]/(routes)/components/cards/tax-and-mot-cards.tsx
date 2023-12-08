@@ -117,93 +117,53 @@ export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({ initialData }) => {
         </>
       ) : initialData ? (
         <>
-          {initialData.taxStatus === "Taxed" ? (
-            <Card className="relative px-6 space-y-2 text-center">
-              <LastUpdatedBadge tax updatedAt={initialData.updatedAt} />
-              <CardHeader>
-                <CardTitle>Tax</CardTitle>
-                <CardDescription>
-                  <span className="flex items-center justify-center">
+          <Card className="relative px-6 space-y-2 text-center">
+            <LastUpdatedBadge tax updatedAt={initialData.updatedAt} />
+            <CardHeader>
+              <CardTitle>Tax</CardTitle>
+              <CardDescription>
+                <span className="flex items-center justify-center">
+                  {initialData.taxStatus === "Taxed" ? (
                     <CheckCircle className="w-8 h-8 mr-2 text-[#adfa1d]" />
-                    {initialData.taxStatus}
-                  </span>
-                </CardDescription>
-                {initialData.taxDueDate && (
-                  <CardContent className="pb-0">
-                    Due:{" "}
-                    {new Date(initialData.taxDueDate).toLocaleDateString(
-                      "en-GB"
-                    )}
-                  </CardContent>
-                )}
-              </CardHeader>
-            </Card>
-          ) : (
-            <Card className="relative px-6 space-y-2 text-center">
-              <LastUpdatedBadge tax updatedAt={initialData.updatedAt} />
-              <CardHeader>
-                <CardTitle>Tax</CardTitle>
-                <CardDescription>
-                  <span className="flex items-center justify-center">
+                  ) : (
                     <XCircle className="w-8 h-8 mr-2 text-[#7f1d1d]" />
-                    {initialData.taxStatus}
-                  </span>
-                </CardDescription>
-                {initialData.taxDueDate && (
-                  <CardContent className="pb-0">
-                    Due:{" "}
-                    {new Date(initialData.taxDueDate).toLocaleDateString(
-                      "en-GB"
-                    )}
-                  </CardContent>
-                )}
-              </CardHeader>
-            </Card>
-          )}
+                  )}
+                  {initialData.taxStatus}
+                </span>
+              </CardDescription>
+              {initialData.taxDueDate && (
+                <CardContent className="pb-0">
+                  Due:{" "}
+                  {new Date(initialData.taxDueDate).toLocaleDateString("en-GB")}
+                </CardContent>
+              )}
+            </CardHeader>
+          </Card>
 
-          {initialData.motStatus === "Valid" ? (
-            <Card className="relative px-6 space-y-2 text-center">
-              <LastUpdatedBadge mot updatedAt={initialData.updatedAt} />
-              <CardHeader>
-                <CardTitle>MOT</CardTitle>
-                <CardDescription>
-                  <span className="flex items-center justify-center">
+          <Card className="relative px-6 space-y-2 text-center">
+            <LastUpdatedBadge mot updatedAt={initialData.updatedAt} />
+            <CardHeader>
+              <CardTitle>MOT</CardTitle>
+              <CardDescription>
+                <span className="flex items-center justify-center">
+                  {initialData.motStatus === "Valid" ? (
                     <CheckCircle className="w-8 h-8 mr-2 text-[#adfa1d]" />
-                    {initialData.motStatus}
-                  </span>
-                </CardDescription>
-                {initialData.motExpiryDate && (
-                  <CardContent className="pb-0">
-                    Due:{" "}
-                    {new Date(initialData.motExpiryDate).toLocaleDateString(
-                      "en-GB"
-                    )}
-                  </CardContent>
-                )}
-              </CardHeader>
-            </Card>
-          ) : (
-            <Card className="relative px-6 space-y-2 text-center">
-              <LastUpdatedBadge mot updatedAt={initialData.updatedAt} />
-              <CardHeader>
-                <CardTitle>MOT</CardTitle>
-                <CardDescription>
-                  <span className="flex items-center justify-center">
+                  ) : (
                     <XCircle className="w-8 h-8 mr-2 text-[#a92727]" />
-                    {initialData.motStatus}
-                  </span>
-                </CardDescription>
-                {initialData.motExpiryDate && (
-                  <CardContent className="pb-0">
-                    Due:{" "}
-                    {new Date(initialData.motExpiryDate).toLocaleDateString(
-                      "en-GB"
-                    )}
-                  </CardContent>
-                )}
-              </CardHeader>
-            </Card>
-          )}
+                  )}
+                  {initialData.motStatus}
+                </span>
+              </CardDescription>
+              {initialData.motExpiryDate && (
+                <CardContent className="pb-0">
+                  Due:{" "}
+                  {new Date(initialData.motExpiryDate).toLocaleDateString(
+                    "en-GB"
+                  )}
+                </CardContent>
+              )}
+            </CardHeader>
+          </Card>
         </>
       ) : (
         <Card className="relative px-6 space-y-2 text-center">

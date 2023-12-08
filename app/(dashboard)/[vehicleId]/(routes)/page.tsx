@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/popover";
 import { ConfigureModal } from "./components/modals/configure-modal";
 import { Button } from "@/components/ui/button";
+import { ServiceHistoryCard } from "./components/cards/service-history-card";
 
 interface DashboardPageProps {
   params: { vehicleId: string };
@@ -40,6 +41,15 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
       serviceHistory: true,
     },
   });
+
+  const sortedServiceHistory = vehicle?.serviceHistory
+    ? vehicle.serviceHistory.sort(
+        (a, b) =>
+          new Date(b.serviceDate).getTime() - new Date(a.serviceDate).getTime()
+      )
+    : [];
+
+  const mostRecentService = sortedServiceHistory[0];
 
   if (!vehicle) {
     return (
@@ -84,8 +94,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
             <TaxAndMOTCards initialData={vehicle.dvlaData} />
           )}
           {vehicle.dashboardConfigure?.insurance && (
-            <InsuranceCard initialData={vehicle?.insurance} />
+            <InsuranceCard initialData={vehicle.insurance} />
           )}
+
+          <ServiceHistoryCard initialData={mostRecentService} />
+
           {vehicle.dashboardConfigure?.totalModifications && (
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0">

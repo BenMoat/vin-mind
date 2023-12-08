@@ -97,7 +97,7 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
           return (
             <div
               className={`relative flex items-center justify-center ${
-                index < data.length - 1 ? "!mb-[130px]" : ""
+                index < data.length - 1 && "!mb-[130px]"
               }`}
               key={index}
             >

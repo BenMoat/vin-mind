@@ -54,7 +54,7 @@ export default function VehicleSwitcher({
           </span>
           <ChevronDown
             className={`ml-auto h-4 w-4 shrink-0 opacity-50 transition-transform duration-300 ${
-              open ? "transform rotate-180" : ""
+              open && "transform rotate-180"
             }`}
             aria-hidden="true"
           />
@@ -73,9 +73,7 @@ export default function VehicleSwitcher({
                 push(`/${vehicle.id}`);
               }}
               className={`text-sm truncate w-full ${
-                vehicle.id === params.vehicleId && !hoveredItem
-                  ? "bg-accent"
-                  : ""
+                vehicle.id === params.vehicleId && !hoveredItem && "bg-accent"
               }`}
               onMouseEnter={() => setHoveredItem(vehicle.id)}
               onMouseLeave={() => setHoveredItem(null)}
