@@ -49,7 +49,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
       )
     : [];
 
-  const mostRecentService = sortedServiceHistory[0];
+  const mostRecentService = JSON.parse(JSON.stringify(sortedServiceHistory[0]));
 
   if (!vehicle) {
     return (
