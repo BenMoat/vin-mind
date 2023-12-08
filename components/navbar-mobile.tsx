@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { ThemeToggle } from "./theme-toggle";
 
 interface NavbarMobileProps {
   items: Vehicle[];
@@ -41,9 +42,9 @@ export const NavbarMobile: React.FC<NavbarMobileProps> = ({ items }) => {
       </SheetTrigger>
       <SheetContent side="left" className="w-[240px]">
         <SheetHeader>
-          <SheetTitle>Menu</SheetTitle>
-          <Separator className="!mb-3" />
-          <div className="!ml-[-4px] space-y-3">
+          <SheetTitle className="flex justify-center">Menu</SheetTitle>
+          <div className="!ml-[-4px] space-y-4">
+            <Separator />
             <VehicleSwitcher
               items={items}
               onClick={handleItemClick}
@@ -53,6 +54,8 @@ export const NavbarMobile: React.FC<NavbarMobileProps> = ({ items }) => {
               onClick={handleItemClick}
               className="flex flex-col space-x-0 space-y-4 text-md"
             />
+            <Separator />
+            <ThemeToggle />
           </div>
         </SheetHeader>
       </SheetContent>

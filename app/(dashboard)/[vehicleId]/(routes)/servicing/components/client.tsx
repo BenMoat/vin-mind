@@ -2,6 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 
+import Link from "next/link";
 import { Heading } from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -23,7 +24,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Link from "next/link";
 
 interface ServiceHistoryProps {
   data: ServiceHistory[];
@@ -96,7 +96,9 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
 
           return (
             <div
-              className="!mb-[130px] relative flex items-center justify-center"
+              className={`relative flex items-center justify-center ${
+                index < data.length - 1 ? "!mb-[130px]" : ""
+              }`}
               key={index}
             >
               <Link href={`/${params.vehicleId}/servicing/${service.id}`}>

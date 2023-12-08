@@ -37,6 +37,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
       dvlaData: true,
       insurance: true,
       dashboardConfigure: true,
+      serviceHistory: true,
     },
   });
 
