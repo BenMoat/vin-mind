@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/popover";
 import { ConfigureModal } from "./components/modals/configure-modal";
 import { Button } from "@/components/ui/button";
-import { ServiceHistoryCard } from "./components/cards/service-history-card";
+import { ServicingCard } from "./components/cards/servicing-card";
 
 interface DashboardPageProps {
   params: { vehicleId: string };
@@ -97,7 +97,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
             <InsuranceCard initialData={vehicle.insurance} />
           )}
 
-          <ServiceHistoryCard initialData={mostRecentService} />
+          <ServicingCard initialData={mostRecentService} />
 
           {vehicle.dashboardConfigure?.totalModifications && (
             <Card>
