@@ -13,8 +13,10 @@ import { Insurance } from "@prisma/client";
 import { format } from "date-fns";
 
 import { CalendarIcon } from "lucide-react";
-import { Modal } from "@/components/ui/modal";
+
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Modal } from "@/components/ui/modal";
 import {
   Form,
   FormControl,
@@ -28,7 +30,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
 
 interface InsuranceModalProps {
   initialData: Insurance | null;

@@ -1,9 +1,12 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, File, Files } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
 import { formatCurrency } from "@/lib/utils";
+
+import { ArrowUpDown, File, Files } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 
 export type ModificationColumn = {
   id: string;

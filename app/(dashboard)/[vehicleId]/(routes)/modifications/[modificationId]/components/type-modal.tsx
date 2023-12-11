@@ -2,9 +2,16 @@
 
 import * as z from "zod";
 import axios from "axios";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Modal } from "@/components/ui/modal";
+
+import toast from "react-hot-toast";
+
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
 import {
   Form,
   FormControl,
@@ -13,11 +20,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useParams, useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 
 interface TypeModalProps {
   isOpen: boolean;

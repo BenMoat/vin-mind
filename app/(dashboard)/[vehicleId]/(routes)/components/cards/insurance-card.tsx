@@ -1,12 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams } from "next/navigation";
+
 import { Insurance } from "@prisma/client";
 
-import { LastUpdatedBadge } from "../last-updated-badge";
-import { InsuranceModal } from "../modals/insurance-modal";
-
 import { CheckCircle, PlusCircle, XCircle } from "lucide-react";
+
+import CardSkeleton from "./card-skeleton";
+import { InsuranceModal } from "../modals/insurance-modal";
+import { LastUpdatedBadge } from "../last-updated-badge";
+
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -14,10 +20,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import axios from "axios";
-import { useParams } from "next/navigation";
-import CardSkeleton from "./card-skeleton";
 
 interface InsuranceCardProps {
   initialData: Insurance | null;

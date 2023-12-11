@@ -1,33 +1,33 @@
 "use client";
 
-import * as z from "zod";
-import axios from "axios";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { useParams, useRouter } from "next/navigation";
-
+import axios from "axios";
+import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useParams, useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 
-import { DvlaData, ServiceHistory, Vehicle } from "@prisma/client";
+import { DvlaData, Vehicle } from "@prisma/client";
+
+import toast from "react-hot-toast";
 
 import { AlertTriangle } from "lucide-react";
 
-import { Heading } from "@/components/heading";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { AlertModal } from "@/components/modals/alert-modal";
+import { RegChecker } from "@/components/reg-checker";
+
+import { Button } from "@/components/ui/button";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Heading } from "@/components/heading";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
 } from "@/components/ui/card";
-import { RegChecker } from "@/components/reg-checker";
 
 interface SettingsFormProps {
   initialData: Vehicle;

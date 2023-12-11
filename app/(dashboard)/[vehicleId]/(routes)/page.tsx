@@ -3,22 +3,23 @@ import { formatCurrency } from "@/lib/utils";
 
 import { getTotalModifications } from "@/actions/get-total-modifications";
 
+import { CarIcon, Eye } from "lucide-react";
+
+import { ConfigureModal } from "./components/modals/configure-modal";
+import { InsuranceCard } from "./components/cards/insurance-card";
+import { Mileage } from "./components/mileage";
+import { ServicingCard } from "./components/cards/servicing-card";
+import { TaxAndMOTCards } from "./components/cards/tax-and-mot-cards";
+
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Heading } from "@/components/heading";
 import { Separator } from "@/components/ui/separator";
-import { CarIcon, Eye } from "lucide-react";
-
-import { TaxAndMOTCards } from "./components/cards/tax-and-mot-cards";
-import { Mileage } from "./components/mileage";
-import { InsuranceCard } from "./components/cards/insurance-card";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ConfigureModal } from "./components/modals/configure-modal";
-import { Button } from "@/components/ui/button";
-import { ServicingCard } from "./components/cards/servicing-card";
 
 interface DashboardPageProps {
   params: { vehicleId: string };
@@ -42,14 +43,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
     },
   });
 
-  const sortedServiceHistory = vehicle?.serviceHistory
-    ? vehicle.serviceHistory.sort(
-        (a, b) =>
-          new Date(b.serviceDate).getTime() - new Date(a.serviceDate).getTime()
-      )
-    : [];
+  //Parse the service history to get the most recent service
+  const mostRecentService =
+    vehicle?.serviceHistory &&
+    vehicle.serviceHistory.reduce((a, b) =>
+      new Date(a.serviceDate) > new Date(b.serviceDate) ? a : b
+    );
 
-  const mostRecentService = JSON.parse(JSON.stringify(sortedServiceHistory[0]));
+  const parsedService = JSON.parse(JSON.stringify(mostRecentService));
 
   if (!vehicle) {
     return (
@@ -97,7 +98,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
             <InsuranceCard initialData={vehicle.insurance} />
           )}
           {vehicle.dashboardConfigure?.servicing && (
-            <ServicingCard initialData={mostRecentService} />
+            <ServicingCard initialData={parsedService} />
           )}
           {vehicle.dashboardConfigure?.totalModifications && (
             <Card>
@@ -119,7 +120,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
                 <CardTitle className="text-sm font-medium">Mileage</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold">11,897 miles</div>
+                <div className="text-3xl font-bold">16,215 miles</div>
               </CardContent>
             </Card>
           )}

@@ -2,16 +2,18 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { Plus, PoundSterling } from "lucide-react";
-
-import { Heading } from "@/components/heading";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { ModificationColumn, columns } from "./columns";
-import { ModificationType } from "@prisma/client";
-import { DataTable } from "@/components/ui/data-table";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
+
+import { ModificationType } from "@prisma/client";
 import { formatCurrency } from "@/lib/utils";
+
+import { ModificationColumn, columns } from "./columns";
+
+import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
+import { Heading } from "@/components/heading";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Popover,
   PopoverContent,

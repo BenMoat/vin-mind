@@ -8,6 +8,8 @@ import toast from "react-hot-toast";
 
 import { DashboardConfigure } from "@prisma/client";
 
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import {
   Form,
   FormControl,
@@ -16,8 +18,6 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { Switch } from "@/components/ui/switch";
-import { Button } from "@/components/ui/button";
 
 interface ConfigureModalProps {
   initialData: DashboardConfigure | null;

@@ -1,4 +1,5 @@
 import React from "react";
+
 import { DvlaData } from "@prisma/client";
 
 import { Modal } from "@/components/ui/modal";

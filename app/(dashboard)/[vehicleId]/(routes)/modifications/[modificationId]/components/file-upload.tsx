@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { CldUploadWidget } from "next-cloudinary";
 
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
+
 import { ExternalLink, Trash, Upload } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 
 interface ImageUploadProps {
   disabled?: boolean;
@@ -96,12 +98,7 @@ const FileUpload: React.FC<ImageUploadProps> = ({
             open();
           };
           return (
-            <Button
-              type="button"
-              disabled={disabled}
-              variant="secondary"
-              onClick={onClick}
-            >
+            <Button type="button" disabled={disabled} onClick={onClick}>
               <Upload className="h-4 w-4 mr-2" />
               Upload Files
             </Button>

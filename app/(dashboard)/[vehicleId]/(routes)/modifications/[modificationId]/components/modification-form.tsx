@@ -1,24 +1,31 @@
 "use client";
 
-import * as z from "zod";
-import axios from "axios";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { useParams, useRouter } from "next/navigation";
-import toast from "react-hot-toast";
-
+import axios from "axios";
+import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useParams, useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 
 import { Modification, ModificationType, Files } from "@prisma/client";
 
-import { TypeModal } from "./type-modal";
-import FileUpload from "./file-upload";
+import toast from "react-hot-toast";
 
 import { PlusCircle } from "lucide-react";
 
-import { Heading } from "@/components/heading";
+import { formatCurrency, formatFormCurrency } from "@/lib/utils";
+
+import FileUpload from "./file-upload";
+import { TypeModal } from "./type-modal";
+
+import { AlertModal } from "@/components/modals/alert-modal";
+
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Heading } from "@/components/heading";
+import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
   FormControl,
@@ -28,8 +35,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { AlertModal } from "@/components/modals/alert-modal";
 import {
   Select,
   SelectContent,
@@ -37,9 +42,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Textarea } from "@/components/ui/textarea";
-
 import {
   Card,
   CardContent,
@@ -47,7 +49,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { formatCurrency, formatFormCurrency } from "@/lib/utils";
 
 interface ModificationFormProps {
   initialData:

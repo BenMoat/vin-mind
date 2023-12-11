@@ -2,10 +2,17 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { DvlaData } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 
+import { DvlaData } from "@prisma/client";
+
+import CardSkeleton from "./card-skeleton";
+import { LastUpdatedBadge } from "../last-updated-badge";
+import { TaxAndMOTModal } from "../modals/tax-and-mot-modal";
+
 import { CheckCircle, PlusCircle, XCircle } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -13,11 +20,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-
-import CardSkeleton from "./card-skeleton";
-import { LastUpdatedBadge } from "../last-updated-badge";
-import { TaxAndMOTModal } from "../modals/tax-and-mot-modal";
 
 interface DvlaDataProps {
   initialData: DvlaData | null;
