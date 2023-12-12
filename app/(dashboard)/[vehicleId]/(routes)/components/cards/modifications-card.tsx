@@ -12,7 +12,7 @@ import { formatCurrency } from "@/lib/utils";
 
 interface ModificationsCardProps {
   totalPrice: number;
-  totalModifications: Number | null;
+  totalModifications: number;
 }
 
 export const ModificationsCard: React.FC<ModificationsCardProps> = ({

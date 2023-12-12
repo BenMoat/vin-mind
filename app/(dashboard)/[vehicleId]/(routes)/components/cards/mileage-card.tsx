@@ -14,11 +14,11 @@ import {
 } from "@/components/ui/card";
 
 interface MileaCardProps {
-  initialData: ServiceHistory;
+  initialData: ServiceHistory | null;
 }
 
 export const MileageCard: React.FC<MileaCardProps> = ({ initialData }) => {
-  const serviceDate = new Date(initialData.serviceDate);
+  const serviceDate = initialData && new Date(initialData.serviceDate);
 
   return (
     <Card className="relative px-6 space-y-2 text-center">
@@ -38,7 +38,7 @@ export const MileageCard: React.FC<MileaCardProps> = ({ initialData }) => {
         </CardDescription>
         <CardContent className="pb-0">
           {initialData ? (
-            <>Since: {serviceDate.toLocaleDateString("en-GB")}</>
+            <>Since: {serviceDate?.toLocaleDateString("en-GB")}</>
           ) : (
             <span className="text-sm italic">
               Enter your vehicle's service history to populate this card.
