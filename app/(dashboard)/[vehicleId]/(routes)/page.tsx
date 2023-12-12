@@ -1,13 +1,12 @@
 import prismadb from "@/lib/prismadb";
-import { formatCurrency } from "@/lib/utils";
 
-import { getTotalModifications } from "@/actions/get-total-modifications";
-
-import { CarIcon, Eye } from "lucide-react";
+import { Eye, HelpCircle } from "lucide-react";
 
 import { ConfigureModal } from "./components/modals/configure-modal";
 import { InsuranceCard } from "./components/cards/insurance-card";
 import { Mileage } from "./components/mileage";
+import { MileageCard } from "./components/cards/mileage-card";
+import { ModificationsCard } from "./components/cards/modifications-card";
 import { ServicingCard } from "./components/cards/servicing-card";
 import { TaxAndMOTCards } from "./components/cards/tax-and-mot-cards";
 
@@ -28,8 +27,6 @@ interface DashboardPageProps {
 export const DashboardPage: React.FC<DashboardPageProps> = async ({
   params,
 }) => {
-  const totalModifications = await getTotalModifications(params.vehicleId);
-
   const vehicle = await prismadb.vehicle.findFirst({
     where: {
       id: params.vehicleId,
@@ -43,21 +40,36 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
     },
   });
 
+  // Calculate the total price of modifications
+  const priceOfModifications =
+    vehicle?.modifications?.reduce(
+      (total, modification) => total + Number(modification.price),
+      0
+    ) || 0;
+
+  // Get the total amount of modifications
+  const numberOfModifications = vehicle?.modifications?.length || null;
+
   //Parse the service history to get the most recent service
   const mostRecentService =
     vehicle?.serviceHistory &&
+    vehicle.serviceHistory.length > 0 &&
     vehicle.serviceHistory.reduce((a, b) =>
       new Date(a.serviceDate) > new Date(b.serviceDate) ? a : b
     );
 
-  const parsedService = JSON.parse(JSON.stringify(mostRecentService));
+  const parsedService =
+    mostRecentService && JSON.parse(JSON.stringify(mostRecentService));
 
   if (!vehicle) {
     return (
-      <div className="flex h-screen items-center justify-center">
+      <div className="flex flex-col h-screen items-center justify-center">
+        <div className="absolute mt-[208px] ml-10">
+          <img src="/where.gif" width="200" alt="Vehicle does not exist GIF" />
+        </div>
         <div className="text-center">
-          <CarIcon className="h-16 w-16 text-muted-foreground mx-auto" />
-          Vehicle not found. <br></br> Please refresh the page.{" "}
+          Are you sure this vehicle exists? <br></br> Please check the URL and
+          try again.
         </div>
       </div>
     );
@@ -101,28 +113,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
             <ServicingCard initialData={parsedService} />
           )}
           {vehicle.dashboardConfigure?.totalModifications && (
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0">
-                <CardTitle className="text-sm font-medium">
-                  Total of {vehicle.modifications.length} Modifications
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold">
-                  {formatCurrency.format(totalModifications)}
-                </div>
-              </CardContent>
-            </Card>
+            <ModificationsCard
+              totalPrice={priceOfModifications}
+              totalModifications={numberOfModifications}
+            />
           )}
           {vehicle.dashboardConfigure?.mileage && (
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0">
-                <CardTitle className="text-sm font-medium">Mileage</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold">16,215 miles</div>
-              </CardContent>
-            </Card>
+            <MileageCard initialData={parsedService} />
           )}
         </div>
         <Card className="col-span-4">

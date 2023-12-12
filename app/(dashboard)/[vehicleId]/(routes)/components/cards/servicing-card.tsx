@@ -4,7 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 
 import { ServiceHistory } from "@prisma/client";
 
-import { CheckCircle, InfoIcon, PlusCircle, XCircle } from "lucide-react";
+import { AlertCircle, CheckCircle, PlusCircle, XCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -30,27 +30,25 @@ export const ServicingCard: React.FC<ServiceHistoryCardProps> = ({
       {initialData ? (
         <CardHeader>
           <CardTitle>Servicing</CardTitle>
-          <CardDescription>
-            <span className="flex items-center justify-center">
-              {initialData.nextServiceDate &&
-              new Date(initialData.serviceDate) <
-                new Date(initialData.nextServiceDate) ? (
-                <>
-                  <CheckCircle className="w-8 h-8 mr-2 text-[#adfa1d]" />
-                  Serviced
-                </>
-              ) : initialData.nextServiceDate === null ? (
-                <>
-                  <InfoIcon className="w-8 h-8 mr-2" />
-                  No next service date
-                </>
-              ) : (
-                <>
-                  <XCircle className="w-8 h-8 mr-2 text-[#7f1d1d]" />
-                  Service Overdue
-                </>
-              )}
-            </span>
+          <CardDescription className="flex items-center justify-center">
+            {initialData.nextServiceDate &&
+            new Date(initialData.serviceDate) <
+              new Date(initialData.nextServiceDate) ? (
+              <>
+                <CheckCircle className="w-8 h-8 mr-2 text-[#adfa1d]" />
+                Serviced
+              </>
+            ) : initialData.nextServiceDate === null ? (
+              <>
+                <AlertCircle className="w-8 h-8 mr-2" />
+                No next service date
+              </>
+            ) : (
+              <>
+                <XCircle className="w-8 h-8 mr-2 text-[#7f1d1d]" />
+                Service Overdue
+              </>
+            )}
           </CardDescription>
           {initialData.nextServiceDate ? (
             <CardContent className="pb-0">
