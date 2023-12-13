@@ -11,6 +11,9 @@ import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 
 import { useStoreModal } from "@/hooks/use-store-modal";
+
+import { ExternalLink } from "lucide-react";
+
 import { Modal } from "@/components/ui/modal";
 import {
   Form,
@@ -130,6 +133,7 @@ export const VehicleModal = () => {
           target="_blank"
         >
           DVLA
+          <ExternalLink className="inline-block ml-1 h-3 w-3" />
         </a>
         .
       </>

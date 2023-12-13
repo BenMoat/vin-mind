@@ -9,6 +9,8 @@ import { useParams, useRouter } from "next/navigation";
 import { SubmitHandler, FieldValues } from "react-hook-form";
 import { DvlaData } from "@prisma/client";
 
+import { ExternalLink } from "lucide-react";
+
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -148,6 +150,7 @@ export const RegChecker: React.FC<DvlaDataProps> = ({
                       target="_blank"
                     >
                       DVLA
+                      <ExternalLink className="inline-block ml-1 h-3 w-3 " />
                     </a>
                     .
                   </CardDescription>

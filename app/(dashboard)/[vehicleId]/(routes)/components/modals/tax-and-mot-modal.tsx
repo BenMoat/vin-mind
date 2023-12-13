@@ -2,6 +2,8 @@ import React from "react";
 
 import { DvlaData } from "@prisma/client";
 
+import { ExternalLink } from "lucide-react";
+
 import { Modal } from "@/components/ui/modal";
 import { RegChecker } from "@/components/reg-checker";
 
@@ -22,6 +24,7 @@ const description = (
       target="_blank"
     >
       DVLA
+      <ExternalLink className="inline-block ml-1 h-3 w-3 " />
     </a>
     .
   </>
