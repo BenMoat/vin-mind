@@ -36,28 +36,28 @@ export const InsuranceCard: React.FC<InsuranceCardProps> = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`/api/${params.vehicleId}/insurance`);
+      if (initialData) {
+        try {
+          setLoading(true);
+          const response = await axios.get(
+            `/api/${params.vehicleId}/insurance`
+          );
 
-        // Check if the insurance is still valid against today's date
-        const today = new Date();
-        const endDate = new Date(response.data[0].endDate);
+          // Check if the insurance is still valid against today's date
+          const today = new Date();
+          const endDate = new Date(response.data[0].endDate);
 
-        if (endDate >= today) {
-          response.data[0].isInsured = true;
-        } else {
-          response.data[0].isInsured = false;
+          initialData.isInsured = endDate >= today;
+
+          await saveData(response.data[0]);
+          setError("");
+        } catch (error) {
+          if (axios.isAxiosError(error) && error.response) {
+            setError("Failed to fetch insurance data.");
+          }
+        } finally {
+          setLoading(false);
         }
-
-        await saveData(response.data[0]);
-        setError("");
-      } catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
-          setError("Failed to fetch insurance data.");
-        }
-      } finally {
-        setLoading(false);
       }
     };
 

@@ -1,6 +1,6 @@
 import prismadb from "@/lib/prismadb";
 
-import { Eye } from "lucide-react";
+import { Eye, HelpCircle } from "lucide-react";
 
 import { ConfigureModal } from "./components/modals/configure-modal";
 import { InsuranceCard } from "./components/cards/insurance-card";
@@ -45,25 +45,26 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
     },
   });
 
-  const totalPriceOfModifications =
-    vehicle?.modifications?.reduce(
-      (total, modification) => total + Number(modification.price),
-      0
-    ) || 0;
-
   if (!vehicle) {
     return (
-      <div className="flex flex-col h-screen items-center justify-center">
-        <div className="absolute mt-[208px] ml-10">
-          <img src="/where.gif" width="200" alt="Vehicle does not exist GIF" />
-        </div>
-        <div className="text-center">
+      <>
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+          <HelpCircle className="h-10 w-10 mb-2" />
           Are you sure this vehicle exists? <br></br> Please check the URL and
           try again.
         </div>
-      </div>
+        <div className="absolute bottom-0">
+          <img src="/where.gif" width="200" alt="Vehicle does not exist GIF" />
+        </div>
+      </>
     );
   }
+
+  const totalPriceOfModifications =
+    vehicle.modifications?.reduce(
+      (total, modification) => total + Number(modification.price),
+      0
+    ) || 0;
 
   return (
     <div className="flex-col flex-1 space-y-4">

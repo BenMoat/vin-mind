@@ -10,7 +10,13 @@ import CardSkeleton from "./card-skeleton";
 import { LastUpdatedBadge } from "../last-updated-badge";
 import { TaxAndMOTModal } from "../modals/tax-and-mot-modal";
 
-import { CheckCircle, PlusCircle, XCircle } from "lucide-react";
+import {
+  CheckCircle,
+  HelpCircle,
+  InfoIcon,
+  PlusCircle,
+  XCircle,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -150,6 +156,8 @@ export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({ initialData }) => {
                 <span className="flex items-center justify-center">
                   {initialData.motStatus === "Valid" ? (
                     <CheckCircle className="w-8 h-8 mr-2 text-[#adfa1d]" />
+                  ) : initialData.motStatus === "No details held by DVLA" ? (
+                    <InfoIcon className="w-8 h-8 mr-2" />
                   ) : (
                     <XCircle className="w-8 h-8 mr-2 text-[#a92727]" />
                   )}
