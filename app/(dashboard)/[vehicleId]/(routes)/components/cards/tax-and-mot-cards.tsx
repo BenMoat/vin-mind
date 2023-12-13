@@ -10,13 +10,7 @@ import CardSkeleton from "./card-skeleton";
 import { LastUpdatedBadge } from "../last-updated-badge";
 import { TaxAndMOTModal } from "../modals/tax-and-mot-modal";
 
-import {
-  CheckCircle,
-  HelpCircle,
-  InfoIcon,
-  PlusCircle,
-  XCircle,
-} from "lucide-react";
+import { CheckCircle, InfoIcon, PlusCircle, XCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -176,26 +170,44 @@ export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({ initialData }) => {
           </Card>
         </>
       ) : (
-        <Card className="relative px-6 space-y-2 text-center">
-          <CardHeader className="pt-7">
-            <CardTitle>Tax and MOT</CardTitle>
-            <CardDescription>
-              <span className="flex items-center justify-center">
-                <Button
-                  variant="ghost"
-                  className="rounded-full w-10 p-0 mb-[-5px]"
-                  type="button"
-                  onClick={() => setIsOpen(true)}
-                >
-                  <PlusCircle className="h-8 w-8" />
-                </Button>
-              </span>
-            </CardDescription>
-            <CardContent className="pb-0">
-              Retrieve Tax and MOT status
-            </CardContent>
-          </CardHeader>
-        </Card>
+        <>
+          <Card className="relative px-6 space-y-2 text-center">
+            <CardHeader className="pt-7">
+              <CardTitle>Tax</CardTitle>
+              <CardDescription>
+                <span className="flex items-center justify-center">
+                  <Button
+                    variant="ghost"
+                    className="rounded-full w-10 p-0 mb-[-5px]"
+                    type="button"
+                    onClick={() => setIsOpen(true)}
+                  >
+                    <PlusCircle className="h-8 w-8" />
+                  </Button>
+                </span>
+              </CardDescription>
+              <CardContent className="pb-0">Retrieve Tax status</CardContent>
+            </CardHeader>
+          </Card>
+          <Card className="relative px-6 space-y-2 text-center">
+            <CardHeader className="pt-7">
+              <CardTitle>MOT</CardTitle>
+              <CardDescription>
+                <span className="flex items-center justify-center">
+                  <Button
+                    variant="ghost"
+                    className="rounded-full w-10 p-0 mb-[-5px]"
+                    type="button"
+                    onClick={() => setIsOpen(true)}
+                  >
+                    <PlusCircle className="h-8 w-8" />
+                  </Button>
+                </span>
+              </CardDescription>
+              <CardContent className="pb-0">Retrieve MOT status</CardContent>
+            </CardHeader>
+          </Card>
+        </>
       )}
     </>
   );

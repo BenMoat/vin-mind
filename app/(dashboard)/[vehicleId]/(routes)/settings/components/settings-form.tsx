@@ -37,6 +37,13 @@ interface SettingsFormProps {
   noOfServices: number;
 }
 
+enum DeleteAction {
+  Vehicle,
+  Modifications,
+  ModificationTypes,
+  ServiceHistory,
+}
+
 const formSchema = z.object({
   name: z
     .string()
@@ -56,12 +63,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
   const params = useParams();
   const router = useRouter();
 
-  const [vehicleDeleteOpen, setvehicleDeleteOpen] = useState(false);
-  const [modificationsDeleteOpen, setmodificationsDeleteOpen] = useState(false);
-  const [modificationTypesDeleteOpen, setmodificationTypesDeleteOpen] =
-    useState(false);
-  const [serviceHistoryDeleteOpen, setserviceHistoryDeleteOpen] =
-    useState(false);
+  const [deleteAction, setDeleteAction] = useState<DeleteAction | null>(null);
   const [loading, setLoading] = useState(false);
 
   const form = useForm<SettingsFormValues>({
@@ -84,100 +86,56 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
     }
   };
 
-  const onVehicleDelete = async () => {
+  const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/vehicles/${params.vehicleId}`);
-      router.refresh();
-      router.push("/");
-      toast.success("Vehicle deleted");
+      switch (deleteAction) {
+        case DeleteAction.Vehicle:
+          await axios.delete(`/api/vehicles/${params.vehicleId}`);
+          router.refresh();
+          router.push("/");
+          toast.success("Vehicle deleted");
+          break;
+        case DeleteAction.Modifications:
+          await axios.delete(`/api/${params.vehicleId}/modifications`);
+          router.refresh();
+          toast.success("All modifications deleted");
+          break;
+        case DeleteAction.ModificationTypes:
+          await axios.delete(`/api/${params.vehicleId}/modification-types`);
+          router.refresh();
+          toast.success("All modifications types deleted");
+          break;
+        case DeleteAction.ServiceHistory:
+          await axios.delete(`/api/${params.vehicleId}/servicing`);
+          router.refresh();
+          toast.success("Service history deleted");
+          break;
+      }
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
-      setvehicleDeleteOpen(false);
-    }
-  };
-
-  const onModificationsDelete = async () => {
-    try {
-      setLoading(true);
-      await axios.delete(`/api/${params.vehicleId}/modifications`);
-      router.refresh();
-      toast.success("All modifications deleted");
-    } catch (error) {
-      toast.error("Something went wrong");
-    } finally {
-      setLoading(false);
-      setmodificationsDeleteOpen(false);
-    }
-  };
-
-  const onModificationTypesDelete = async () => {
-    try {
-      setLoading(true);
-      await axios.delete(`/api/${params.vehicleId}/modification-types`);
-      router.refresh();
-      toast.success("All modifications types deleted");
-    } catch (error) {
-      toast.error("Something went wrong");
-    } finally {
-      setLoading(false);
-      setmodificationTypesDeleteOpen(false);
-    }
-  };
-
-  const onServiceHistoryDelete = async () => {
-    try {
-      setLoading(true);
-      await axios.delete(`/api/${params.vehicleId}/servicing`);
-      router.refresh();
-      toast.success("Service history deleted");
-    } catch (error) {
-      toast.error("Something went wrong");
-    } finally {
-      setLoading(false);
-      setserviceHistoryDeleteOpen(false);
+      setDeleteAction(null);
     }
   };
 
   return (
     <>
       <AlertModal
-        isOpen={vehicleDeleteOpen}
+        isOpen={deleteAction !== null}
         onClose={() => {
-          setvehicleDeleteOpen(false);
+          setDeleteAction(null);
         }}
-        onConfirm={onVehicleDelete}
+        onConfirm={onDelete}
         loading={loading}
-        vehicle={initialData.name}
-      />
-      <AlertModal
-        isOpen={modificationsDeleteOpen}
-        onClose={() => {
-          setmodificationsDeleteOpen(false);
-        }}
-        onConfirm={onModificationsDelete}
-        loading={loading}
-        allModifications
-      />
-      <AlertModal
-        isOpen={modificationTypesDeleteOpen}
-        onClose={() => {
-          setmodificationTypesDeleteOpen(false);
-        }}
-        onConfirm={onModificationTypesDelete}
-        loading={loading}
-        allModificationTypes
-      />
-      <AlertModal
-        isOpen={serviceHistoryDeleteOpen}
-        onClose={() => {
-          setserviceHistoryDeleteOpen(false);
-        }}
-        onConfirm={onServiceHistoryDelete}
-        loading={loading}
-        allServices
+        // Pass the appropriate props based on the delete action
+        vehicle={
+          deleteAction === DeleteAction.Vehicle ? initialData.name : undefined
+        }
+        allModifications={deleteAction === DeleteAction.Modifications}
+        allModificationTypes={deleteAction === DeleteAction.ModificationTypes}
+        allServices={deleteAction === DeleteAction.ServiceHistory}
       />
       <div className="flex items-center justify-between">
         <Heading
@@ -258,7 +216,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                     disabled={loading || noOfModifications === 0}
                     variant="destructive"
                     onClick={() => {
-                      setmodificationsDeleteOpen(true);
+                      setDeleteAction(DeleteAction.Modifications);
                     }}
                   >
                     Delete
@@ -286,7 +244,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                       }
                       variant="destructive"
                       onClick={() => {
-                        setmodificationTypesDeleteOpen(true);
+                        setDeleteAction(DeleteAction.ModificationTypes);
                       }}
                     >
                       Delete
@@ -307,7 +265,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                   disabled={loading || noOfServices === 0}
                   variant="destructive"
                   onClick={() => {
-                    setserviceHistoryDeleteOpen(true);
+                    setDeleteAction(DeleteAction.ServiceHistory);
                   }}
                 >
                   Delete
@@ -329,7 +287,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                   disabled={loading}
                   variant="destructive"
                   onClick={() => {
-                    setvehicleDeleteOpen(true);
+                    setDeleteAction(DeleteAction.Vehicle);
                   }}
                 >
                   Delete

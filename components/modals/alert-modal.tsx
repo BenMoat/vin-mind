@@ -18,19 +18,36 @@ interface AlertModalProps {
   service?: string;
 }
 
-export const AlertModal: React.FC<AlertModalProps> = ({
-  isOpen,
-  onClose,
-  onConfirm,
-  loading,
-  vehicle,
-  allModifications,
-  allModificationTypes,
-  modification,
-  modificationType,
-  allServices,
-  service,
-}) => {
+const generateTitle = (props: AlertModalProps) => {
+  const {
+    vehicle,
+    allModifications,
+    allModificationTypes,
+    modification,
+    modificationType,
+    allServices,
+    service,
+  } = props;
+
+  if (vehicle)
+    return `Are you sure you want to delete "${vehicle}" from your garage?`;
+  if (allModifications)
+    return `Are you sure you want to delete all modifications?`;
+  if (allModificationTypes)
+    return `Are you sure you want to delete all modification types?`;
+  if (modification)
+    return `Are you sure you want to delete "${modification}" from your modifications?`;
+  if (modificationType)
+    return `Are you sure you want to delete "${modificationType}" from your modification types?`;
+  if (allServices)
+    return `Are you sure you want to delete the service history?`;
+  if (service)
+    return `Are you sure you want to delete "${service}" from your services?`;
+  return "Are you sure you want to delete this item?";
+};
+
+export const AlertModal: React.FC<AlertModalProps> = (props) => {
+  const { isOpen, onClose, onConfirm, loading } = props;
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -41,23 +58,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({
 
   return (
     <Modal
-      title={
-        vehicle
-          ? `Are you sure you want to delete "${vehicle}" from your garage?`
-          : allModifications
-          ? `Are you sure you want to delete all modifications?`
-          : allModificationTypes
-          ? `Are you sure you want to delete all modification types?`
-          : modification
-          ? `Are you sure you want to delete "${modification}" from your modifications?`
-          : modificationType
-          ? `Are you sure you want to delete "${modificationType}" from your modification types?`
-          : allServices
-          ? `Are you sure you want to delete all services?`
-          : service
-          ? `Are you sure you want to delete "${service}" from your services?`
-          : "Are you sure you want to delete this item?"
-      }
+      title={generateTitle(props)}
       description="This action cannot be undone."
       isOpen={isOpen}
       onClose={onClose}
@@ -67,7 +68,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({
           Cancel
         </Button>
         <Button disabled={loading} variant="destructive" onClick={onConfirm}>
-          Continue
+          Delete
         </Button>
       </div>
     </Modal>
