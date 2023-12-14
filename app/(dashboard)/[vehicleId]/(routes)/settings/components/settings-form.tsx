@@ -162,6 +162,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                     </CardHeader>
                     <CardContent className="space-y-4 !mt-[-12px]">
                       <Input
+                        className="max-w-[300px]"
                         disabled={loading}
                         placeholder="Vehicle Name"
                         {...field}

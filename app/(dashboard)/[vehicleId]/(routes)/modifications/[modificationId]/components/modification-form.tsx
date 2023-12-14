@@ -21,7 +21,7 @@ import { TypeModal } from "./type-modal";
 import { AlertModal } from "@/components/modals/alert-modal";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 import { Heading } from "@/components/heading";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -180,14 +180,14 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem className="max-w-[300px]">
+                <FormItem>
                   <FormLabel>
                     <span className="text-red-600">*</span> Name
                   </FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      className="placeholder:italic"
+                      className="max-w-[300px] placeholder:italic"
                       placeholder="Cold Air Intake"
                       {...field}
                     />
@@ -200,13 +200,13 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               control={form.control}
               name="price"
               render={({ field }) => (
-                <FormItem className="max-w-[140px]">
+                <FormItem>
                   <FormLabel>Price</FormLabel>
                   <FormControl>
                     <Input
                       type="text"
                       disabled={loading}
-                      className="placeholder:italic"
+                      className="max-w-[140px] placeholder:italic"
                       placeholder="149.99"
                       {...field}
                       onChange={(e) => {
@@ -286,18 +286,25 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               render={({ field }) => (
                 <FormItem className="max-w-[450px]">
                   <FormLabel>Obsolete</FormLabel>
-                  <div className="inline-flex items-start space-x-3 space-y-[-2px] rounded-md border p-4">
+                  <FormDescription>
+                    Has this modification been removed from the vehicle?
+                  </FormDescription>
+                  <div className="inline-flex items-center space-x-3 rounded-md border px-4 py-3">
                     <FormControl>
-                      <Checkbox
-                        aria-label="It is obsolete"
+                      <Switch
+                        className="!ml-[-5px]"
+                        aria-label="Is this mod no longer in use?"
                         checked={field.value}
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
-
-                    <FormDescription>
-                      Tick the box if this modification is no longer in use.
-                    </FormDescription>
+                    <div>
+                      This mod is
+                      <b className="boldText">
+                        {field.value ? " no longer " : " currently "}
+                      </b>
+                      in use
+                    </div>
                   </div>
                 </FormItem>
               )}
@@ -306,12 +313,12 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               control={form.control}
               name="notes"
               render={({ field }) => (
-                <FormItem className="max-w-[400px]">
+                <FormItem>
                   <FormLabel>Notes</FormLabel>
                   <FormControl>
                     <Textarea
                       disabled={loading}
-                      className="placeholder:italic"
+                      className="max-w-[400px] placeholder:italic"
                       placeholder="This cold air intake will add at least 170hp."
                       {...field}
                     />
