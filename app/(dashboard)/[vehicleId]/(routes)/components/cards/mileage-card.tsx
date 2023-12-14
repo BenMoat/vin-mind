@@ -1,7 +1,7 @@
 "use client";
 import { ServiceHistory } from "@prisma/client";
 
-import { formatMileage } from "@/lib/utils";
+import { formatMileage } from "@/lib/utils/wrapper-utils";
 
 import { Milestone } from "lucide-react";
 

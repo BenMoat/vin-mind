@@ -12,7 +12,11 @@ import { ServiceHistory } from "@prisma/client";
 import toast from "react-hot-toast";
 
 import { format } from "date-fns";
-import { formatCurrency, formatFormCurrency, formatMileage } from "@/lib/utils";
+import {
+  formatCurrency,
+  formatFormCurrency,
+  formatMileage,
+} from "@/lib/utils/wrapper-utils";
 
 import { AlertModal } from "@/components/modals/alert-modal";
 

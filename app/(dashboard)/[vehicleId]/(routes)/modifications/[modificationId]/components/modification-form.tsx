@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 
 import { PlusCircle } from "lucide-react";
 
-import { formatCurrency, formatFormCurrency } from "@/lib/utils";
+import { formatCurrency, formatFormCurrency } from "@/lib/utils/wrapper-utils";
 
 import FileUpload from "./file-upload";
 import { TypeModal } from "./type-modal";

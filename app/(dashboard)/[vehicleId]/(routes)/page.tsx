@@ -1,4 +1,7 @@
+import { Modification } from "@prisma/client";
 import prismadb from "@/lib/prismadb";
+
+import { stringify } from "@/lib/utils/wrapper-utils";
 
 import { Eye, HelpCircle } from "lucide-react";
 
@@ -62,7 +65,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
 
   const totalPriceOfModifications =
     vehicle.modifications?.reduce(
-      (total, modification) => total + Number(modification.price),
+      (total: number, modification: Modification) =>
+        total + Number(modification.price),
       0
     ) || 0;
 
@@ -97,7 +101,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
           <InsuranceCard initialData={vehicle.insurance} />
         )}
         {vehicle.dashboardConfigure?.servicing && (
-          <ServicingCard initialData={vehicle.serviceHistory[0]} />
+          <ServicingCard initialData={stringify(vehicle.serviceHistory[0])} />
         )}
         {vehicle.dashboardConfigure?.totalModifications && (
           <ModificationsCard
@@ -106,7 +110,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
           />
         )}
         {vehicle.dashboardConfigure?.mileage && (
-          <MileageCard initialData={vehicle.serviceHistory[0]} />
+          <MileageCard initialData={stringify(vehicle.serviceHistory[0])} />
         )}
       </div>
       <Card className="col-span-4">

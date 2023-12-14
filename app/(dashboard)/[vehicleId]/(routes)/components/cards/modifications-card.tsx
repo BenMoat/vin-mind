@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils/wrapper-utils";
 
 interface ModificationsCardProps {
   totalPrice: number;

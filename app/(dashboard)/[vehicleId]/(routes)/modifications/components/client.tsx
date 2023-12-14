@@ -5,7 +5,7 @@ import { Plus, PoundSterling } from "lucide-react";
 import Link from "next/link";
 
 import { ModificationType } from "@prisma/client";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils/wrapper-utils";
 
 import { ModificationColumn, columns } from "./columns";
 
