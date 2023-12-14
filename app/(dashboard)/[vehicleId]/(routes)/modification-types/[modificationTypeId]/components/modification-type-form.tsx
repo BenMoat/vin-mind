@@ -43,18 +43,9 @@ interface ModificationTypeFormProps {
 const formSchema = z.object({
   name: z
     .string()
-    .min(1)
-    .refine((value) => {
-      if (!value) {
-        throw new z.ZodError([
-          {
-            code: z.ZodIssueCode.custom,
-            message: "Please enter a vehicle name",
-            path: ["name"],
-          },
-        ]);
-      }
-      return true;
+    .min(1, "Please enter a modification type")
+    .refine((value) => value.trim().length > 0, {
+      message: "Please enter a modification type",
     }),
 });
 
@@ -99,13 +90,13 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
       } else {
         await axios.post(`/api/${params.vehicleId}/modification-types`, data);
       }
-      router.refresh();
       router.push(`/${params.vehicleId}/modification-types`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
+      router.refresh();
     }
   };
 
@@ -115,7 +106,6 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
       await axios.delete(
         `/api/${params.vehicleId}/modification-types/${params.modificationTypeId}`
       );
-      router.refresh();
       router.push(`/${params.vehicleId}/modification-types`);
       toast.success("Modification Type deleted");
     } catch (error) {
@@ -125,6 +115,7 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
     } finally {
       setLoading(false);
       setOpen(false);
+      router.refresh();
     }
   };
 

@@ -60,7 +60,12 @@ interface ModificationFormProps {
 }
 
 const formSchema = z.object({
-  name: z.string().min(1, "Modification name is required"),
+  name: z
+    .string()
+    .min(1, "Modification name is required")
+    .refine((value) => value.trim().length > 0, {
+      message: "Modification name is required",
+    }),
   price: z.string().optional(),
   modificationTypeId: z.string().min(1, "Select a modification type"),
   isObsolete: z.boolean().default(false).optional(),
@@ -302,9 +307,13 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                     </FormControl>
                     <div>
                       This mod is
-                      <b className="text-bold">
+                      <span
+                        className={`font-bold transition-colors ${
+                          field.value ? "text-destructive" : "text-green"
+                        }`}
+                      >
                         {field.value ? " no longer " : " currently "}
-                      </b>
+                      </span>
                       in use
                     </div>
                   </div>

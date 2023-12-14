@@ -42,8 +42,18 @@ interface ServiceFormProps {
 }
 
 const formSchema = z.object({
-  provider: z.string().min(1, "Service Provider is required"),
-  type: z.string().min(1, "Service Type is required"),
+  provider: z
+    .string()
+    .min(1, "Service Provider is required")
+    .refine((value) => value.trim().length > 0, {
+      message: "Service Provider is required",
+    }),
+  type: z
+    .string()
+    .min(1, "Service Type is required")
+    .refine((value) => value.trim().length > 0, {
+      message: "Service Type is required",
+    }),
   mileage: z.string().min(1, "Mileage is required"),
   cost: z.string().optional(),
   details: z.string().optional(),
