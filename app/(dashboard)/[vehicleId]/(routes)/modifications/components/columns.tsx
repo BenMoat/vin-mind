@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-import { formatCurrency } from "@/lib/utils/wrapper-utils";
+import { formatCurrency } from "@/lib/utils";
 
 import { ArrowUpDown, File, Files } from "lucide-react";
 

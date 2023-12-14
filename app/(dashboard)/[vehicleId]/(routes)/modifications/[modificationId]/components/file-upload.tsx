@@ -98,7 +98,12 @@ const FileUpload: React.FC<ImageUploadProps> = ({
             open();
           };
           return (
-            <Button type="button" disabled={disabled} onClick={onClick}>
+            <Button
+              type="button"
+              variant="secondary"
+              disabled={disabled}
+              onClick={onClick}
+            >
               <Upload className="h-4 w-4 mr-2" />
               Upload Files
             </Button>

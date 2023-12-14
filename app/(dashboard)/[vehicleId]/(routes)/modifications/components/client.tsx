@@ -5,7 +5,7 @@ import { Plus, PoundSterling } from "lucide-react";
 import Link from "next/link";
 
 import { ModificationType } from "@prisma/client";
-import { formatCurrency } from "@/lib/utils/wrapper-utils";
+import { formatCurrency } from "@/lib/utils";
 
 import { ModificationColumn, columns } from "./columns";
 
@@ -72,7 +72,7 @@ export const ModificationClient: React.FC<ModificationClientProps> = ({
           <>
             <a className="border rounded-md sm:py-2 sm:px-4 justify-end hidden sm:flex sm:col-span-1 sm:justify-start">
               Total:&nbsp;
-              <b className="boldText">{formatCurrency.format(totalPrice)}</b>
+              <b className="text-bold">{formatCurrency.format(totalPrice)}</b>
             </a>
             <Popover>
               <PopoverTrigger asChild className="sm:hidden">
@@ -82,7 +82,7 @@ export const ModificationClient: React.FC<ModificationClientProps> = ({
               </PopoverTrigger>
               <PopoverContent side="left" className="w-auto">
                 Total:&nbsp;{" "}
-                <b className="boldText">{formatCurrency.format(totalPrice)}</b>
+                <b className="text-bold">{formatCurrency.format(totalPrice)}</b>
               </PopoverContent>
             </Popover>
           </>

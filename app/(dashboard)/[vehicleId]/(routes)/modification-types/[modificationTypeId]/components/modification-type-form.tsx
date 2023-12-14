@@ -214,14 +214,14 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
                   <br />
                   <br />
                   {(modifications?.length ?? 0) > 0 && (
-                    <b className="boldText">
+                    <b className="text-bold">
                       Click on a mod to view or edit it
                     </b>
                   )}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-8 w-full">
-                <ul className="list-disc list-inside marker:text-[#e2e8f0] dark:marker:text-[#1e293b]">
+                <ul className="list-disc list-inside marker:text-secondary dark:marker:text-secondary">
                   {modifications?.map((modification) => (
                     <li key={modification.id}>
                       <a

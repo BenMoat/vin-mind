@@ -12,11 +12,7 @@ import { ServiceHistory } from "@prisma/client";
 import toast from "react-hot-toast";
 
 import { format } from "date-fns";
-import {
-  formatCurrency,
-  formatFormCurrency,
-  formatMileage,
-} from "@/lib/utils/wrapper-utils";
+import { formatCurrency, formatFormCurrency, formatMileage } from "@/lib/utils";
 
 import { AlertModal } from "@/components/modals/alert-modal";
 
@@ -167,7 +163,7 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
               render={({ field }) => (
                 <FormItem className="max-w-[300px]">
                   <FormLabel>
-                    <span className="text-red-600">*</span> Type
+                    <span className="text-destructive">*</span> Type
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -187,7 +183,7 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
               render={({ field }) => (
                 <FormItem className="max-w-[300px]">
                   <FormLabel>
-                    <span className="text-red-600">*</span> Provider
+                    <span className="text-destructive">*</span> Provider
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -207,7 +203,7 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
               render={({ field }) => (
                 <FormItem className="max-w-[300px]">
                   <FormLabel>
-                    <span className="text-red-600">*</span> Mileage
+                    <span className="text-destructive">*</span> Mileage
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -274,7 +270,7 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>
-                      <span className="text-red-600">*</span> Service Date
+                      <span className="text-destructive">*</span> Service Date
                     </FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>

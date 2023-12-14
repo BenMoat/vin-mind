@@ -105,7 +105,7 @@ export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({ initialData }) => {
       {error ? (
         <div className="px-6 py-6 space-y-2 w-full rounded-lg border text-center">
           <span className="flex items-center justify-center">
-            <XCircle className="w-8 h-8 text-red-500" />
+            <XCircle className="w-8 h-8 text-destructive" />
           </span>
           <p className="text-sm">{error}</p>
           <Button variant="outline" onClick={() => window.location.reload()}>
@@ -126,9 +126,9 @@ export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({ initialData }) => {
               <CardDescription>
                 <span className="flex items-center justify-center">
                   {initialData.taxStatus === "Taxed" ? (
-                    <CheckCircle className="w-8 h-8 mr-2 text-[#adfa1d]" />
+                    <CheckCircle className="w-8 h-8 mr-2 text-green" />
                   ) : (
-                    <XCircle className="w-8 h-8 mr-2 text-[#7f1d1d]" />
+                    <XCircle className="w-8 h-8 mr-2 text-destructive" />
                   )}
                   {initialData.taxStatus}
                 </span>
@@ -149,11 +149,11 @@ export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({ initialData }) => {
               <CardDescription>
                 <span className="flex items-center justify-center">
                   {initialData.motStatus === "Valid" ? (
-                    <CheckCircle className="w-8 h-8 mr-2 text-[#adfa1d]" />
+                    <CheckCircle className="w-8 h-8 mr-2 text-green" />
                   ) : initialData.motStatus === "No details held by DVLA" ? (
                     <InfoIcon className="w-8 h-8 mr-2" />
                   ) : (
-                    <XCircle className="w-8 h-8 mr-2 text-[#a92727]" />
+                    <XCircle className="w-8 h-8 mr-2 text-destructive" />
                   )}
                   {initialData.motStatus}
                 </span>

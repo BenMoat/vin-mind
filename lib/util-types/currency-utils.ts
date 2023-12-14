@@ -1,4 +1,4 @@
-import { addThousandsSeparators } from "./wrapper-utils";
+import { addThousandsSeparators } from "../utils";
 
 // Format a number as a currency
 export const formatCurrency = new Intl.NumberFormat("en-UK", {

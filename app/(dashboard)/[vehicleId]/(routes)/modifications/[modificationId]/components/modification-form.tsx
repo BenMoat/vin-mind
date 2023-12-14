@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 
 import { PlusCircle } from "lucide-react";
 
-import { formatCurrency, formatFormCurrency } from "@/lib/utils/wrapper-utils";
+import { formatCurrency, formatFormCurrency } from "@/lib/utils";
 
 import FileUpload from "./file-upload";
 import { TypeModal } from "./type-modal";
@@ -182,7 +182,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    <span className="text-red-600">*</span> Name
+                    <span className="text-destructive">*</span> Name
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -206,8 +206,8 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                     <Input
                       type="text"
                       disabled={loading}
-                      className="max-w-[140px] placeholder:italic"
-                      placeholder="149.99"
+                      className="max-w-[300px] placeholder:italic"
+                      placeholder="£149.99"
                       {...field}
                       onChange={(e) => {
                         const formattedValue = formatFormCurrency(
@@ -221,65 +221,67 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                 </FormItem>
               )}
             />
-            <div className="flex ">
-              <FormField
-                control={form.control}
-                name="modificationTypeId"
-                render={({ field }) => (
-                  <FormItem className="max-w-[400px] sm:w-[418px] ">
-                    <FormLabel>
-                      <span className="text-red-600">*</span> Modification Type
-                    </FormLabel>
-                    <FormDescription>
-                      What type of modification is this? (e.g. Engine,
-                      Wheels)...
-                    </FormDescription>
-                    <div className="sm:flex">
-                      <Select
-                        disabled={loading}
-                        onOpenChange={setSelectOpen}
-                        onValueChange={field.onChange}
-                        value={field.value}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger
-                            open={selectOpen}
-                            aria-label="Modification Type"
+            <FormField
+              control={form.control}
+              name="modificationTypeId"
+              render={({ field }) => (
+                <FormItem className="">
+                  <FormLabel>
+                    <span className="text-destructive">*</span> Modification
+                    Type
+                  </FormLabel>
+                  <FormDescription>
+                    What type of modification is this? (e.g. Engine, Wheels)...
+                  </FormDescription>
+                  <div className="sm:flex">
+                    <Select
+                      disabled={loading}
+                      onOpenChange={setSelectOpen}
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger
+                          className={`max-w-[300px] ${
+                            !field.value && "text-muted-foreground italic"
+                          }`}
+                          open={selectOpen}
+                          aria-label="Modification Type"
+                        >
+                          <SelectValue
+                            defaultValue={field.value}
+                            placeholder="Performance"
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {modificationTypes.map((modificationType) => (
+                          <SelectItem
+                            key={modificationType.id}
+                            value={modificationType.id}
                           >
-                            <SelectValue
-                              defaultValue={field.value}
-                              placeholder="---"
-                            />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {modificationTypes.map((modificationType) => (
-                            <SelectItem
-                              key={modificationType.id}
-                              value={modificationType.id}
-                            >
-                              {modificationType.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <Button
-                        type="button"
-                        className=" ml-auto mt-2 sm:ml-2 sm:mt-0 w-[200px] !max-w-[140px]"
-                        onClick={() => {
-                          setTypeOpen(true);
-                        }}
-                      >
-                        <PlusCircle className="mr-2 h-5 w-5" />
-                        New Type
-                      </Button>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+                            {modificationType.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      type="button"
+                      className="ml-auto mt-2 sm:ml-2 sm:mt-0"
+                      variant="secondary"
+                      onClick={() => {
+                        setTypeOpen(true);
+                      }}
+                    >
+                      <PlusCircle className="mr-2 h-5 w-5" />
+                      New Type
+                    </Button>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="isObsolete"
@@ -300,7 +302,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                     </FormControl>
                     <div>
                       This mod is
-                      <b className="boldText">
+                      <b className="text-bold">
                         {field.value ? " no longer " : " currently "}
                       </b>
                       in use
@@ -318,7 +320,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                   <FormControl>
                     <Textarea
                       disabled={loading}
-                      className="max-w-[400px] placeholder:italic"
+                      className="placeholder:italic sm:resize max-w-[850px]"
                       placeholder="This cold air intake will add at least 170hp."
                       {...field}
                     />
@@ -362,7 +364,6 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               />
             </CardContent>
           </Card>
-
           {initialData && (
             <Button
               type="button"

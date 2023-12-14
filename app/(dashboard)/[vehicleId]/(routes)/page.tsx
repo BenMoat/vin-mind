@@ -1,7 +1,7 @@
 import { Modification } from "@prisma/client";
 import prismadb from "@/lib/prismadb";
 
-import { stringify } from "@/lib/utils/wrapper-utils";
+import { stringify } from "@/lib/utils";
 
 import { Eye, HelpCircle } from "lucide-react";
 

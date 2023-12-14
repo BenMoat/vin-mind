@@ -1,7 +1,7 @@
 "use client";
 import { ServiceHistory } from "@prisma/client";
 
-import { formatMileage } from "@/lib/utils/wrapper-utils";
+import { formatMileage } from "@/lib/utils";
 
 import { Milestone } from "lucide-react";
 
@@ -24,15 +24,15 @@ export const MileageCard: React.FC<MileaCardProps> = ({ initialData }) => {
     <Card className="relative px-6 space-y-2 text-center">
       <CardHeader>
         <CardTitle>Mileage</CardTitle>
-        <CardDescription className="flex items-center justify-center boldText text-md">
+        <CardDescription className="flex items-center justify-center text-bold text-md">
           {initialData ? (
             <>
-              <Milestone className="w-8 h-8 mr-2 text-[#adfa1d]" />
+              <Milestone className="w-8 h-8 mr-2 text-green" />
               {formatMileage(initialData.mileage)}
             </>
           ) : (
             <>
-              <Milestone className="w-8 h-8 mr-2 text-gray-400 " />
+              <Milestone className="w-8 h-8 mr-2 text-muted-foreground" />
             </>
           )}
         </CardDescription>

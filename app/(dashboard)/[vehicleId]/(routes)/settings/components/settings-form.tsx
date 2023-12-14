@@ -193,7 +193,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
             </CardTitle>
             <CardDescription>
               Actions taken within the Danger Zone{" "}
-              <b className="boldText">cannot</b> be undone.
+              <b className="text-bold">cannot</b> be undone.
             </CardDescription>
             <Separator className="!mt-4" />
           </CardHeader>

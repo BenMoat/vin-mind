@@ -16,7 +16,7 @@ interface TaxAndMotModalProps {
 const description = (
   <>
     Enter your vehicle's number plate to view its up-to-date tax and MOT status
-    in the <b className="boldText">Overview</b> tab. This is directly sourced
+    in the <b className="text-bold">Overview</b> tab. This is directly sourced
     from the{" "}
     <a
       className="underline font-bold hover:text-primary transition-colors"

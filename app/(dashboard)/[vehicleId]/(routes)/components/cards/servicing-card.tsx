@@ -35,7 +35,7 @@ export const ServicingCard: React.FC<ServiceHistoryCardProps> = ({
             new Date(initialData.serviceDate) <
               new Date(initialData.nextServiceDate) ? (
               <>
-                <CheckCircle className="w-8 h-8 mr-2 text-[#adfa1d]" />
+                <CheckCircle className="w-8 h-8 mr-2 text-green" />
                 Serviced
               </>
             ) : initialData.nextServiceDate === null ? (
@@ -45,7 +45,7 @@ export const ServicingCard: React.FC<ServiceHistoryCardProps> = ({
               </>
             ) : (
               <>
-                <XCircle className="w-8 h-8 mr-2 text-[#7f1d1d]" />
+                <XCircle className="w-8 h-8 mr-2 text-destructive" />
                 Service Overdue
               </>
             )}
