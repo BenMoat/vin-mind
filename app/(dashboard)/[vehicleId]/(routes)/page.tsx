@@ -40,7 +40,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
       insurance: true,
       dashboardConfigure: true,
       serviceHistory: {
-        take: 1,
         orderBy: {
           serviceDate: "desc",
         },
@@ -116,7 +115,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
       <Card className="col-span-4">
         <CardHeader>Annual Mileage</CardHeader>
         <CardContent className="pl-2">
-          <Mileage data={[4, 8]} />
+          <Mileage data={vehicle.serviceHistory} />
         </CardContent>
       </Card>
     </div>

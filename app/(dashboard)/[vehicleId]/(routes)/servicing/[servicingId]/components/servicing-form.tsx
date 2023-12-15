@@ -339,6 +339,7 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0">
                         <Calendar
+                          className="!h-[350px]"
                           mode="single"
                           selected={initialData?.nextServiceDate || undefined}
                           onSelect={(e) => {
