@@ -21,7 +21,7 @@ import { TypeModal } from "./type-modal";
 import { AlertModal } from "@/components/modals/alert-modal";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 import { Heading } from "@/components/heading";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -60,7 +60,12 @@ interface ModificationFormProps {
 }
 
 const formSchema = z.object({
-  name: z.string().min(1, "Modification name is required"),
+  name: z
+    .string()
+    .min(1, "Modification name is required")
+    .refine((value) => value.trim().length > 0, {
+      message: "Modification name is required",
+    }),
   price: z.string().optional(),
   modificationTypeId: z.string().min(1, "Select a modification type"),
   isObsolete: z.boolean().default(false).optional(),
@@ -180,14 +185,14 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem className="max-w-[300px]">
+                <FormItem>
                   <FormLabel>
-                    <span className="text-red-600">*</span> Name
+                    <span className="text-destructive">*</span> Name
                   </FormLabel>
                   <FormControl>
                     <Input
                       disabled={loading}
-                      className="placeholder:italic"
+                      className="max-w-[300px] placeholder:italic"
                       placeholder="Cold Air Intake"
                       {...field}
                     />
@@ -200,14 +205,14 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               control={form.control}
               name="price"
               render={({ field }) => (
-                <FormItem className="max-w-[140px]">
+                <FormItem>
                   <FormLabel>Price</FormLabel>
                   <FormControl>
                     <Input
                       type="text"
                       disabled={loading}
-                      className="placeholder:italic"
-                      placeholder="149.99"
+                      className="max-w-[300px] placeholder:italic"
+                      placeholder="£149.99"
                       {...field}
                       onChange={(e) => {
                         const formattedValue = formatFormCurrency(
@@ -221,83 +226,96 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                 </FormItem>
               )}
             />
-            <div className="flex ">
-              <FormField
-                control={form.control}
-                name="modificationTypeId"
-                render={({ field }) => (
-                  <FormItem className="max-w-[400px] sm:w-[418px] ">
-                    <FormLabel>
-                      <span className="text-red-600">*</span> Modification Type
-                    </FormLabel>
-                    <FormDescription>
-                      What type of modification is this? (e.g. Engine,
-                      Wheels)...
-                    </FormDescription>
-                    <div className="sm:flex">
-                      <Select
-                        disabled={loading}
-                        onOpenChange={setSelectOpen}
-                        onValueChange={field.onChange}
-                        value={field.value}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger
-                            open={selectOpen}
-                            aria-label="Modification Type"
+            <FormField
+              control={form.control}
+              name="modificationTypeId"
+              render={({ field }) => (
+                <FormItem className="">
+                  <FormLabel>
+                    <span className="text-destructive">*</span> Modification
+                    Type
+                  </FormLabel>
+                  <FormDescription>
+                    What type of modification is this? (e.g. Engine, Wheels)...
+                  </FormDescription>
+                  <div className="sm:flex">
+                    <Select
+                      disabled={loading}
+                      onOpenChange={setSelectOpen}
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger
+                          className={`max-w-[300px] ${
+                            !field.value && "text-muted-foreground italic"
+                          }`}
+                          open={selectOpen}
+                          aria-label="Modification Type"
+                        >
+                          <SelectValue
+                            defaultValue={field.value}
+                            placeholder="Performance"
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {modificationTypes.map((modificationType) => (
+                          <SelectItem
+                            key={modificationType.id}
+                            value={modificationType.id}
                           >
-                            <SelectValue
-                              defaultValue={field.value}
-                              placeholder="---"
-                            />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {modificationTypes.map((modificationType) => (
-                            <SelectItem
-                              key={modificationType.id}
-                              value={modificationType.id}
-                            >
-                              {modificationType.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <Button
-                        type="button"
-                        className=" ml-auto mt-2 sm:ml-2 sm:mt-0 w-[200px] !max-w-[140px]"
-                        onClick={() => {
-                          setTypeOpen(true);
-                        }}
-                      >
-                        <PlusCircle className="mr-2 h-5 w-5" />
-                        New Type
-                      </Button>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+                            {modificationType.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      type="button"
+                      className="ml-auto mt-2 sm:ml-2 sm:mt-0"
+                      variant="secondary"
+                      onClick={() => {
+                        setTypeOpen(true);
+                      }}
+                    >
+                      <PlusCircle className="mr-2 h-5 w-5" />
+                      New Type
+                    </Button>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="isObsolete"
               render={({ field }) => (
                 <FormItem className="max-w-[450px]">
                   <FormLabel>Obsolete</FormLabel>
-                  <div className="inline-flex items-start space-x-3 space-y-[-2px] rounded-md border p-4">
+                  <FormDescription>
+                    Has this modification been removed from the vehicle?
+                  </FormDescription>
+                  <div className="inline-flex items-center space-x-3 rounded-md border px-4 py-3">
                     <FormControl>
-                      <Checkbox
-                        aria-label="It is obsolete"
+                      <Switch
+                        className="!ml-[-5px]"
+                        aria-label="Is this mod no longer in use?"
                         checked={field.value}
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
-
-                    <FormDescription>
-                      Tick the box if this modification is no longer in use.
-                    </FormDescription>
+                    <div>
+                      This mod is
+                      <span
+                        className={`font-bold transition-colors ${
+                          field.value ? "text-destructive" : "text-green"
+                        }`}
+                      >
+                        {field.value ? " no longer " : " currently "}
+                      </span>
+                      in use
+                    </div>
                   </div>
                 </FormItem>
               )}
@@ -306,12 +324,12 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               control={form.control}
               name="notes"
               render={({ field }) => (
-                <FormItem className="max-w-[400px]">
+                <FormItem>
                   <FormLabel>Notes</FormLabel>
                   <FormControl>
                     <Textarea
                       disabled={loading}
-                      className="placeholder:italic"
+                      className="placeholder:italic sm:resize max-w-[850px]"
                       placeholder="This cold air intake will add at least 170hp."
                       {...field}
                     />
@@ -355,7 +373,6 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               />
             </CardContent>
           </Card>
-
           {initialData && (
             <Button
               type="button"

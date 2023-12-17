@@ -40,7 +40,10 @@ const formSchema = z.object({
   name: z
     .string()
     .min(1, "Enter a name for your vehicle")
-    .max(40, "Vehicle name must be less than 40 characters"),
+    .max(40, "Vehicle name must be less than 40 characters")
+    .refine((value) => value.trim().length > 0, {
+      message: "Enter a name for your vehicle",
+    }),
   registrationNumber: z.any(), //DVLA RES API handles this validation
 });
 

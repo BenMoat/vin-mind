@@ -48,7 +48,10 @@ const formSchema = z.object({
   name: z
     .string()
     .min(1, "Enter a name for your vehicle")
-    .max(40, "Vehicle name must be less than 40 characters"),
+    .max(40, "Vehicle name must be less than 40 characters")
+    .refine((value) => value.trim().length > 0, {
+      message: "Enter a name for your vehicle",
+    }),
 });
 
 type SettingsFormValues = z.infer<typeof formSchema>;
@@ -162,6 +165,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                     </CardHeader>
                     <CardContent className="space-y-4 !mt-[-12px]">
                       <Input
+                        className="max-w-[300px]"
                         disabled={loading}
                         placeholder="Vehicle Name"
                         {...field}
@@ -192,7 +196,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
             </CardTitle>
             <CardDescription>
               Actions taken within the Danger Zone{" "}
-              <b className="boldText">cannot</b> be undone.
+              <b className="text-bold">cannot</b> be undone.
             </CardDescription>
             <Separator className="!mt-4" />
           </CardHeader>

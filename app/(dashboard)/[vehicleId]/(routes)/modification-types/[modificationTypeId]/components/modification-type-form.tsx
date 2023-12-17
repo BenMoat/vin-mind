@@ -43,18 +43,9 @@ interface ModificationTypeFormProps {
 const formSchema = z.object({
   name: z
     .string()
-    .min(1)
-    .refine((value) => {
-      if (!value) {
-        throw new z.ZodError([
-          {
-            code: z.ZodIssueCode.custom,
-            message: "Please enter a vehicle name",
-            path: ["name"],
-          },
-        ]);
-      }
-      return true;
+    .min(1, "Please enter a modification type")
+    .refine((value) => value.trim().length > 0, {
+      message: "Please enter a modification type",
     }),
 });
 
@@ -99,13 +90,13 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
       } else {
         await axios.post(`/api/${params.vehicleId}/modification-types`, data);
       }
-      router.refresh();
       router.push(`/${params.vehicleId}/modification-types`);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
+      router.refresh();
     }
   };
 
@@ -115,7 +106,6 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
       await axios.delete(
         `/api/${params.vehicleId}/modification-types/${params.modificationTypeId}`
       );
-      router.refresh();
       router.push(`/${params.vehicleId}/modification-types`);
       toast.success("Modification Type deleted");
     } catch (error) {
@@ -125,6 +115,7 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
     } finally {
       setLoading(false);
       setOpen(false);
+      router.refresh();
     }
   };
 
@@ -144,104 +135,99 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
       </div>
       <Separator />
       {initialData ? (
-        <div className="flex flex-wrap">
-          <div className="w-full md:w-1/2 pr-4 flex items-center justify-center">
-            <Card className="h-full w-full flex flex-col justify-center items-center min-h-[200px]">
-              <CardContent>
-                <Form {...form}>
-                  <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-4 w-full"
-                  >
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Name</FormLabel>
-                          <FormControl>
-                            <Input
-                              disabled={loading}
-                              placeholder="Type of modification"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    {modifications?.length == 0 && (
-                      <Button
-                        type="button"
-                        disabled={loading}
-                        className="mr-2"
-                        variant="destructive"
-                        onClick={() => {
-                          setOpen(true);
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    )}
-                    <Button
-                      disabled={
-                        loading ||
-                        form.getValues("name").trim() === initialData?.name
-                      }
-                      className="ml-auto"
-                      type="submit"
-                    >
-                      {action}
-                    </Button>
-                  </form>
-                </Form>
-              </CardContent>
-            </Card>
-          </div>
-          <div className="w-full md:w-1/2">
-            <Card className="min-h-[200px]">
-              <CardHeader className="pb-2">
-                <CardTitle className="inline-flex items-center">
-                  <Info className="mr-2" size={25} />
-                  {modifications?.length === 1
-                    ? " 1 Mod Associated with "
-                    : ` ${modifications?.length} Mods Associated with `}
-                  {initialData?.name}
-                </CardTitle>
-                <CardDescription>
-                  A mod type's name can be changed, but a type cannot be deleted
-                  if there are mods associated with it.
-                  <br />
-                  <br />
-                  {(modifications?.length ?? 0) > 0 && (
-                    <b className="boldText">
-                      Click on a mod to view or edit it
-                    </b>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <Card className="flex items-center">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="flex justify-center w-full"
+              >
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <CardHeader>Name</CardHeader>
+                      <CardContent className="space-y-4 !mt-[-12px]">
+                        <FormControl>
+                          <Input
+                            className="max-w-[300px] placeholder:italic"
+                            disabled={loading}
+                            placeholder="Performance"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                        {modifications?.length == 0 && (
+                          <Button
+                            type="button"
+                            disabled={loading}
+                            className="mr-2"
+                            variant="destructive"
+                            onClick={() => {
+                              setOpen(true);
+                            }}
+                          >
+                            Delete
+                          </Button>
+                        )}
+                        <Button
+                          disabled={
+                            loading ||
+                            form.getValues("name").trim() === initialData?.name
+                          }
+                          className="ml-auto"
+                          type="submit"
+                        >
+                          {action}
+                        </Button>
+                      </CardContent>
+                    </FormItem>
                   )}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-8 w-full">
-                <ul className="list-disc list-inside marker:text-[#e2e8f0] dark:marker:text-[#1e293b]">
-                  {modifications?.map((modification) => (
-                    <li key={modification.id}>
-                      <a
-                        className="underline"
-                        href={`/${modification.vehicleId}/modifications/${modification.id}`}
-                      >
-                        {modification.name}
-                      </a>
-                      &nbsp;
-                      <Link size={14} className="inline-block" />
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
+                />
+              </form>
+            </Form>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle className="inline-flex items-center">
+                <Info className="mr-2" size={25} />
+                {modifications?.length === 1
+                  ? " 1 Mod Associated with "
+                  : ` ${modifications?.length} Mods Associated with `}
+                {initialData?.name}
+              </CardTitle>
+              <CardDescription>
+                A mod type's name can be changed, but a type cannot be deleted
+                if there are mods associated with it.
+                <br />
+                <br />
+                {(modifications?.length ?? 0) > 0 && (
+                  <b className="text-bold">Click on a mod to view or edit it</b>
+                )}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-8 w-full">
+              <ul className="list-disc list-inside marker:text-secondary dark:marker:text-secondary">
+                {modifications?.map((modification) => (
+                  <li key={modification.id}>
+                    <a
+                      className="underline"
+                      href={`/${modification.vehicleId}/modifications/${modification.id}`}
+                    >
+                      {modification.name}
+                    </a>
+                    &nbsp;
+                    <Link size={14} className="inline-block" />
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
         </div>
       ) : (
         <div className="flex items-center justify-center">
-          <Card className="w-[407px]">
+          <Card>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>
                 <FormField
@@ -249,7 +235,7 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <CardHeader className="pb-2">
+                      <CardHeader>
                         <CardTitle>Name</CardTitle>
                         <CardDescription>
                           Create a modification type to categorise your
@@ -257,10 +243,10 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
                           this? (e.g. Engine, Wheels)...
                         </CardDescription>
                       </CardHeader>
-                      <CardContent className="space-y-4">
+                      <CardContent className="space-y-4 !mt-[-12px]">
                         <Input
+                          className="max-w-[300px] placeholder:italic"
                           disabled={loading}
-                          className="placeholder:italic"
                           placeholder="Performance"
                           {...field}
                         />

@@ -7,15 +7,16 @@ import { ServiceHistory } from "@prisma/client";
 
 import { InfoIcon, Plus } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Heading } from "@/components/heading";
-import { Separator } from "@/components/ui/separator";
 import {
   calculateAndFormatTimeDifference,
   compareMileage,
   formatCurrency,
   formatMileage,
 } from "@/lib/utils";
+
+import { Button } from "@/components/ui/button";
+import { Heading } from "@/components/heading";
+import { Separator } from "@/components/ui/separator";
 import {
   Card,
   CardContent,
@@ -117,7 +118,9 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
                   </CardHeader>
                   <CardContent className="flex justify-center">
                     Mileage:&nbsp;
-                    <b className="boldText">{formatMileage(service.mileage)}</b>
+                    <b className="text-bold">
+                      {formatMileage(service.mileage)}
+                    </b>
                   </CardContent>
                   {service.details && (
                     <CardContent className="flex justify-center">
@@ -129,7 +132,7 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
                       <p>
                         <InfoIcon className="mr-1 mb-1 h-5 inline-block" />
                         Next Service Due:{" "}
-                        <b className="boldText">
+                        <b className="text-bold">
                           {new Date(
                             service.nextServiceDate
                           ).toLocaleDateString()}

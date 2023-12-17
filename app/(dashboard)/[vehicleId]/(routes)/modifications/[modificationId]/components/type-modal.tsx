@@ -30,18 +30,9 @@ interface TypeModalProps {
 const formSchema = z.object({
   name: z
     .string()
-    .min(1)
-    .refine((value) => {
-      if (!value) {
-        throw new z.ZodError([
-          {
-            code: z.ZodIssueCode.custom,
-            message: "Please enter a vehicle name",
-            path: ["name"],
-          },
-        ]);
-      }
-      return true;
+    .min(1, "Please enter a modification type name")
+    .refine((value) => value.trim().length > 0, {
+      message: "Please enter a modification type name",
     }),
 });
 

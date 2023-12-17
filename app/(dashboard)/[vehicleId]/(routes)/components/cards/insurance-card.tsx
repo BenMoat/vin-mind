@@ -105,7 +105,7 @@ export const InsuranceCard: React.FC<InsuranceCardProps> = ({
       {error ? (
         <div className="px-6 py-6 space-y-2 w-full rounded-lg border text-center">
           <span className="flex items-center justify-center">
-            <XCircle className="w-8 h-8 text-red-500" />
+            <XCircle className="w-8 h-8 text-destructive" />
           </span>
           <p className="text-sm">{error}</p>
           <Button variant="outline">Retry</Button>
@@ -122,12 +122,12 @@ export const InsuranceCard: React.FC<InsuranceCardProps> = ({
                 <CardDescription>
                   {initialData.isInsured ? (
                     <span className="flex items-center justify-center">
-                      <CheckCircle className="w-8 h-8 mr-2 text-[#adfa1d]" />
+                      <CheckCircle className="w-8 h-8 mr-2 text-green" />
                       Insured
                     </span>
                   ) : (
                     <span className="flex items-center justify-center">
-                      <XCircle className="w-8 h-8 mr-2 text-[#a92727]" />
+                      <XCircle className="w-8 h-8 mr-2 text-destructive" />
                       Not Insured
                     </span>
                   )}

@@ -23,15 +23,15 @@ export const ModificationsCard: React.FC<ModificationsCardProps> = ({
     <Card className="relative px-6 space-y-2 text-center">
       <CardHeader>
         <CardTitle>Modifications</CardTitle>
-        <CardDescription className="flex items-center justify-center boldText text-md">
+        <CardDescription className="flex items-center justify-center text-bold text-md">
           {totalPrice ? (
             <>
-              <Wrench className="w-8 h-8 mr-2 text-[#adfa1d]" />
+              <Wrench className="w-8 h-8 mr-2 text-green" />
               {totalModifications}
             </>
           ) : (
             <>
-              <Wrench className="w-8 h-8 mr-2 text-gray-400 " />
+              <Wrench className="w-8 h-8 mr-2 text-muted-foreground" />
             </>
           )}
         </CardDescription>

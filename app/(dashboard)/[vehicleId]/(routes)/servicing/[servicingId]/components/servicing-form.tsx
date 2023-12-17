@@ -42,8 +42,18 @@ interface ServiceFormProps {
 }
 
 const formSchema = z.object({
-  provider: z.string().min(1, "Service Provider is required"),
-  type: z.string().min(1, "Service Type is required"),
+  provider: z
+    .string()
+    .min(1, "Service Provider is required")
+    .refine((value) => value.trim().length > 0, {
+      message: "Service Provider is required",
+    }),
+  type: z
+    .string()
+    .min(1, "Service Type is required")
+    .refine((value) => value.trim().length > 0, {
+      message: "Service Type is required",
+    }),
   mileage: z.string().min(1, "Mileage is required"),
   cost: z.string().optional(),
   details: z.string().optional(),
@@ -163,7 +173,7 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
               render={({ field }) => (
                 <FormItem className="max-w-[300px]">
                   <FormLabel>
-                    <span className="text-red-600">*</span> Type
+                    <span className="text-destructive">*</span> Type
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -183,7 +193,7 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
               render={({ field }) => (
                 <FormItem className="max-w-[300px]">
                   <FormLabel>
-                    <span className="text-red-600">*</span> Provider
+                    <span className="text-destructive">*</span> Provider
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -203,7 +213,7 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
               render={({ field }) => (
                 <FormItem className="max-w-[300px]">
                   <FormLabel>
-                    <span className="text-red-600">*</span> Mileage
+                    <span className="text-destructive">*</span> Mileage
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -270,7 +280,7 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>
-                      <span className="text-red-600">*</span> Service Date
+                      <span className="text-destructive">*</span> Service Date
                     </FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
@@ -329,6 +339,7 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0">
                         <Calendar
+                          className="!h-[350px]"
                           mode="single"
                           selected={initialData?.nextServiceDate || undefined}
                           onSelect={(e) => {

@@ -1,4 +1,9 @@
+import { Modification } from "@prisma/client";
 import prismadb from "@/lib/prismadb";
+
+import { stringify } from "@/lib/utils";
+
+import { getChartData } from "@/actions/get-chart-data";
 
 import { Eye, HelpCircle } from "lucide-react";
 
@@ -37,13 +42,14 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
       insurance: true,
       dashboardConfigure: true,
       serviceHistory: {
-        take: 1,
         orderBy: {
           serviceDate: "desc",
         },
       },
     },
   });
+
+  const chartData = await getChartData(params.vehicleId);
 
   if (!vehicle) {
     return (
@@ -62,7 +68,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
 
   const totalPriceOfModifications =
     vehicle.modifications?.reduce(
-      (total, modification) => total + Number(modification.price),
+      (total: number, modification: Modification) =>
+        total + Number(modification.price),
       0
     ) || 0;
 
@@ -97,7 +104,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
           <InsuranceCard initialData={vehicle.insurance} />
         )}
         {vehicle.dashboardConfigure?.servicing && (
-          <ServicingCard initialData={vehicle.serviceHistory[0]} />
+          <ServicingCard initialData={stringify(vehicle.serviceHistory[0])} />
         )}
         {vehicle.dashboardConfigure?.totalModifications && (
           <ModificationsCard
@@ -106,13 +113,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
           />
         )}
         {vehicle.dashboardConfigure?.mileage && (
-          <MileageCard initialData={vehicle.serviceHistory[0]} />
+          <MileageCard initialData={stringify(vehicle.serviceHistory[0])} />
         )}
       </div>
       <Card className="col-span-4">
-        <CardHeader>Annual Mileage</CardHeader>
+        <CardHeader>Mileage Timeline</CardHeader>
         <CardContent className="pl-2">
-          <Mileage data={[4, 8]} />
+          <Mileage data={chartData} />
         </CardContent>
       </Card>
     </div>
