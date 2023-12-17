@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ExternalLink, Trash, Upload } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { addFileToAlbum } from "@/actions/post-file-to-album";
 
 interface ImageUploadProps {
   disabled?: boolean;
@@ -26,8 +27,13 @@ const FileUpload: React.FC<ImageUploadProps> = ({
     setIsMounted(true);
   }, []);
 
-  const onUpload = (result: any) => {
+  const onUpload = async (result: any) => {
     onChange(result.info.secure_url);
+    try {
+      await addFileToAlbum(result.info.public_id, "test");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   if (!isMounted) {
@@ -92,7 +98,7 @@ const FileUpload: React.FC<ImageUploadProps> = ({
           );
         })}
       </div>
-      <CldUploadWidget onUpload={onUpload} uploadPreset="k18d0hpm">
+      <CldUploadWidget onUpload={onUpload} uploadPreset="k2e4toj9">
         {({ open }) => {
           const onClick = () => {
             open();
