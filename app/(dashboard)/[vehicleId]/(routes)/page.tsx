@@ -3,6 +3,8 @@ import prismadb from "@/lib/prismadb";
 
 import { stringify } from "@/lib/utils";
 
+import { getChartData } from "@/actions/get-chart-data";
+
 import { Eye, HelpCircle } from "lucide-react";
 
 import { ConfigureModal } from "./components/modals/configure-modal";
@@ -46,6 +48,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
       },
     },
   });
+
+  const chartData = await getChartData(params.vehicleId);
 
   if (!vehicle) {
     return (
@@ -113,9 +117,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
         )}
       </div>
       <Card className="col-span-4">
-        <CardHeader>Annual Mileage</CardHeader>
+        <CardHeader>Mileage Timeline</CardHeader>
         <CardContent className="pl-2">
-          <Mileage data={vehicle.serviceHistory} />
+          <Mileage data={chartData} />
         </CardContent>
       </Card>
     </div>
