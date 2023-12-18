@@ -29,9 +29,9 @@ const FileUpload: React.FC<ImageUploadProps> = ({
 
   const onUpload = async (result: any) => {
     try {
-      const response = await addFileToAlbum(result.info.public_id, "test");
-      onChange(response);
-      console.log(response);
+      onChange(result.info.secure_url);
+      //const response = await addFileToAlbum(result.info.public_id, "test");
+      //console.log(response);
     } catch (error) {
       console.error(error);
     }
@@ -93,7 +93,11 @@ const FileUpload: React.FC<ImageUploadProps> = ({
           );
         })}
       </div>
-      <CldUploadWidget onUpload={onUpload} uploadPreset="k2e4toj9">
+      <CldUploadWidget
+        options={{ folder: "test", theme: "dark" }}
+        onUpload={onUpload}
+        uploadPreset="k2e4toj9"
+      >
         {({ open }) => {
           const onClick = () => {
             open();
