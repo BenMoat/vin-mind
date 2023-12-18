@@ -28,9 +28,10 @@ const FileUpload: React.FC<ImageUploadProps> = ({
   }, []);
 
   const onUpload = async (result: any) => {
-    onChange(result.info.secure_url);
     try {
-      await addFileToAlbum(result.info.public_id, "test");
+      const response = await addFileToAlbum(result.info.public_id, "test");
+      onChange(response);
+      console.log(response);
     } catch (error) {
       console.error(error);
     }
@@ -45,12 +46,6 @@ const FileUpload: React.FC<ImageUploadProps> = ({
       <div className="mb-4 grid grid-cols-1 md:grid-cols-2 items-center gap-4">
         {value.map((url) => {
           const isImage = /\.(jpg|jpeg|png|gif)$/i.test(url);
-          const filename = url.split("/").pop();
-
-          const formattedFilename =
-            filename && filename.length > 15
-              ? `${filename.slice(0, 23)}...`
-              : filename;
 
           return (
             <div
@@ -59,7 +54,7 @@ const FileUpload: React.FC<ImageUploadProps> = ({
             >
               <>
                 <a href={url} target="_blank" className="truncate underline">
-                  {formattedFilename}{" "}
+                  View full
                   <ExternalLink size={14} className="inline-block" />
                 </a>
               </>

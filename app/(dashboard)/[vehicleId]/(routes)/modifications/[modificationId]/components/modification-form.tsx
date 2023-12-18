@@ -356,16 +356,17 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                       <FileUpload
                         value={field.value.map((file) => file.url)}
                         disabled={loading}
-                        onChange={(url) =>
-                          field.onChange([...field.value, { url }])
-                        }
-                        onRemove={(url) =>
+                        onChange={(url) => {
+                          //console.log(url);
+                          field.onChange([...field.value, { url }]);
+                        }}
+                        onRemove={(url) => {
                           field.onChange([
                             ...field.value.filter(
                               (current) => current.url !== url
                             ),
-                          ])
-                        }
+                          ]);
+                        }}
                       />
                     </FormControl>
                   </FormItem>
