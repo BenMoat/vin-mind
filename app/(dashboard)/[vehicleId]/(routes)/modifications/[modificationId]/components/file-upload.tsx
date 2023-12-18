@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { CldUploadWidget } from "next-cloudinary";
 
@@ -6,7 +8,8 @@ import Image from "next/image";
 import { ExternalLink, Trash, Upload } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { addFileToAlbum } from "@/actions/post-file-to-album";
+import { removeFileFromAlbum } from "@/actions/post-file-to-album";
+import { useParams } from "next/navigation";
 
 interface ImageUploadProps {
   disabled?: boolean;
@@ -22,6 +25,9 @@ const FileUpload: React.FC<ImageUploadProps> = ({
   value,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
+  const params = useParams();
+
+  const folder = `${params.vehicleId}`;
 
   useEffect(() => {
     setIsMounted(true);
@@ -30,11 +36,22 @@ const FileUpload: React.FC<ImageUploadProps> = ({
   const onUpload = async (result: any) => {
     try {
       onChange(result.info.secure_url);
-      //const response = await addFileToAlbum(result.info.public_id, "test");
-      //console.log(response);
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const onDelete = async (url: string) => {
+    const urlParts = url.split("/");
+    let filename = urlParts.pop();
+    filename = filename?.split(".")[0];
+    const formattedString = `${folder}/${filename}`;
+
+    console.log(formattedString);
+
+    await removeFileFromAlbum(formattedString);
+    console.log(url);
+    onRemove(url);
   };
 
   if (!isMounted) {
@@ -44,17 +61,23 @@ const FileUpload: React.FC<ImageUploadProps> = ({
   return (
     <div>
       <div className="mb-4 grid grid-cols-1 md:grid-cols-2 items-center gap-4">
-        {value.map((url) => {
+        {value.map((url, index) => {
           const isImage = /\.(jpg|jpeg|png|gif)$/i.test(url);
+          const filename = url.split("/").pop();
+
+          const formattedFilename =
+            filename && filename.length > 15
+              ? `${filename.slice(0, 23)}...`
+              : filename;
 
           return (
             <div
-              key={url}
+              key={index}
               className="relative h-[400px] rounded-md overflow-hidden"
             >
               <>
                 <a href={url} target="_blank" className="truncate underline">
-                  View full
+                  {formattedFilename}{" "}
                   <ExternalLink size={14} className="inline-block" />
                 </a>
               </>
@@ -63,7 +86,7 @@ const FileUpload: React.FC<ImageUploadProps> = ({
                   aria-label="Remove file"
                   type="button"
                   variant="destructive"
-                  onClick={() => onRemove(url)}
+                  onClick={() => onDelete(url)}
                   size="sm"
                 >
                   <Trash className="h-4 w-4" />
@@ -94,9 +117,9 @@ const FileUpload: React.FC<ImageUploadProps> = ({
         })}
       </div>
       <CldUploadWidget
-        options={{ folder: "test", theme: "dark" }}
+        options={{ folder: folder }}
         onUpload={onUpload}
-        uploadPreset="k2e4toj9"
+        uploadPreset="k18d0hpm"
       >
         {({ open }) => {
           const onClick = () => {
