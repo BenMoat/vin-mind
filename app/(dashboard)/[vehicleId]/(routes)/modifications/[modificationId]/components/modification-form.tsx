@@ -42,13 +42,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 
 interface ModificationFormProps {
   initialData:
@@ -338,41 +331,33 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               )}
             />
           </div>
-          <Card className="max-w-[850px]">
-            <CardHeader>
-              <CardTitle>File Upload</CardTitle>
-              <CardDescription>
-                Upload up to three images or PDFs related to this modification.
-                (e.g receipts, invoices, user guides)...
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <FormField
-                control={form.control}
-                name="files"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <FileUpload
-                        value={field.value.map((file) => file.url)}
-                        disabled={loading}
-                        onChange={(url) => {
-                          field.onChange([...field.value, { url }]);
-                        }}
-                        onRemove={(url) => {
-                          field.onChange([
-                            ...field.value.filter(
-                              (current) => current.url !== url
-                            ),
-                          ]);
-                        }}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </CardContent>
-          </Card>
+          <FormField
+            control={form.control}
+            name="files"
+            render={({ field }) => (
+              <FormItem className="max-w-[850px]">
+                <FormLabel>Files</FormLabel>
+                <FormDescription>
+                  Upload up to three images or PDFs related to this
+                  modification. (e.g receipts, invoices, user guides)...
+                </FormDescription>
+                <FormControl>
+                  <FileUpload
+                    value={field.value.map((file) => file.url)}
+                    disabled={loading}
+                    onChange={(url) => {
+                      field.onChange([...field.value, { url }]);
+                    }}
+                    onRemove={(url) => {
+                      field.onChange([
+                        ...field.value.filter((current) => current.url !== url),
+                      ]);
+                    }}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
           {initialData && (
             <Button
               type="button"
