@@ -75,7 +75,7 @@ const FileUpload: React.FC<ImageUploadProps> = ({
             )}
           >
             <a
-              href={url}
+              href={disabled ? undefined : url}
               target="_blank"
               className="absolute top-0 left-0 w-full h-full flex items-center justify-center"
             >
