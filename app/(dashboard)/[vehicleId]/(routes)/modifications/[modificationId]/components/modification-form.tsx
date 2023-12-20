@@ -342,8 +342,8 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
             <CardHeader>
               <CardTitle>File Upload</CardTitle>
               <CardDescription>
-                Upload any files related related to this modification. (e.g
-                receipts, invoices, user guides)...
+                Upload up to three images or PDFs related to this modification.
+                (e.g receipts, invoices, user guides)...
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -357,7 +357,6 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                         value={field.value.map((file) => file.url)}
                         disabled={loading}
                         onChange={(url) => {
-                          //console.log(url);
                           field.onChange([...field.value, { url }]);
                         }}
                         onRemove={(url) => {

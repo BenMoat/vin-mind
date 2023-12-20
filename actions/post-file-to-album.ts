@@ -8,13 +8,6 @@ cloudinary.v2.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export async function removeFileFromAlbum(imageURL: string) {
-  await cloudinary.v2.api.delete_resources([imageURL], {
-    type: "upload",
-    resource_type: "image",
-  });
-}
-
 export async function getFilesFromFolder(folderName: string) {
   const result = await cloudinary.v2.api.resources({
     type: "upload",
@@ -22,4 +15,11 @@ export async function getFilesFromFolder(folderName: string) {
   });
 
   return result.resources;
+}
+
+export async function removeFileFromAlbum(imageURL: string) {
+  await cloudinary.v2.api.delete_resources([imageURL], {
+    type: "upload",
+    resource_type: "image",
+  });
 }
