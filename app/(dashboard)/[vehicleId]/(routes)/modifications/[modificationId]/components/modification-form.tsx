@@ -127,6 +127,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
+      router.refresh();
     }
   };
 
@@ -144,6 +145,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
     } finally {
       setLoading(false);
       setAlertOpen(false);
+      router.refresh();
     }
   };
   return (
