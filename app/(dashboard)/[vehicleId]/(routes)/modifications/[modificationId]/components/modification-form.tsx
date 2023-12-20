@@ -114,41 +114,38 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
       setLoading(true);
       const price = Number(data.price?.replace(/£|,/g, ""));
       const formData = { ...data, price };
-      if (initialData) {
-        await axios.patch(
-          `/api/${params.vehicleId}/modifications/${params.modificationId}`,
-          formData
-        );
-      } else {
-        await axios.post(`/api/${params.vehicleId}/modifications`, formData);
-      }
-      router.push(`/${params.vehicleId}/modifications`);
+      const request = initialData
+        ? axios.patch(
+            `/api/${params.vehicleId}/modifications/${params.modificationId}`,
+            formData
+          )
+        : axios.post(`/api/${params.vehicleId}/modifications`, formData);
+      const navigation = router.push(`/${params.vehicleId}/modifications`);
+      await Promise.all([request, navigation]);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
-      router.refresh();
     }
   };
 
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(
+      const request = axios.delete(
         `/api/${params.vehicleId}/modifications/${params.modificationId}`
       );
-      router.push(`/${params.vehicleId}/modifications`);
+      const navigation = router.push(`/${params.vehicleId}/modifications`);
+      await Promise.all([request, navigation]);
       toast.success("Modification Type deleted");
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
       setLoading(false);
       setAlertOpen(false);
-      router.refresh();
     }
   };
-
   return (
     <>
       <AlertModal
