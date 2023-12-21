@@ -1,16 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { CldImage, CldUploadWidget } from "next-cloudinary";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+import { cn } from "@/lib/utils";
+import { removeFilesFromAlbum } from "@/actions/post-file-to-album";
+import { useParams } from "next/navigation";
 
 import { Trash, Upload } from "lucide-react";
 
+import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { Button } from "@/components/ui/button";
-import { removeFilesFromAlbum } from "@/actions/post-file-to-album";
-import { useParams } from "next/navigation";
-import { cn } from "@/lib/utils";
 
 interface ImageUploadProps {
+  hasInitialData: boolean;
   disabled?: boolean;
   onChange: (value: string) => void;
   onRemove: (value: string) => void;
@@ -18,18 +21,32 @@ interface ImageUploadProps {
 }
 
 const FileUpload: React.FC<ImageUploadProps> = ({
+  hasInitialData,
   disabled,
   onChange,
   onRemove,
   value,
 }) => {
   const params = useParams();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
 
   const folder = `${params.vehicleId}`;
 
   const onUpload = async (result: any) => {
     try {
       onChange(result.info.secure_url);
+      if (hasInitialData) {
+        axios.post(
+          `/api/${params.vehicleId}/modifications/${params.modificationId}/file`,
+          { url: result.info.secure_url }
+        );
+      }
     } catch (error) {
       console.error(error);
     }
@@ -37,6 +54,10 @@ const FileUpload: React.FC<ImageUploadProps> = ({
 
   const onDelete = async (url: string) => {
     await removeFilesFromAlbum([url]);
+    axios.delete(
+      `/api/${params.vehicleId}/modifications/${params.modificationId}/file`,
+      { data: { url: url } }
+    );
     onRemove(url);
   };
 
@@ -74,7 +95,7 @@ const FileUpload: React.FC<ImageUploadProps> = ({
                     multiple: false,
                   }}
                   onUpload={onUpload}
-                  uploadPreset="k18d0hpm"
+                  uploadPreset="k2e4toj9"
                 >
                   {({ open }) => {
                     return (

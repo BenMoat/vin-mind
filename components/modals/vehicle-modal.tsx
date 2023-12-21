@@ -102,7 +102,6 @@ export const VehicleModal = () => {
   ) => {
     try {
       setLoading(true);
-      console.log(vehicleName, responseData);
       const response = await axios.post("/api/vehicles", {
         name: vehicleName,
         ...responseData,

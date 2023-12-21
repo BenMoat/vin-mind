@@ -19,7 +19,6 @@ interface OverviewProps {
 export const Mileage: React.FC<OverviewProps> = ({ data }) => {
   const { resolvedTheme } = useTheme();
   const fontColor = resolvedTheme === "dark" ? "#ffffff" : "#000000";
-  console.log(data);
 
   return (
     <ResponsiveContainer width="100%" height={350}>

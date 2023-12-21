@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -76,10 +76,13 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
   const params = useParams();
   const router = useRouter();
 
+  const hasInitialData = Boolean(initialData);
+
   const [alertOpen, setAlertOpen] = useState(false);
   const [typeOpen, setTypeOpen] = useState(false);
   const [selectOpen, setSelectOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [fileUrls, setFileUrls] = useState<string[]>([]);
 
   const title = initialData
     ? `Edit Modification: ${initialData.name}`
@@ -132,13 +135,22 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
     }
   };
 
+  //Keep track of file urls for deletion
+  const { watch } = form;
+  const files = watch("files");
+
+  useEffect(() => {
+    const urls = files.map((file) => file.url);
+    setFileUrls(urls);
+  }, [files]);
+
   const onDelete = async () => {
     try {
       setLoading(true);
-      const fileUrls = initialData!!.files.map((file) => file.url);
       const request = axios.delete(
         `/api/${params.vehicleId}/modifications/${params.modificationId}`
       );
+      console.log(fileUrls);
       await removeFilesFromAlbum(fileUrls);
       const navigation = router.push(`/${params.vehicleId}/modifications`);
       await Promise.all([request, navigation]);
@@ -151,6 +163,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
       router.refresh();
     }
   };
+
   return (
     <>
       <AlertModal
@@ -345,6 +358,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                 </FormDescription>
                 <FormControl>
                   <FileUpload
+                    hasInitialData={hasInitialData}
                     value={field.value.map((file) => file.url)}
                     disabled={loading}
                     onChange={(url) => {
