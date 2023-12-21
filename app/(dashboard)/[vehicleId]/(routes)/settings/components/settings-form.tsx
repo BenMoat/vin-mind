@@ -215,16 +215,18 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                     modifications including their associated files will be
                     deleted.
                   </CardDescription>
-                  <Button
-                    type="button"
-                    disabled={loading || noOfModifications === 0}
-                    variant="destructive"
-                    onClick={() => {
-                      setDeleteAction(DeleteAction.Modifications);
-                    }}
-                  >
-                    Delete
-                  </Button>
+                  <div className="!pl-0 pt-5">
+                    <Button
+                      type="button"
+                      disabled={loading || noOfModifications === 0}
+                      variant="destructive"
+                      onClick={() => {
+                        setDeleteAction(DeleteAction.Modifications);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
               <Card>

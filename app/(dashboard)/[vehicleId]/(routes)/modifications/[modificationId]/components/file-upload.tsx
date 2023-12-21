@@ -3,12 +3,10 @@
 import { useEffect, useState } from "react";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 
-import Image from "next/image";
-
-import { ExternalLink, Loader, Trash, Upload } from "lucide-react";
+import { Trash, Upload } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { removeFileFromAlbum } from "@/actions/post-file-to-album";
+import { removeFilesFromAlbum } from "@/actions/post-file-to-album";
 import { useParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 
@@ -25,15 +23,9 @@ const FileUpload: React.FC<ImageUploadProps> = ({
   onRemove,
   value,
 }) => {
-  const [isMounted, setIsMounted] = useState(false);
-
   const params = useParams();
 
   const folder = `${params.vehicleId}`;
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   const onUpload = async (result: any) => {
     try {
@@ -44,21 +36,9 @@ const FileUpload: React.FC<ImageUploadProps> = ({
   };
 
   const onDelete = async (url: string) => {
-    const urlParts = url.split("/");
-    let filename = urlParts.pop();
-    filename = filename?.split(".")[0];
-    const formattedString = `${folder}/${filename}`;
-
-    console.log(formattedString);
-
-    await removeFileFromAlbum(formattedString);
-    console.log(url);
+    await removeFilesFromAlbum([url]);
     onRemove(url);
   };
-
-  if (!isMounted) {
-    return null;
-  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

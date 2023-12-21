@@ -42,6 +42,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { removeFilesFromAlbum } from "@/actions/post-file-to-album";
 
 interface ModificationFormProps {
   initialData:
@@ -134,12 +135,14 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
+      const fileUrls = initialData!!.files.map((file) => file.url);
       const request = axios.delete(
         `/api/${params.vehicleId}/modifications/${params.modificationId}`
       );
+      await removeFilesFromAlbum(fileUrls);
       const navigation = router.push(`/${params.vehicleId}/modifications`);
       await Promise.all([request, navigation]);
-      toast.success("Modification Type deleted");
+      toast.success("Modification deleted");
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
@@ -297,7 +300,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
-                    <div>
+                    <div className="text-sm">
                       This mod is
                       <span
                         className={`font-bold transition-colors ${
