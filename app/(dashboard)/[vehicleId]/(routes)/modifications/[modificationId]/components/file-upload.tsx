@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { removeFilesFromAlbum } from "@/actions/post-file-to-album";
 import { useParams } from "next/navigation";
 
-import { Trash, Upload } from "lucide-react";
+import { ExternalLink, Trash, Upload } from "lucide-react";
 
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { Button } from "@/components/ui/button";
@@ -34,8 +34,6 @@ const FileUpload: React.FC<ImageUploadProps> = ({
     setIsMounted(true);
   }, []);
 
-  if (!isMounted) return null;
-
   const folder = `${params.vehicleId}`;
 
   const onUpload = async (result: any) => {
@@ -61,65 +59,78 @@ const FileUpload: React.FC<ImageUploadProps> = ({
     onRemove(url);
   };
 
+  if (!isMounted) return null;
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {[0, 1, 2].map((_, index) => {
         const url = value[index];
         return (
-          <div
-            key={index}
-            className={cn(
-              "relative h-80 w-50 border rounded-md overflow-hidden flex items-center justify-center",
-              disabled
-                ? "opacity-50"
-                : "transition-colors dark:hover:border-white hover:border-black"
-            )}
-          >
-            <a
-              href={disabled ? undefined : url}
-              target="_blank"
-              className="absolute top-0 left-0 w-full h-full flex items-center justify-center"
-            >
-              {url ? (
-                <CldImage
-                  src={url}
-                  alt="Uploaded file"
-                  width="600"
-                  height="600"
-                />
-              ) : (
-                <CldUploadWidget
-                  options={{
-                    folder: folder,
-                    tags: ["modification"],
-                    multiple: false,
-                  }}
-                  onUpload={onUpload}
-                  uploadPreset="k2e4toj9"
+          <div key={index} className="relative">
+            {url ? (
+              <div
+                className={cn(
+                  "relative h-80 w-50 border rounded-md overflow-hidden flex items-center justify-center",
+                  disabled
+                    ? "opacity-50"
+                    : "transition-colors dark:hover:border-white hover:border-black"
+                )}
+              >
+                <a
+                  href={disabled ? undefined : url}
+                  target="_blank"
+                  className="absolute top-0 left-0 w-full h-full flex items-center justify-center"
                 >
-                  {({ open }) => {
-                    return (
-                      <>
-                        {disabled ? (
-                          <span className="text-muted-foreground inline-flex items-center">
-                            <Upload className="h-4 w-4 mr-2" />
-                            Upload File
-                          </span>
-                        ) : (
+                  <CldImage
+                    src={url}
+                    alt="Uploaded file"
+                    width="600"
+                    height="600"
+                  />
+                  <div className="absolute top-0 left-0 w-full h-full transition-colors bg-black bg-opacity-0 hover:bg-opacity-50 flex items-center justify-center cursor-pointer">
+                    <span className="text-white text-lg flex items-center">
+                      Open in New Tab <ExternalLink className="w-4 h-4 ml-2" />
+                    </span>
+                  </div>
+                </a>
+              </div>
+            ) : index === value.length ? (
+              <CldUploadWidget
+                options={{
+                  folder: folder,
+                  tags: ["modification"],
+                  multiple: false,
+                }}
+                onUpload={onUpload}
+                uploadPreset="k2e4toj9"
+              >
+                {({ open }) => {
+                  return (
+                    <>
+                      {value.length >= 1 ? (
+                        <div className="flex h-full w-full items-center ml-4">
                           <div
-                            className="h-full w-full flex items-center justify-center cursor-pointer"
-                            onClick={() => open && open()}
+                            onClick={() => open()}
+                            className="border-dashed border-2 rounded-full p-4 hover:bg-muted cursor-pointer w-25 h-14 flex items-center justify-center"
                           >
-                            <Upload className="h-4 w-4 mr-2" />
-                            <span>Upload File</span>
+                            File {index + 1}
+                            <Upload className="h-4 w-4 ml-2" />
                           </div>
-                        )}
-                      </>
-                    );
-                  }}
-                </CldUploadWidget>
-              )}
-            </a>
+                        </div>
+                      ) : (
+                        <div
+                          onClick={() => open && open()}
+                          className="border-dashed border-2 max-w-[100px] h-12 rounded-full hover:bg-muted cursor-pointer flex items-center justify-center"
+                        >
+                          File 1
+                          <Upload className="h-4 w-4 ml-2" />
+                        </div>
+                      )}
+                    </>
+                  );
+                }}
+              </CldUploadWidget>
+            ) : null}
             {url && (
               <div className="absolute bottom-2 left-2">
                 <Button

@@ -8,6 +8,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 import { Modification, ModificationType, Files } from "@prisma/client";
+import { removeFilesFromAlbum } from "@/actions/post-file-to-album";
 
 import toast from "react-hot-toast";
 
@@ -42,7 +43,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { removeFilesFromAlbum } from "@/actions/post-file-to-album";
 
 interface ModificationFormProps {
   initialData:
@@ -135,7 +135,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
     }
   };
 
-  //Keep track of file urls for deletion
+  //Keep track of latest file urls for deletion
   const { watch } = form;
   const files = watch("files");
 
@@ -150,7 +150,6 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
       const request = axios.delete(
         `/api/${params.vehicleId}/modifications/${params.modificationId}`
       );
-      console.log(fileUrls);
       await removeFilesFromAlbum(fileUrls);
       const navigation = router.push(`/${params.vehicleId}/modifications`);
       await Promise.all([request, navigation]);
@@ -244,7 +243,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                     Type
                   </FormLabel>
                   <FormDescription>
-                    What type of modification is this? (e.g. Engine, Wheels)...
+                    What type of modification is this? (e.g. Engine, Wheels)
                   </FormDescription>
                   <div className="sm:flex">
                     <Select
@@ -304,7 +303,11 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                   <FormDescription>
                     Has this modification been removed from the vehicle?
                   </FormDescription>
-                  <div className="inline-flex items-center space-x-3 rounded-md border px-4 py-3">
+                  <div
+                    className={`inline-flex items-center border transition-colors space-x-3 rounded-md px-4 py-3 ${
+                      field.value ? "border-red-500" : "border-green-500"
+                    }`}
+                  >
                     <FormControl>
                       <Switch
                         className="!ml-[-5px]"
@@ -315,19 +318,14 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                     </FormControl>
                     <div className="text-sm">
                       This mod is
-                      <span
-                        className={`font-bold transition-colors ${
-                          field.value ? "text-destructive" : "text-green"
-                        }`}
-                      >
-                        {field.value ? " no longer " : " currently "}
-                      </span>
+                      <span>{field.value ? " no longer " : " currently "}</span>
                       in use
                     </div>
                   </div>
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="notes"
@@ -353,8 +351,8 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               <FormItem className="max-w-[850px]">
                 <FormLabel>Files</FormLabel>
                 <FormDescription>
-                  Upload up to three images or PDFs related to this
-                  modification. (e.g receipts, invoices, user guides)...
+                  Upload and view up to three files related to this
+                  modification. (e.g invoices, guides, photos)
                 </FormDescription>
                 <FormControl>
                   <FileUpload
