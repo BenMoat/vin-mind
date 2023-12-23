@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
@@ -14,9 +14,14 @@ import { Trash, Upload } from "lucide-react";
 import { CldUploadWidget } from "next-cloudinary";
 import { removeFilesFromAlbum } from "@/actions/cloudinary-api";
 import { useParams } from "next/navigation";
+import axios from "axios";
 
-export default function PhotoGallery() {
-  const [images, setImages] = useState<string[]>([]);
+interface PhotoGalleryProps {
+  initialData: string[];
+}
+
+export default function PhotoGallery({ initialData }: PhotoGalleryProps) {
+  const [images, setImages] = useState<string[]>(initialData);
   const params = useParams();
 
   const folder = `${params.vehicleId}/images`;
@@ -24,14 +29,22 @@ export default function PhotoGallery() {
   const onUpload = async (result: any) => {
     try {
       setImages((prevImages) => [...prevImages, result.info.secure_url]);
+      axios.post(`/api/${params.vehicleId}/images`, {
+        url: result.info.secure_url,
+      });
     } catch (error) {
       console.error(error);
     }
   };
 
   const onDelete = async (url: string) => {
-    await removeFilesFromAlbum([url]);
-    setImages((prevImages) => prevImages.filter((image) => image !== url));
+    try {
+      await removeFilesFromAlbum([url]);
+      setImages((prevImages) => prevImages.filter((image) => image !== url));
+      axios.delete(`/api/${params.vehicleId}/images`, { data: { url: url } });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
