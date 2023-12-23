@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,6 +8,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 import { Modification, ModificationType, Files } from "@prisma/client";
+import { removeFilesFromAlbum } from "@/actions/cloudinary-api";
 
 import toast from "react-hot-toast";
 
@@ -42,13 +43,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 
 interface ModificationFormProps {
   initialData:
@@ -86,6 +80,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
   const [typeOpen, setTypeOpen] = useState(false);
   const [selectOpen, setSelectOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [fileUrls, setFileUrls] = useState<string[]>([]);
 
   const title = initialData
     ? `Edit Modification: ${initialData.name}`
@@ -121,15 +116,14 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
       setLoading(true);
       const price = Number(data.price?.replace(/£|,/g, ""));
       const formData = { ...data, price };
-      if (initialData) {
-        await axios.patch(
-          `/api/${params.vehicleId}/modifications/${params.modificationId}`,
-          formData
-        );
-      } else {
-        await axios.post(`/api/${params.vehicleId}/modifications`, formData);
-      }
-      router.push(`/${params.vehicleId}/modifications`);
+      const request = initialData
+        ? axios.patch(
+            `/api/${params.vehicleId}/modifications/${params.modificationId}`,
+            formData
+          )
+        : axios.post(`/api/${params.vehicleId}/modifications`, formData);
+      const navigation = router.push(`/${params.vehicleId}/modifications`);
+      await Promise.all([request, navigation]);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");
@@ -139,14 +133,25 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
     }
   };
 
+  //Keep track of latest file urls for deletion
+  const { watch } = form;
+  const files = watch("files");
+
+  useEffect(() => {
+    const urls = files.map((file) => file.url);
+    setFileUrls(urls);
+  }, [files]);
+
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(
+      const request = axios.delete(
         `/api/${params.vehicleId}/modifications/${params.modificationId}`
       );
-      router.push(`/${params.vehicleId}/modifications`);
-      toast.success("Modification Type deleted");
+      await removeFilesFromAlbum(fileUrls);
+      const navigation = router.push(`/${params.vehicleId}/modifications`);
+      await Promise.all([request, navigation]);
+      toast.success("Modification deleted");
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
@@ -236,7 +241,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                     Type
                   </FormLabel>
                   <FormDescription>
-                    What type of modification is this? (e.g. Engine, Wheels)...
+                    What type of modification is this? (e.g. Engine, Wheels)
                   </FormDescription>
                   <div className="sm:flex">
                     <Select
@@ -296,7 +301,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                   <FormDescription>
                     Has this modification been removed from the vehicle?
                   </FormDescription>
-                  <div className="inline-flex items-center space-x-3 rounded-md border px-4 py-3">
+                  <div className="inline-flex items-center border transition-colors space-x-3 rounded-md px-4 py-3">
                     <FormControl>
                       <Switch
                         className="!ml-[-5px]"
@@ -305,21 +310,16 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
-                    <div>
+                    <div className="text-sm">
                       This mod is
-                      <span
-                        className={`font-bold transition-colors ${
-                          field.value ? "text-destructive" : "text-green"
-                        }`}
-                      >
-                        {field.value ? " no longer " : " currently "}
-                      </span>
+                      <b>{field.value ? " no longer " : " currently "}</b>
                       in use
                     </div>
                   </div>
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="notes"
@@ -338,41 +338,34 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
               )}
             />
           </div>
-          <Card className="max-w-[850px]">
-            <CardHeader>
-              <CardTitle>File Upload</CardTitle>
-              <CardDescription>
-                Upload any files related related to this modification. (e.g
-                receipts, invoices, user guides)...
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <FormField
-                control={form.control}
-                name="files"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <FileUpload
-                        value={field.value.map((file) => file.url)}
-                        disabled={loading}
-                        onChange={(url) =>
-                          field.onChange([...field.value, { url }])
-                        }
-                        onRemove={(url) =>
-                          field.onChange([
-                            ...field.value.filter(
-                              (current) => current.url !== url
-                            ),
-                          ])
-                        }
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </CardContent>
-          </Card>
+          <FormField
+            control={form.control}
+            name="files"
+            render={({ field }) => (
+              <FormItem className="max-w-[850px]">
+                <FormLabel>Files</FormLabel>
+                <FormDescription>
+                  Upload and view up to three files related to this
+                  modification. (e.g invoices, guides, photos)
+                </FormDescription>
+                <FormControl>
+                  <FileUpload
+                    folder={`${params.vehicleId}/modifications`}
+                    value={field.value.map((file) => file.url)}
+                    disabled={loading}
+                    onChange={(url) => {
+                      field.onChange([...field.value, { url }]);
+                    }}
+                    onRemove={(url) => {
+                      field.onChange([
+                        ...field.value.filter((current) => current.url !== url),
+                      ]);
+                    }}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
           {initialData && (
             <Button
               type="button"

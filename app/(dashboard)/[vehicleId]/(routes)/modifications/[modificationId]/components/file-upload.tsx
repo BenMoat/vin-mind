@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
-import { CldUploadWidget } from "next-cloudinary";
+"use client";
 
-import Image from "next/image";
+import { useState, useEffect } from "react";
+
+import { cn } from "@/lib/utils";
+import { removeFilesFromAlbum } from "@/actions/cloudinary-api";
 
 import { ExternalLink, Trash, Upload } from "lucide-react";
 
+import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { Button } from "@/components/ui/button";
 
 interface ImageUploadProps {
@@ -12,6 +15,7 @@ interface ImageUploadProps {
   onChange: (value: string) => void;
   onRemove: (value: string) => void;
   value: string[];
+  folder: string;
 }
 
 const FileUpload: React.FC<ImageUploadProps> = ({
@@ -19,6 +23,7 @@ const FileUpload: React.FC<ImageUploadProps> = ({
   onChange,
   onRemove,
   value,
+  folder,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
 
@@ -26,90 +31,119 @@ const FileUpload: React.FC<ImageUploadProps> = ({
     setIsMounted(true);
   }, []);
 
-  const onUpload = (result: any) => {
-    onChange(result.info.secure_url);
+  const onUpload = async (result: any) => {
+    try {
+      onChange(result.info.secure_url);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  if (!isMounted) {
-    return null;
-  }
+  const onDelete = async (url: string) => {
+    await removeFilesFromAlbum([url]);
+    onRemove(url);
+  };
+
+  if (!isMounted) return null;
 
   return (
-    <div>
-      <div className="mb-4 grid grid-cols-1 md:grid-cols-2 items-center gap-4">
-        {value.map((url) => {
-          const isImage = /\.(jpg|jpeg|png|gif)$/i.test(url);
-          const filename = url.split("/").pop();
-
-          const formattedFilename =
-            filename && filename.length > 15
-              ? `${filename.slice(0, 23)}...`
-              : filename;
-
-          return (
-            <div
-              key={url}
-              className="relative h-[400px] rounded-md overflow-hidden"
-            >
-              <>
-                <a href={url} target="_blank" className="truncate underline">
-                  {formattedFilename}{" "}
-                  <ExternalLink size={14} className="inline-block" />
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {[0, 1, 2].map((_, index) => {
+        const url = value[index];
+        return (
+          <div key={index} className="relative">
+            {url ? (
+              <div
+                className={cn(
+                  "relative border rounded-lg overflow-hidden flex items-center justify-center",
+                  disabled
+                    ? "opacity-50"
+                    : "transition-colors dark:hover:border-white hover:border-black"
+                )}
+              >
+                <a
+                  href={disabled ? undefined : url}
+                  target="_blank"
+                  className="w-full h-full p-2 flex items-center justify-center"
+                >
+                  <CldImage
+                    src={url}
+                    alt="Uploaded file"
+                    width="600"
+                    height="600"
+                    className="rounded-md"
+                  />
+                  <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 hover:bg-opacity-70 flex items-center justify-center cursor-pointer opacity-0 hover:opacity-100 transition-opacity duration-200">
+                    <span className="text-white text-lg items-center inline-flex">
+                      Open in New Tab <ExternalLink className="w-4 h-4 ml-2" />
+                    </span>
+                  </div>
                 </a>
-              </>
-              <div className="z-10 absolute bottom-2 right-2">
+              </div>
+            ) : (
+              index === value.length &&
+              !disabled && (
+                <CldUploadWidget
+                  options={{
+                    folder: folder,
+                    multiple: false,
+                    clientAllowedFormats: ["png", "jpeg", "jpg", "gif", "pdf"],
+                    sources: [
+                      "local",
+                      "url",
+                      "camera",
+                      "dropbox",
+                      "google_drive",
+                    ],
+                  }}
+                  onUpload={onUpload}
+                  uploadPreset="k2e4toj9"
+                >
+                  {({ open }) => {
+                    return (
+                      <>
+                        {value.length >= 1 ? (
+                          <div className="flex h-full w-full items-center ml-4">
+                            <div
+                              onClick={() => open()}
+                              className="border-dashed border-2 rounded-full p-4 hover:bg-muted cursor-pointer w-25 h-14 flex items-center justify-center"
+                            >
+                              File {index + 1}
+                              <Upload className="h-4 w-4 ml-2" />
+                            </div>
+                          </div>
+                        ) : (
+                          <div
+                            onClick={() => open()}
+                            className="border-dashed border-2 max-w-[100px] h-12 rounded-full hover:bg-muted cursor-pointer flex items-center justify-center"
+                          >
+                            File 1
+                            <Upload className="h-4 w-4 ml-2" />
+                          </div>
+                        )}
+                      </>
+                    );
+                  }}
+                </CldUploadWidget>
+              )
+            )}
+            {url && (
+              <div className="absolute top-4 right-4">
                 <Button
                   aria-label="Remove file"
                   type="button"
                   variant="destructive"
-                  onClick={() => onRemove(url)}
                   size="sm"
+                  disabled={disabled}
+                  onClick={() => onDelete(url)}
                 >
                   <Trash className="h-4 w-4" />
                 </Button>
               </div>
-              {isImage ? (
-                <>
-                  <Image
-                    className="mt-2"
-                    src={url}
-                    alt="Uploaded image"
-                    width={400}
-                    height={400}
-                    objectFit="cover"
-                  />
-                </>
-              ) : (
-                <>
-                  <embed
-                    src={url}
-                    type="application/pdf"
-                    className="w-full h-full mt-2"
-                  />
-                </>
-              )}
-            </div>
-          );
-        })}
-      </div>
-      <CldUploadWidget onUpload={onUpload} uploadPreset="k18d0hpm">
-        {({ open }) => {
-          const onClick = () => {
-            open();
-          };
-          return (
-            <Button
-              type="button"
-              variant="secondary"
-              disabled={disabled}
-              onClick={onClick}
-            >
-              <Upload className="h-4 w-4 mr-2" />
-              Upload Files
-            </Button>
-          );
-        }}
-      </CldUploadWidget>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };

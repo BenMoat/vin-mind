@@ -24,7 +24,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import {
@@ -82,15 +81,14 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
   const onSubmit = async (data: ModificationTypeFormValues) => {
     try {
       setLoading(true);
-      if (initialData) {
-        await axios.patch(
-          `/api/${params.vehicleId}/modification-types/${params.modificationTypeId}`,
-          data
-        );
-      } else {
-        await axios.post(`/api/${params.vehicleId}/modification-types`, data);
-      }
-      router.push(`/${params.vehicleId}/modification-types`);
+      const request = initialData
+        ? axios.patch(
+            `/api/${params.vehicleId}/modification-types/${params.modificationTypeId}`,
+            data
+          )
+        : axios.post(`/api/${params.vehicleId}/modification-types`, data);
+      const navigation = router.push(`/${params.vehicleId}/modification-types`);
+      await Promise.all([request, navigation]);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");
@@ -103,10 +101,11 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(
+      const request = axios.delete(
         `/api/${params.vehicleId}/modification-types/${params.modificationTypeId}`
       );
-      router.push(`/${params.vehicleId}/modification-types`);
+      const navigation = router.push(`/${params.vehicleId}/modification-types`);
+      await Promise.all([request, navigation]);
       toast.success("Modification Type deleted");
     } catch (error) {
       toast.error(

@@ -71,12 +71,14 @@ export const VehicleModal = () => {
     if (registrationNumber) {
       const fetchData = async () => {
         try {
-          const response = await axios.post(
+          const request = axios.post(
             `/api/${params.vehicleId}/vehicle-enquiry`,
             { registrationNumber }
           );
+          const response = await request;
           response.data.registrationNumber = registrationNumber;
-          await saveData(values.name, response.data);
+          const save = saveData(values.name, response.data);
+          await Promise.all([request, save]);
           setError("");
         } catch (error) {
           if (axios.isAxiosError(error) && error.response) {
@@ -100,7 +102,6 @@ export const VehicleModal = () => {
   ) => {
     try {
       setLoading(true);
-      console.log(vehicleName, responseData);
       const response = await axios.post("/api/vehicles", {
         name: vehicleName,
         ...responseData,

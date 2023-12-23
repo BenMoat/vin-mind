@@ -69,31 +69,32 @@ export const InsuranceModal: React.FC<InsuranceModalProps> = ({
     try {
       setLoading(true);
 
-      // If the end date is today or in the future, then the vehicle is insured
       const today = new Date();
       values.isInsured = values.endDate >= today;
 
-      if (!initialData?.startDate) {
-        await axios.post(`/api/${params.vehicleId}/insurance`, values);
-      } else {
-        await axios.patch(`/api/${params.vehicleId}/insurance`, values);
-      }
-      router.refresh();
+      const request = !initialData?.startDate
+        ? axios.post(`/api/${params.vehicleId}/insurance`, values)
+        : axios.patch(`/api/${params.vehicleId}/insurance`, values);
+      const refresh = router.refresh();
+
+      await Promise.all([request, refresh]);
+      toast.success("Insurance Reminder Added");
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
       onClose();
       setLoading(false);
-      toast.success("Insurance Reminder Added");
     }
   };
 
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.vehicleId}/insurance`);
+      const request = axios.delete(`/api/${params.vehicleId}/insurance`);
       localStorage.removeItem(`insTMS-${params.vehicleId}`);
-      router.refresh();
+      const refresh = router.refresh();
+
+      await Promise.all([request, refresh]);
       toast.success("Insurance Reminder Deleted");
     } catch (error) {
       toast.error("Something went wrong");

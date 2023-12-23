@@ -106,20 +106,18 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
   const onSubmit = async (data: ServiceCardValues) => {
     try {
       setLoading(true);
-      //Ensure mileage set to a number
       const mileage = Number(data.mileage.replace(/,/g, ""));
       const cost = Number(data.cost?.replace(/£|,/g, ""));
       const details = data.details?.trim();
       const formData = { ...data, mileage, cost, details };
-      if (initialData) {
-        await axios.patch(
-          `/api/${params.vehicleId}/servicing/${params.servicingId}`,
-          formData
-        );
-      } else {
-        await axios.post(`/api/${params.vehicleId}/servicing`, formData);
-      }
-      router.push(`/${params.vehicleId}/servicing`);
+      const request = initialData
+        ? axios.patch(
+            `/api/${params.vehicleId}/servicing/${params.servicingId}`,
+            formData
+          )
+        : axios.post(`/api/${params.vehicleId}/servicing`, formData);
+      const navigation = router.push(`/${params.vehicleId}/servicing`);
+      await Promise.all([request, navigation]);
       toast.success(toastMessage);
     } catch (error) {
       toast.error("Something went wrong");
@@ -132,10 +130,11 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(
+      const request = axios.delete(
         `/api/${params.vehicleId}/servicing/${params.servicingId}`
       );
-      router.push(`/${params.vehicleId}/servicing`);
+      const navigation = router.push(`/${params.vehicleId}/servicing`);
+      await Promise.all([request, navigation]);
       toast.success("Servicing record deleted");
     } catch (error) {
       toast.error("Something went wrong");
