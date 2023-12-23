@@ -1,11 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import axios from "axios";
 
 import { cn } from "@/lib/utils";
-import { removeFilesFromAlbum } from "@/actions/post-file-to-album";
-import { useParams } from "next/navigation";
+import { removeFilesFromAlbum } from "@/actions/cloudinary-api";
 
 import { ExternalLink, Trash, Upload } from "lucide-react";
 
@@ -13,38 +11,29 @@ import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { Button } from "@/components/ui/button";
 
 interface ImageUploadProps {
-  hasInitialData: boolean;
   disabled?: boolean;
   onChange: (value: string) => void;
   onRemove: (value: string) => void;
   value: string[];
+  folder: string;
 }
 
 const FileUpload: React.FC<ImageUploadProps> = ({
-  hasInitialData,
   disabled,
   onChange,
   onRemove,
   value,
+  folder,
 }) => {
-  const params = useParams();
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  const folder = `${params.vehicleId}`;
-
   const onUpload = async (result: any) => {
     try {
       onChange(result.info.secure_url);
-      if (hasInitialData) {
-        axios.post(
-          `/api/${params.vehicleId}/modifications/${params.modificationId}/file`,
-          { url: result.info.secure_url }
-        );
-      }
     } catch (error) {
       console.error(error);
     }
@@ -52,10 +41,6 @@ const FileUpload: React.FC<ImageUploadProps> = ({
 
   const onDelete = async (url: string) => {
     await removeFilesFromAlbum([url]);
-    axios.delete(
-      `/api/${params.vehicleId}/modifications/${params.modificationId}/file`,
-      { data: { url: url } }
-    );
     onRemove(url);
   };
 
@@ -101,8 +86,15 @@ const FileUpload: React.FC<ImageUploadProps> = ({
                 <CldUploadWidget
                   options={{
                     folder: folder,
-                    tags: ["modification"],
                     multiple: false,
+                    clientAllowedFormats: ["png", "jpeg", "jpg", "gif", "pdf"],
+                    sources: [
+                      "local",
+                      "url",
+                      "camera",
+                      "dropbox",
+                      "google_drive",
+                    ],
                   }}
                   onUpload={onUpload}
                   uploadPreset="k2e4toj9"
@@ -122,7 +114,7 @@ const FileUpload: React.FC<ImageUploadProps> = ({
                           </div>
                         ) : (
                           <div
-                            onClick={() => open && open()}
+                            onClick={() => open()}
                             className="border-dashed border-2 max-w-[100px] h-12 rounded-full hover:bg-muted cursor-pointer flex items-center justify-center"
                           >
                             File 1

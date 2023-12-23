@@ -8,7 +8,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 import { Modification, ModificationType, Files } from "@prisma/client";
-import { removeFilesFromAlbum } from "@/actions/post-file-to-album";
+import { removeFilesFromAlbum } from "@/actions/cloudinary-api";
 
 import toast from "react-hot-toast";
 
@@ -75,8 +75,6 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
 }) => {
   const params = useParams();
   const router = useRouter();
-
-  const hasInitialData = Boolean(initialData);
 
   const [alertOpen, setAlertOpen] = useState(false);
   const [typeOpen, setTypeOpen] = useState(false);
@@ -303,11 +301,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                   <FormDescription>
                     Has this modification been removed from the vehicle?
                   </FormDescription>
-                  <div
-                    className={`inline-flex items-center border transition-colors space-x-3 rounded-md px-4 py-3 ${
-                      field.value ? "border-red-500" : "border-green-500"
-                    }`}
-                  >
+                  <div className="inline-flex items-center border transition-colors space-x-3 rounded-md px-4 py-3">
                     <FormControl>
                       <Switch
                         className="!ml-[-5px]"
@@ -318,7 +312,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                     </FormControl>
                     <div className="text-sm">
                       This mod is
-                      <span>{field.value ? " no longer " : " currently "}</span>
+                      <b>{field.value ? " no longer " : " currently "}</b>
                       in use
                     </div>
                   </div>
@@ -356,7 +350,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                 </FormDescription>
                 <FormControl>
                   <FileUpload
-                    hasInitialData={hasInitialData}
+                    folder={`${params.vehicleId}/modifications`}
                     value={field.value.map((file) => file.url)}
                     disabled={loading}
                     onChange={(url) => {

@@ -14,6 +14,7 @@ export async function removeFilesFromAlbum(fileUrls: string[]) {
     const segments = new URL(url).pathname.split("/");
     const publicId = segments.slice(5, segments.length).join("/");
     // Remove file extension
+    console.log(publicId);
     return publicId.replace(/\.[^/.]+$/, "");
   });
 
