@@ -5,9 +5,10 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { removeFilesFromAlbum } from "@/actions/cloudinary-api";
 
+import { CldImage, CldUploadWidget } from "next-cloudinary";
+
 import { ExternalLink, Trash, Upload } from "lucide-react";
 
-import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { Button } from "@/components/ui/button";
 
 interface ImageUploadProps {

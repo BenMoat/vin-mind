@@ -9,12 +9,18 @@ import { ConfigureModal } from "./components/modals/configure-modal";
 import { InsuranceCard } from "./components/cards/insurance-card";
 import { MileageCard } from "./components/cards/mileage-card";
 import { ModificationsCard } from "./components/cards/modifications-card";
-import PhotoGallery from "./components/photo-gallery";
+import { PhotoGallery } from "./components/photo-gallery";
 import { ServicingCard } from "./components/cards/servicing-card";
 import { TaxAndMOTCards } from "./components/cards/tax-and-mot-cards";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardDescription,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Heading } from "@/components/heading";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -116,6 +122,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
       <Card>
         <CardHeader>
           <CardTitle className="text-xl">Photo Gallery</CardTitle>
+          <CardDescription>
+            Upload up to 5 pictures of your {vehicle.name}.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <PhotoGallery

@@ -21,9 +21,9 @@ export const MileageCard: React.FC<MileaCardProps> = ({ initialData }) => {
   const serviceDate = initialData && new Date(initialData.serviceDate);
 
   return (
-    <Card className="relative px-6 space-y-2 text-center">
-      <CardHeader>
-        <CardTitle>Mileage</CardTitle>
+    <Card className="text-center">
+      <CardHeader className="pb-1">
+        <CardTitle className="pb-1">Mileage</CardTitle>
         <CardDescription className="flex items-center justify-center text-bold text-md">
           {initialData ? (
             <>
@@ -31,21 +31,19 @@ export const MileageCard: React.FC<MileaCardProps> = ({ initialData }) => {
               {formatMileage(initialData.mileage)}
             </>
           ) : (
-            <>
-              <Milestone className="w-8 h-8 mr-2 text-muted-foreground" />
-            </>
+            <Milestone className="w-8 h-8 mr-2 text-muted-foreground" />
           )}
         </CardDescription>
-        <CardContent className="pb-0">
-          {initialData ? (
-            <>Since: {serviceDate?.toLocaleDateString("en-GB")}</>
-          ) : (
-            <span className="text-sm italic">
-              Enter your vehicle's service history to populate this card.
-            </span>
-          )}
-        </CardContent>
       </CardHeader>
+      <CardContent>
+        {initialData ? (
+          <>Since: {serviceDate?.toLocaleDateString("en-GB")}</>
+        ) : (
+          <span className="text-sm italic whitespace-nowrap">
+            Populated by vehicle service history
+          </span>
+        )}
+      </CardContent>
     </Card>
   );
 };

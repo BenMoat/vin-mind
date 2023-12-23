@@ -1,6 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import axios from "axios";
+import { useParams } from "next/navigation";
+import { removeFilesFromAlbum } from "@/actions/cloudinary-api";
+
+import { CldImage, CldUploadWidget } from "next-cloudinary";
+
+import { Trash, Upload } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
@@ -9,18 +18,12 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Button } from "@/components/ui/button";
-import { Trash, Upload } from "lucide-react";
-import { CldUploadWidget } from "next-cloudinary";
-import { removeFilesFromAlbum } from "@/actions/cloudinary-api";
-import { useParams } from "next/navigation";
-import axios from "axios";
 
 interface PhotoGalleryProps {
   initialData: string[];
 }
 
-export default function PhotoGallery({ initialData }: PhotoGalleryProps) {
+export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ initialData }) => {
   const [images, setImages] = useState<string[]>(initialData);
   const params = useParams();
 
@@ -63,15 +66,18 @@ export default function PhotoGallery({ initialData }: PhotoGalleryProps) {
             >
               {url ? (
                 <Card>
-                  <CardContent className="p-4 flex items-center justify-center relative">
+                  <CardContent className="p-4 flex items-center justify-center relative group">
                     <div className="rounded-md">
-                      <img
+                      <CldImage
                         src={url}
                         alt={`Image ${index + 1}`}
-                        className="rounded-md h-72"
+                        width="600"
+                        height="400"
+                        crop="fill"
+                        className="rounded-md"
                       />
                     </div>
-                    <div className="absolute top-4 right-4">
+                    <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                       <Button
                         aria-label="Remove file"
                         type="button"
@@ -123,4 +129,6 @@ export default function PhotoGallery({ initialData }: PhotoGalleryProps) {
       <CarouselNext />
     </Carousel>
   );
-}
+};
+
+export default PhotoGallery;

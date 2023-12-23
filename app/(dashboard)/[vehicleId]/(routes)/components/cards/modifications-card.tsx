@@ -20,9 +20,9 @@ export const ModificationsCard: React.FC<ModificationsCardProps> = ({
   totalModifications,
 }) => {
   return (
-    <Card className="relative px-6 space-y-2 text-center">
-      <CardHeader>
-        <CardTitle>Modifications</CardTitle>
+    <Card className="text-center">
+      <CardHeader className="pb-1">
+        <CardTitle className="pb-1">Modifications</CardTitle>
         <CardDescription className="flex items-center justify-center text-bold text-md">
           {totalPrice ? (
             <>
@@ -30,21 +30,19 @@ export const ModificationsCard: React.FC<ModificationsCardProps> = ({
               {totalModifications}
             </>
           ) : (
-            <>
-              <Wrench className="w-8 h-8 mr-2 text-muted-foreground" />
-            </>
+            <Wrench className="w-8 h-8 mr-2 text-muted-foreground" />
           )}
         </CardDescription>
-        <CardContent className="pb-0">
-          {totalModifications ? (
-            <>Costing: {formatCurrency.format(totalPrice)}</>
-          ) : (
-            <span className="text-sm italic">
-              Enter your vehicle's modifications to populate this card.
-            </span>
-          )}
-        </CardContent>
       </CardHeader>
+      <CardContent>
+        {totalModifications ? (
+          <>Costing: {formatCurrency.format(totalPrice)}</>
+        ) : (
+          <span className="text-sm italic whitespace-nowrap">
+            Populated by vehicle modifications
+          </span>
+        )}
+      </CardContent>
     </Card>
   );
 };

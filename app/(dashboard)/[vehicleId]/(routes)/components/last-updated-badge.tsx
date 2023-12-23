@@ -48,11 +48,11 @@ export const LastUpdatedBadge: React.FC<LastUpdatedBadgeProps> = ({
           <HelpCircle size={18} className="flex justify-center" />
         </Badge>
       </PopoverTrigger>
-      <PopoverContent>
-        <p className="text-center pb-1">
+      <PopoverContent className="p-4">
+        <p className="pb-1">
           Last sync: {date} at{time}
         </p>
-        <p className="text-muted-foreground text-sm pl-5">
+        <p className="text-muted-foreground text-sm">
           {`If your ${getStatusText()} status has recently changed, please allow up to `}
           <b className="text-bold">24 hours</b>
           {` for this to take effect.`}

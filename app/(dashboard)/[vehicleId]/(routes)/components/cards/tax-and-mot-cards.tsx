@@ -119,10 +119,10 @@ export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({ initialData }) => {
         </>
       ) : initialData ? (
         <>
-          <Card className="relative px-6 space-y-2 text-center">
+          <Card className="relative text-center">
             <LastUpdatedBadge tax updatedAt={initialData.updatedAt} />
-            <CardHeader>
-              <CardTitle>Tax</CardTitle>
+            <CardHeader className="pb-1">
+              <CardTitle className="pb-1">Tax</CardTitle>
               <CardDescription>
                 <span className="flex items-center justify-center">
                   {initialData.taxStatus === "Taxed" ? (
@@ -133,19 +133,19 @@ export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({ initialData }) => {
                   {initialData.taxStatus}
                 </span>
               </CardDescription>
-              {initialData.taxDueDate && (
-                <CardContent className="pb-0">
-                  Due:{" "}
-                  {new Date(initialData.taxDueDate).toLocaleDateString("en-GB")}
-                </CardContent>
-              )}
             </CardHeader>
+            {initialData.taxDueDate && (
+              <CardContent>
+                Due:{" "}
+                {new Date(initialData.taxDueDate).toLocaleDateString("en-GB")}
+              </CardContent>
+            )}
           </Card>
 
-          <Card className="relative px-6 space-y-2 text-center">
+          <Card className="relative text-center">
             <LastUpdatedBadge mot updatedAt={initialData.updatedAt} />
-            <CardHeader>
-              <CardTitle>MOT</CardTitle>
+            <CardHeader className="pb-1">
+              <CardTitle className="pb-1">MOT</CardTitle>
               <CardDescription>
                 <span className="flex items-center justify-center">
                   {initialData.motStatus === "Valid" ? (
@@ -158,27 +158,27 @@ export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({ initialData }) => {
                   {initialData.motStatus}
                 </span>
               </CardDescription>
-              {initialData.motExpiryDate && (
-                <CardContent className="pb-0">
-                  Due:{" "}
-                  {new Date(initialData.motExpiryDate).toLocaleDateString(
-                    "en-GB"
-                  )}
-                </CardContent>
-              )}
             </CardHeader>
+            {initialData.motExpiryDate && (
+              <CardContent>
+                Due:{" "}
+                {new Date(initialData.motExpiryDate).toLocaleDateString(
+                  "en-GB"
+                )}
+              </CardContent>
+            )}
           </Card>
         </>
       ) : (
         <>
-          <Card className="relative px-6 space-y-2 text-center">
-            <CardHeader className="pt-7">
-              <CardTitle>Tax</CardTitle>
+          <Card className="relative text-center">
+            <CardHeader className="pb-1">
+              <CardTitle className="pb-1">Tax</CardTitle>
               <CardDescription>
                 <span className="flex items-center justify-center">
                   <Button
                     variant="ghost"
-                    className="rounded-full w-10 p-0 mb-[-5px]"
+                    className="rounded-full w-10 p-0"
                     type="button"
                     onClick={() => setIsOpen(true)}
                   >
@@ -186,17 +186,17 @@ export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({ initialData }) => {
                   </Button>
                 </span>
               </CardDescription>
-              <CardContent className="pb-0">Retrieve Tax status</CardContent>
             </CardHeader>
+            <CardContent>Retrieve Tax status</CardContent>
           </Card>
-          <Card className="relative px-6 space-y-2 text-center">
-            <CardHeader className="pt-7">
-              <CardTitle>MOT</CardTitle>
+          <Card className="relative text-center">
+            <CardHeader className="pb-1">
+              <CardTitle className="pb-1">MOT</CardTitle>
               <CardDescription>
                 <span className="flex items-center justify-center">
                   <Button
                     variant="ghost"
-                    className="rounded-full w-10 p-0 mb-[-5px]"
+                    className="rounded-full w-10 p-0"
                     type="button"
                     onClick={() => setIsOpen(true)}
                   >
@@ -204,8 +204,8 @@ export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({ initialData }) => {
                   </Button>
                 </span>
               </CardDescription>
-              <CardContent className="pb-0">Retrieve MOT status</CardContent>
             </CardHeader>
+            <CardContent>Retrieve MOT status</CardContent>
           </Card>
         </>
       )}
