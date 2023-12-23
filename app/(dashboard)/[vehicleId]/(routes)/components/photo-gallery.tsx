@@ -1,0 +1,113 @@
+"use client";
+
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { Button } from "@/components/ui/button";
+import { Trash, Upload } from "lucide-react";
+import { CldUploadWidget } from "next-cloudinary";
+import { removeFilesFromAlbum } from "@/actions/cloudinary-api";
+import { useParams } from "next/navigation";
+
+export default function PhotoGallery() {
+  const [images, setImages] = useState<string[]>([]);
+  const params = useParams();
+
+  const folder = `${params.vehicleId}/images`;
+
+  const onUpload = async (result: any) => {
+    try {
+      setImages((prevImages) => [...prevImages, result.info.secure_url]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onDelete = async (url: string) => {
+    await removeFilesFromAlbum([url]);
+    setImages((prevImages) => prevImages.filter((image) => image !== url));
+  };
+
+  return (
+    <Carousel
+      opts={{
+        align: "start",
+      }}
+    >
+      <CarouselContent>
+        {Array.from({ length: 5 }).map((_, index) => {
+          const url = images[index];
+          return (
+            <CarouselItem
+              key={index}
+              className="md:basis-1/2 lg:basis-1/2 overflow-hidden"
+            >
+              {url ? (
+                <Card>
+                  <CardContent className="p-4 flex items-center justify-center relative">
+                    <div className="rounded-md">
+                      <img
+                        src={url}
+                        alt={`Image ${index + 1}`}
+                        className="rounded-md h-72"
+                      />
+                    </div>
+                    <div className="absolute top-4 right-4">
+                      <Button
+                        aria-label="Remove file"
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => onDelete(url)}
+                      >
+                        <Trash className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="border rounded-lg h-full w-full flex items-center justify-center">
+                  <CldUploadWidget
+                    options={{
+                      folder: folder,
+                      multiple: false,
+                      clientAllowedFormats: ["png", "jpeg", "jpg"],
+                      sources: [
+                        "local",
+                        "url",
+                        "camera",
+                        "dropbox",
+                        "google_drive",
+                      ],
+                    }}
+                    onUpload={onUpload}
+                    uploadPreset="k2e4toj9"
+                  >
+                    {({ open }) => {
+                      return (
+                        <div className="h-full w-full min-h-[300px] flex items-center justify-center">
+                          <Button variant="outline" onClick={() => open()}>
+                            Upload Image
+                            <Upload className="h-4 w-4 ml-2" />
+                          </Button>
+                        </div>
+                      );
+                    }}
+                  </CldUploadWidget>
+                </div>
+              )}
+            </CarouselItem>
+          );
+        })}
+      </CarouselContent>
+      <CarouselPrevious />
+      <CarouselNext />
+    </Carousel>
+  );
+}

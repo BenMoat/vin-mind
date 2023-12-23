@@ -3,20 +3,16 @@ import prismadb from "@/lib/prismadb";
 
 import { stringify } from "@/lib/utils";
 
-import { getChartData } from "@/actions/get-chart-data";
-
 import { Eye, HelpCircle } from "lucide-react";
 
 import { ConfigureModal } from "./components/modals/configure-modal";
 import { InsuranceCard } from "./components/cards/insurance-card";
-import { Mileage } from "./components/mileage";
 import { MileageCard } from "./components/cards/mileage-card";
 import { ModificationsCard } from "./components/cards/modifications-card";
 import { ServicingCard } from "./components/cards/servicing-card";
 import { TaxAndMOTCards } from "./components/cards/tax-and-mot-cards";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Heading } from "@/components/heading";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -24,7 +20,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
+import PhotoGallery from "./components/photo-gallery";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 interface DashboardPageProps {
   params: { vehicleId: string };
 }
@@ -48,8 +45,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
       },
     },
   });
-
-  const chartData = await getChartData(params.vehicleId);
 
   if (!vehicle) {
     return (
@@ -116,10 +111,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
           <MileageCard initialData={stringify(vehicle.serviceHistory[0])} />
         )}
       </div>
-      <Card className="col-span-4">
-        <CardHeader>Mileage Timeline</CardHeader>
-        <CardContent className="pl-2">
-          <Mileage data={chartData} />
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl">Photo Gallery</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <PhotoGallery />
         </CardContent>
       </Card>
     </div>
