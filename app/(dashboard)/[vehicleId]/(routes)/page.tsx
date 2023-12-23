@@ -3,20 +3,24 @@ import prismadb from "@/lib/prismadb";
 
 import { stringify } from "@/lib/utils";
 
-import { getChartData } from "@/actions/get-chart-data";
-
 import { Eye, HelpCircle } from "lucide-react";
 
 import { ConfigureModal } from "./components/modals/configure-modal";
 import { InsuranceCard } from "./components/cards/insurance-card";
-import { Mileage } from "./components/mileage";
 import { MileageCard } from "./components/cards/mileage-card";
 import { ModificationsCard } from "./components/cards/modifications-card";
+import { PhotoGallery } from "./components/photo-gallery";
 import { ServicingCard } from "./components/cards/servicing-card";
 import { TaxAndMOTCards } from "./components/cards/tax-and-mot-cards";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardDescription,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Heading } from "@/components/heading";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -37,10 +41,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
       id: params.vehicleId,
     },
     include: {
-      modifications: true,
+      dashboardConfigure: true,
+      images: true,
       dvlaData: true,
       insurance: true,
-      dashboardConfigure: true,
+      modifications: true,
       serviceHistory: {
         orderBy: {
           serviceDate: "desc",
@@ -48,8 +53,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
       },
     },
   });
-
-  const chartData = await getChartData(params.vehicleId);
 
   if (!vehicle) {
     return (
@@ -116,10 +119,17 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
           <MileageCard initialData={stringify(vehicle.serviceHistory[0])} />
         )}
       </div>
-      <Card className="col-span-4">
-        <CardHeader>Mileage Timeline</CardHeader>
-        <CardContent className="pl-2">
-          <Mileage data={chartData} />
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl">Photo Gallery</CardTitle>
+          <CardDescription>
+            Upload up to 5 pictures of your {vehicle.name}.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <PhotoGallery
+            initialData={vehicle.images.map((image) => image.url)}
+          />
         </CardContent>
       </Card>
     </div>

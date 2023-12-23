@@ -16,11 +16,12 @@ model Vehicle {
   name               String
   userId             String
   dvlaData           DvlaData?           @relation("VehicleToDvlaData")
+  dashboardConfigure DashboardConfigure? @relation("VehicleToDashboardConfigure")
+  images             DashboardImages[]   @relation("VehicleToDashboardImages")
   insurance          Insurance?          @relation("VehicleToInsurance")
-  serviceHistory     ServiceHistory[]    @relation("VehicleToServiceHistory")
   modifications      Modification[]      @relation("VehicleToModification")
   modificationTypes  ModificationType[]  @relation("VehicleToModificationType")
-  dashboardConfigure DashboardConfigure? @relation("VehicleToDashboardConfigure")
+  serviceHistory     ServiceHistory[]    @relation("VehicleToServiceHistory")
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @updatedAt
 }
@@ -40,6 +41,32 @@ model DvlaData {
   @@index([vehicleId])
 }
 
+model DashboardConfigure {
+  id                 String   @id @default(uuid())
+  vehicleId          String   @unique
+  vehicle            Vehicle  @relation("VehicleToDashboardConfigure", fields: [vehicleId], references: [id], onDelete: Cascade)
+  taxAndMot          Boolean  @default(true)
+  insurance          Boolean  @default(true)
+  totalModifications Boolean  @default(true)
+  mileage            Boolean  @default(true)
+  servicing          Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([vehicleId])
+}
+
+model DashboardImages {
+  id        String   @id @default(uuid())
+  vehicleId String
+  vehicle   Vehicle  @relation("VehicleToDashboardImages", fields: [vehicleId], references: [id], onDelete: Cascade)
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([vehicleId])
+}
+
 model Insurance {
   id        String   @id @default(uuid())
   vehicleId String   @unique
@@ -53,42 +80,25 @@ model Insurance {
   @@index([vehicleId])
 }
 
-model ServiceHistory {
-  id              String    @id @default(uuid())
-  vehicleId       String
-  vehicle         Vehicle   @relation("VehicleToServiceHistory", fields: [vehicleId], references: [id], onDelete: Cascade)
-  provider        String
-  type            String
-  mileage         Int
-  details         String?
-  cost            Decimal
-  serviceDate     DateTime
-  nextServiceDate DateTime?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-
-  @@index([vehicleId])
-}
-
 model Modification {
-  id                 String           @id @default(uuid())
+  id                 String              @id @default(uuid())
   vehicleId          String
-  vehicle            Vehicle          @relation("VehicleToModification", fields: [vehicleId], references: [id], onDelete: Cascade)
+  vehicle            Vehicle             @relation("VehicleToModification", fields: [vehicleId], references: [id], onDelete: Cascade)
   modificationTypeId String
-  modificationType   ModificationType @relation("ModificationTypeToModification", fields: [modificationTypeId], references: [id])
+  modificationType   ModificationType    @relation("ModificationTypeToModification", fields: [modificationTypeId], references: [id])
   name               String
   price              Decimal
-  isObsolete         Boolean          @default(false)
+  isObsolete         Boolean             @default(false)
   notes              String?
-  files              Files[]
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt
+  files              ModificationFiles[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
 
   @@index([vehicleId])
   @@index([modificationTypeId])
 }
 
-model Files {
+model ModificationFiles {
   id             String       @id @default(uuid())
   modificationId String
   modification   Modification @relation(fields: [modificationId], references: [id], onDelete: Cascade)
@@ -111,17 +121,19 @@ model ModificationType {
   @@index([vehicleId])
 }
 
-model DashboardConfigure {
-  id                 String   @id @default(uuid())
-  vehicleId          String   @unique
-  vehicle            Vehicle  @relation("VehicleToDashboardConfigure", fields: [vehicleId], references: [id], onDelete: Cascade)
-  taxAndMot          Boolean  @default(true)
-  insurance          Boolean  @default(true)
-  totalModifications Boolean  @default(true)
-  mileage            Boolean  @default(true)
-  servicing          Boolean  @default(true)
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+model ServiceHistory {
+  id              String    @id @default(uuid())
+  vehicleId       String
+  vehicle         Vehicle   @relation("VehicleToServiceHistory", fields: [vehicleId], references: [id], onDelete: Cascade)
+  provider        String
+  type            String
+  mileage         Int
+  details         String?
+  cost            Decimal
+  serviceDate     DateTime
+  nextServiceDate DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   @@index([vehicleId])
 }

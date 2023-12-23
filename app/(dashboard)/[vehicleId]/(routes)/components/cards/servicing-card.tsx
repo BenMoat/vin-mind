@@ -26,39 +26,55 @@ export const ServicingCard: React.FC<ServiceHistoryCardProps> = ({
   const router = useRouter();
 
   return (
-    <Card className="relative px-6 space-y-2 text-center">
+    <Card className="text-center">
       {initialData ? (
-        <CardHeader>
-          <CardTitle>Servicing</CardTitle>
-          <CardDescription className="flex items-center justify-center">
-            {initialData.nextServiceDate &&
-            new Date(initialData.serviceDate) <
-              new Date(initialData.nextServiceDate) ? (
-              <>
-                <CheckCircle className="w-8 h-8 mr-2 text-green" />
-                Serviced
-              </>
-            ) : initialData.nextServiceDate === null ? (
-              <>
-                <AlertCircle className="w-8 h-8 mr-2" />
-                No next service date
-              </>
-            ) : (
-              <>
-                <XCircle className="w-8 h-8 mr-2 text-destructive" />
-                Service Overdue
-              </>
-            )}
-          </CardDescription>
+        <>
+          <CardHeader className="pb-1">
+            <CardTitle className="pb-1">Servicing</CardTitle>
+            <CardDescription className="flex items-center justify-center">
+              {initialData.nextServiceDate &&
+              new Date(initialData.serviceDate) <
+                new Date(initialData.nextServiceDate) ? (
+                <>
+                  <CheckCircle className="w-8 h-8 mr-2 text-green" />
+                  Serviced
+                </>
+              ) : initialData.nextServiceDate === null ? (
+                <>
+                  <AlertCircle className="w-8 h-8 mr-2" />
+                  No next service date
+                </>
+              ) : new Date(initialData.serviceDate) >
+                new Date(initialData.nextServiceDate) ? (
+                <>
+                  <XCircle className="w-8 h-8 mr-2 text-destructive" />
+                  Service Overdue
+                </>
+              ) : (
+                <span className="flex items-center justify-center">
+                  <Button
+                    variant="ghost"
+                    className="rounded-full w-10 p-0 mb-[-5px]"
+                    type="button"
+                    onClick={() => {
+                      router.push(`/${params.vehicleId}/servicing/new`);
+                    }}
+                  >
+                    <PlusCircle className="h-8 w-8" />
+                  </Button>
+                </span>
+              )}
+            </CardDescription>
+          </CardHeader>
           {initialData.nextServiceDate ? (
-            <CardContent className="pb-0">
+            <CardContent>
               Due:{" "}
               {new Date(initialData.nextServiceDate).toLocaleDateString(
                 "en-GB"
               )}
             </CardContent>
           ) : (
-            <CardContent className="pb-0 inline-flex justify-center">
+            <CardContent>
               <span className="whitespace-nowrap mr-2">Due: Not Set</span>
               <Button
                 variant="outline"
@@ -74,10 +90,10 @@ export const ServicingCard: React.FC<ServiceHistoryCardProps> = ({
               </Button>
             </CardContent>
           )}
-        </CardHeader>
+        </>
       ) : (
-        <CardHeader className="pt-7">
-          <CardTitle>Servicing</CardTitle>
+        <CardHeader className="pb-1">
+          <CardTitle className="pb-1">Servicing</CardTitle>
           <CardDescription>
             <span className="flex items-center justify-center">
               <Button
@@ -92,7 +108,7 @@ export const ServicingCard: React.FC<ServiceHistoryCardProps> = ({
               </Button>
             </span>
           </CardDescription>
-          <CardContent className="pb-0">Add a servicing</CardContent>
+          <CardContent>Add a servicing</CardContent>
         </CardHeader>
       )}
     </Card>

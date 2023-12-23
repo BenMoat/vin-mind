@@ -113,12 +113,12 @@ export const InsuranceCard: React.FC<InsuranceCardProps> = ({
       ) : loading ? (
         <CardSkeleton />
       ) : (
-        <Card className="relative px-6 space-y-2 text-center">
+        <Card className="relative text-center">
           {initialData ? (
             <>
               <LastUpdatedBadge insurance updatedAt={initialData.updatedAt} />
-              <CardHeader>
-                <CardTitle>Insurance</CardTitle>
+              <CardHeader className="pb-1">
+                <CardTitle className="pb-1">Insurance</CardTitle>
                 <CardDescription>
                   {initialData.isInsured ? (
                     <span className="flex items-center justify-center">
@@ -132,42 +132,44 @@ export const InsuranceCard: React.FC<InsuranceCardProps> = ({
                     </span>
                   )}
                 </CardDescription>
-                <CardContent className="pb-0 inline-flex justify-center">
-                  <span className="whitespace-nowrap mr-2">
-                    Due: {initialData.endDate.toLocaleDateString()}
-                  </span>
-                  <Button
-                    variant="outline"
-                    className="h-6"
-                    type="button"
-                    onClick={() => {
-                      setIsOpen(true);
-                    }}
-                  >
-                    Edit
-                  </Button>
-                </CardContent>
               </CardHeader>
+              <CardContent>
+                <span className="whitespace-nowrap mr-2">
+                  Due: {initialData.endDate.toLocaleDateString()}
+                </span>
+                <Button
+                  variant="outline"
+                  className="h-6"
+                  type="button"
+                  onClick={() => {
+                    setIsOpen(true);
+                  }}
+                >
+                  Edit
+                </Button>
+              </CardContent>
             </>
           ) : (
-            <CardHeader className="pt-7">
-              <CardTitle>Insurance</CardTitle>
-              <CardDescription>
-                <span className="flex items-center justify-center">
-                  <Button
-                    variant="ghost"
-                    className="rounded-full w-10 p-0 mb-[-5px]"
-                    type="button"
-                    onClick={() => {
-                      setIsOpen(true);
-                    }}
-                  >
-                    <PlusCircle className="h-8 w-8" />
-                  </Button>
-                </span>
-              </CardDescription>
-              <CardContent className="pb-0">Add a renewal reminder</CardContent>
-            </CardHeader>
+            <>
+              <CardHeader className="pb-1">
+                <CardTitle className="pb-1">Insurance</CardTitle>
+                <CardDescription>
+                  <span className="flex items-center justify-center">
+                    <Button
+                      variant="ghost"
+                      className="rounded-full w-10 p-0"
+                      type="button"
+                      onClick={() => {
+                        setIsOpen(true);
+                      }}
+                    >
+                      <PlusCircle className="h-8 w-8" />
+                    </Button>
+                  </span>
+                </CardDescription>
+              </CardHeader>
+              <CardContent>Add a renewal reminder</CardContent>
+            </>
           )}
         </Card>
       )}

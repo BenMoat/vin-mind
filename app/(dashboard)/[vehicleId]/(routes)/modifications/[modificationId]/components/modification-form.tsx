@@ -7,7 +7,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
-import { Modification, ModificationType, Files } from "@prisma/client";
+import {
+  Modification,
+  ModificationType,
+  ModificationFiles,
+} from "@prisma/client";
 import { removeFilesFromAlbum } from "@/actions/cloudinary-api";
 
 import toast from "react-hot-toast";
@@ -47,7 +51,7 @@ import {
 interface ModificationFormProps {
   initialData:
     | (Modification & {
-        files: Files[];
+        files: ModificationFiles[];
       })
     | null;
   modificationTypes: ModificationType[];
