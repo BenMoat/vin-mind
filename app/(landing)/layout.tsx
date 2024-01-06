@@ -11,7 +11,7 @@ export default async function SetupLayout({
   const { userId } = auth();
 
   if (!userId) {
-    redirect("/sign-in");
+    return <>{children}</>;
   }
 
   //Sort vehicles by name and redirect to the first one
