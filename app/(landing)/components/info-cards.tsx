@@ -1,6 +1,4 @@
-import React from "react";
-
-import { MenuSquare, Warehouse, Wrench } from "lucide-react";
+import { CheckCircle, Warehouse, Wrench } from "lucide-react";
 
 export default function InfoCards() {
   return (
@@ -18,7 +16,7 @@ export default function InfoCards() {
         </div>
         <div className="flex flex-col items-center space-y-2 p-6 border rounded-lg">
           <div>
-            <MenuSquare className="h-6 w-6 mb-2 " />
+            <CheckCircle className="h-6 w-6 mb-2 " />
           </div>
           <h2 className="text-xl font-bold">Vehicle Status</h2>
           <p>
