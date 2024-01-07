@@ -1,15 +1,6 @@
 import React from "react";
 
-import {
-  CarIcon,
-  Info,
-  LucideProps,
-  MenuSquare,
-  MergeIcon,
-  RectangleHorizontal,
-  SettingsIcon,
-  Warehouse,
-} from "lucide-react";
+import { MenuSquare, Warehouse, Wrench } from "lucide-react";
 
 export default function InfoCards() {
   return (
@@ -29,21 +20,20 @@ export default function InfoCards() {
           <div>
             <MenuSquare className="h-6 w-6 mb-2 " />
           </div>
-          <h2 className="text-xl font-bold">Info Cards</h2>
+          <h2 className="text-xl font-bold">Vehicle Status</h2>
           <p>
-            View your tax, MOT, and insurance status at a glance, all from the
-            Overview tab.
+            View your tax, MOT, and insurance status from simply inputting your
+            registration number.
           </p>
         </div>
-
         <div className="flex flex-col items-center space-y-2 p-6 border rounded-lg">
           <div>
-            <RectangleHorizontal className="h-6 w-6 mb-2" />
+            <Wrench className="h-6 w-6 mb-2 " />
           </div>
-          <h2 className="text-xl ">Advanced Customization</h2>
+          <h2 className="text-xl font-bold">Modification Tracker</h2>
           <p>
-            With Advanced Customization, you can personalize your email client
-            to suit your preferences and work style.
+            Track and categorise modifications made to your vehicle. Upload
+            invoices, receipts or instructions of each modification.
           </p>
         </div>
       </div>
