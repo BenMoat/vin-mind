@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import InfoCards from "./components/info-cards";
 import ImageShowcase from "./components/image-showcase";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function LandingPage() {
   return (
@@ -34,13 +35,14 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-      <div className="bg-gradient-to-t from-gray-900 to-black min-h-[180px] flex items-center justify-center">
+      <div className="bg-gradient-to-b from-white to-gray-300 dark:from-black dark:to-gray-900 min-h-[180px] flex items-center justify-center">
         <h2 className="text-4xl font-bold text-center">Features</h2>
+        <ThemeToggle />
       </div>
       <section>
         <ImageShowcase />
       </section>
-      <div className="bg-gradient-to-b from-gray-900 to-black min-h-[220px] mt-[-40px]"></div>
+      <div className="bg-gradient-to-b from-gray-300 to-white dark:from-gray-900 dark:to-black min-h-[220px] mt-[-40px]"></div>
     </>
   );
 }
