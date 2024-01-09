@@ -3,34 +3,45 @@ import Image from "next/image";
 export default function ImageShowcase() {
   const images = [
     {
-      src: "/dashboard-light-dark.png",
+      src: "/dashboard.png",
       description: [
-        "Your dashboard provides an overview of your vehicle through six configurable info cards.",
-        "Tax and MOT: Populated from your registration number. These details are automatically updated once every 24 hours. Click on the question mark icon to see when it was last updated.",
-        "Insurance: A simple popup requiring your insurance start and end date.",
-        "Servicing: Determined by your next service due date.",
-        "Modifications: The total cost of all your modifications.",
-        "Mileage: Calculated by the current mileage of your last service.",
+        <>
+          <b>Tax and MOT:</b> Populated from your registration number. These
+          details are automatically updated once every 24 hours.
+        </>,
+        <>
+          <b>Insurance:</b> A simple popup requiring your insurance start and
+          end date.
+        </>,
+        <>
+          <b>Servicing:</b> A simple popup requiring your next service due date.
+        </>,
+        <>
+          <b>Modifications:</b> The total cost of all your modifications.
+        </>,
+        <>
+          <b>Mileage:</b> Calculated by the current mileage of your last
+          service.
+        </>,
       ],
     },
     {
-      src: "/modifications-dark.png",
+      src: "/modifications.png",
       description: [
-        "VinMind has a dedicated section for modifications.",
         "Add a modification and upload up to three files associated with it.",
         "Each modification requires a modification type, allowing you to easily categorise them.",
         "Modification types can be renamed at any time. Safety features are built in so only empty modification types can be deleted.",
       ],
     },
     {
-      src: "/servicing-dark.png",
+      src: "/servicing.png",
       description: [
         "Record your vehicle's service history.",
         "When more than one servicing has been added, VinMind will automatically show the mileage and duration of time between each service.",
       ],
     },
     {
-      src: "/modifications-dark.png",
+      src: "/settings.png",
       description: [
         "Rename your vehicle or change it's registration number.",
         "Delete your vehicle at any time or it's associated data.",
@@ -41,7 +52,7 @@ export default function ImageShowcase() {
   return (
     <>
       {images.map((image, index) => (
-        <div key={index} className="w-full px-10 bg-gray-900">
+        <div key={index} className="w-full bg-gray-900">
           <div
             className={`flex flex-wrap ${
               index % 2 === 0 && "flex-row-reverse"
@@ -61,7 +72,6 @@ export default function ImageShowcase() {
                   layout="responsive"
                   width={400}
                   height={400}
-                  objectFit="fill"
                   alt={`Image ${index + 1}`}
                   className="rounded-lg shadow-lg shadow-black"
                 />
