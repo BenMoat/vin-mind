@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
 import prismadb from "@/lib/prismadb";
+import Footer from "@/components/footer";
 
 export default async function SetupLayout({
   children,

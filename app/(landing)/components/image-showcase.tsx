@@ -1,16 +1,9 @@
-import { useTheme } from "next-themes";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 
 export default function ImageShowcase() {
-  const { resolvedTheme } = useTheme();
-
   const images = [
     {
-      src:
-        resolvedTheme === "light"
-          ? "/dashboard-light.png"
-          : "/dashboard-dark.png",
+      src: "/dashboard-light-dark.png",
       description: [
         "Your dashboard provides an overview of your vehicle through six configurable info cards.",
         "Tax and MOT: Populated from your registration number. These details are automatically updated once every 24 hours. Click on the question mark icon to see when it was last updated.",
@@ -21,10 +14,7 @@ export default function ImageShowcase() {
       ],
     },
     {
-      src:
-        resolvedTheme === "light"
-          ? "/modifications-light.png"
-          : "/modifications-dark.png",
+      src: "/modifications-dark.png",
       description: [
         "VinMind has a dedicated section for modifications.",
         "Add a modification and upload up to three files associated with it.",
@@ -33,20 +23,14 @@ export default function ImageShowcase() {
       ],
     },
     {
-      src:
-        resolvedTheme === "light"
-          ? "/servicing-light.png"
-          : "/servicing-dark.png",
+      src: "/servicing-dark.png",
       description: [
         "Record your vehicle's service history.",
         "When more than one servicing has been added, VinMind will automatically show the mileage and duration of time between each service.",
       ],
     },
     {
-      src:
-        resolvedTheme === "light"
-          ? "/settings-light.png"
-          : "/modifications-dark.png",
+      src: "/modifications-dark.png",
       description: [
         "Rename your vehicle or change it's registration number.",
         "Delete your vehicle at any time or it's associated data.",
@@ -57,7 +41,7 @@ export default function ImageShowcase() {
   return (
     <>
       {images.map((image, index) => (
-        <div key={index} className="w-full px-10 bg-gray-300 dark:bg-gray-900">
+        <div key={index} className="w-full px-10 bg-gray-900">
           <div
             className={`flex flex-wrap ${
               index % 2 === 0 && "flex-row-reverse"
@@ -65,7 +49,7 @@ export default function ImageShowcase() {
           >
             <div className="w-full md:w-1/2 flex flex-col justify-center items-start sm:px-10 pb-2">
               {image.description.map((paragraph, i) => (
-                <p key={i} className="text-lg mb-2 text-black dark:text-white">
+                <p key={i} className="text-lg mb-2 text-white">
                   {paragraph}
                 </p>
               ))}
@@ -79,7 +63,7 @@ export default function ImageShowcase() {
                   height={400}
                   objectFit="fill"
                   alt={`Image ${index + 1}`}
-                  className="rounded-lg shadow-lg shadow-gray-600 dark:shadow-black"
+                  className="rounded-lg shadow-lg shadow-black"
                 />
               </div>
             </div>
