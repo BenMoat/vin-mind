@@ -51,7 +51,7 @@ export default function LandingPage() {
         </div>
       </section>
       <div
-        className="bg-gradient-to-b from-black to-gray-900 min-h-[180px] flex items-center justify-center"
+        className="bg-gradient-to-b from-[#060609] to-gray-900 min-h-[180px] flex items-center justify-center"
         ref={featuresRef}
       >
         <h2 className="text-4xl font-bold text-center text-white">Features</h2>
@@ -59,7 +59,7 @@ export default function LandingPage() {
       <section>
         <ImageShowcase />
       </section>
-      <div className="bg-gradient-to-b from-gray-900 to-black min-h-[220px] mt-[-100px]"></div>
+      <div className="bg-gradient-to-b from-gray-900 to-[#060609] min-h-[220px] mt-[-100px]"></div>
       <Footer className="bg-[#060609] border-[#060609]" />
     </>
   );
