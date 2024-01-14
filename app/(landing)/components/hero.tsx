@@ -7,7 +7,7 @@ import { ChevronDown } from "lucide-react";
 export default function Hero() {
   return (
     <section className="w-full sm:min-h-screen flex flex-col justify-center ">
-      <div className="container flex flex-col min-h-screen justify-center text-center text-white">
+      <div className="flex flex-col min-h-screen justify-center text-center text-white">
         <h1 className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-white via-slate-500 to-blue-700 bg-clip-text text-transparent">
           VinMind
         </h1>

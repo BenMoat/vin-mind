@@ -2,7 +2,7 @@ import { Copyright, GithubIcon } from "lucide-react";
 
 export default function Footer({ className, ...props }: any) {
   return (
-    <footer className={`mt-auto ${className}`}>
+    <footer className={`mt-auto px-2 ${className}`}>
       <div
         className={`flex items-center justify-center border-t h-16 text-xs sm:text-sm font-medium text-muted-foreground flex-wrap ${className}`}
       >
