@@ -1,10 +1,6 @@
 import { Copyright, GithubIcon } from "lucide-react";
 
-interface FooterProps {
-  className?: string;
-}
-
-export default function Footer({ className }: FooterProps) {
+export default function Footer({ className, ...props }: any) {
   return (
     <footer className={`mt-auto ${className}`}>
       <div
