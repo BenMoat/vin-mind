@@ -24,7 +24,11 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en" suppressHydrationWarning={true}>
+      <html
+        lang="en"
+        className="!scroll-smooth"
+        suppressHydrationWarning={true}
+      >
         <body className={`${inter.className} flex flex-col min-h-screen`}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <ToastProvider />
