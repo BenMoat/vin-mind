@@ -10,7 +10,7 @@ import { sectionRoutes } from "@/lib/constants";
 
 export const LandingNavbar = () => {
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0 });
   };
 
   return (
