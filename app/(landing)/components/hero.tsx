@@ -15,8 +15,8 @@ export default function Hero() {
       id="home"
       className="w-full sm:min-h-screen flex flex-col justify-center "
     >
-      <div className="flex flex-col min-h-screen justify-center text-center">
-        <div className="inline-flex justify-center">
+      <div className="flex flex-col min-h-screen justify-center text-center pb-20 sm:pb-0">
+        <div className="inline-flex justify-center pt-20 md:pt-0">
           <h1 className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-white via-slate-500 to-blue-600 bg-clip-text text-transparent">
             VinMind
           </h1>
@@ -35,7 +35,7 @@ export default function Hero() {
         <div>
           <InfoCards />
         </div>
-        <div className="text-center mt-8">
+        <div className="hidden sm:block text-center mt-8">
           <Button
             size="lg"
             className="rounded-full"
