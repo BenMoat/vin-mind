@@ -2,10 +2,6 @@
 
 import { useState } from "react";
 
-import { Vehicle } from "@prisma/client";
-import { useParams, useRouter } from "next/navigation";
-import { useStoreModal } from "@/hooks/use-store-modal";
-
 import { Button } from "@/components/ui/button";
 import { CarFront, ChevronDown, PlusCircle } from "lucide-react";
 import {
@@ -15,27 +11,50 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
-export interface VehicleSwitcherProps {
-  items: Vehicle[];
-  className?: string;
-  onClick?: () => void;
-}
+type MockVehicle = {
+  id: string;
+  name: string;
+  userId: string;
+};
 
-export default function VehicleSwitcher({
-  items = [],
-  className,
-  ...props
-}: VehicleSwitcherProps) {
-  const { onOpen: openVehicleModal } = useStoreModal();
-  const params = useParams();
-  const { push } = useRouter();
+const mockData = [
+  {
+    id: "1",
+    name: "A90 Toyota Supra",
+    userId: "Benjie",
+  },
+  {
+    id: "2",
+    name: "McLaren F1",
+    userId: "Future Benjie",
+  },
+  {
+    id: "3",
+    name: "Mercedes AMG GT Black Series",
+    userId: "Slightly more realistic Future Benjie",
+  },
+];
 
+export default function MockVehicleSwitcher() {
   const [open, setOpen] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [currentVehicle, setCurrentVehicle] = useState<MockVehicle>(
+    mockData[1]
+  );
 
-  const currentVehicle = items.find((item) => item.id === params.vehicleId);
+  const { push } = useRouter();
+
+  const handleSelect = (vehicle: MockVehicle) => {
+    setCurrentVehicle(vehicle);
+    setOpen(false);
+    setHoveredItem(null);
+  };
+
+  const signUp = () => {
+    push("/sign-up");
+  };
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -45,11 +64,13 @@ export default function VehicleSwitcher({
           size="sm"
           aria-haspopup="true"
           aria-expanded={open}
-          className={cn("flex w-[200px] justify-between", className)}
+          className="flex w-[200px] justify-between"
         >
-          <CarFront className="mr-2 h-4 w-4" aria-hidden="true" />
+          <CarFront className="mr-2 h-4 w-4 shrink-0" aria-hidden="true" />
           <span id="vehicleButtonLabel" className="truncate">
-            <span className="truncate">{currentVehicle?.name}</span>
+            <span className="truncate" title={currentVehicle.name}>
+              {currentVehicle.name}
+            </span>
           </span>
           <ChevronDown
             className={`ml-auto h-4 w-4 shrink-0 opacity-50 transition-transform duration-300 ${
@@ -61,18 +82,15 @@ export default function VehicleSwitcher({
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[200px] p-0" align="end">
         <DropdownMenuLabel>Garage</DropdownMenuLabel>
-        {items
+        {mockData
           .sort((a, b) => a.name.localeCompare(b.name))
           .map((vehicle) => (
             <DropdownMenuCheckboxItem
               key={vehicle.id}
-              checked={vehicle.id === params.vehicleId}
-              onSelect={() => {
-                setOpen(false);
-                push(`/${vehicle.id}`);
-              }}
+              checked={vehicle.id === currentVehicle.id}
+              onSelect={() => handleSelect(vehicle)}
               className={`text-sm truncate w-full ${
-                vehicle.id === params.vehicleId && !hoveredItem && "bg-accent"
+                vehicle.id === currentVehicle.id && !hoveredItem && "bg-accent"
               }`}
               onMouseEnter={() => setHoveredItem(vehicle.id)}
               onMouseLeave={() => setHoveredItem(null)}
@@ -81,7 +99,7 @@ export default function VehicleSwitcher({
               <span
                 title={vehicle.name}
                 className={`truncate ${
-                  vehicle.id === currentVehicle?.id && "mr-5"
+                  vehicle.id === currentVehicle.id && "mr-5"
                 }`}
               >
                 {vehicle.name}
@@ -90,7 +108,7 @@ export default function VehicleSwitcher({
           ))}
         <DropdownMenuCheckboxItem
           className="border-t"
-          onSelect={openVehicleModal}
+          onSelect={signUp}
           onMouseEnter={() => setHoveredItem("addVehicle")}
           onMouseLeave={() => setHoveredItem(null)}
         >

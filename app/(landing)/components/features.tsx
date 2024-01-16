@@ -57,7 +57,9 @@ const Section = ({
       </h2>
       <div className="relative">
         <div className="sm:inline-flex items-center border backdrop-blur rounded-lg sm:px-4 w-full sm:w-auto sm:h-12 absolute z-10 top-[-24px] left-1/2 transform -translate-x-1/2">
-          <p className="sm:text-lg text-center px-2">{description}</p>
+          <p className="text-sm sm:text-md text-center py-2 sm:py-0">
+            {description}
+          </p>
         </div>
         <div className="relative flex justify-center">
           <div className="border rounded-lg p-4 sm:w-3/4 flex justify-center items-center">

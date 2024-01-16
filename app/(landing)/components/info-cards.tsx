@@ -1,18 +1,19 @@
 import { motion } from "framer-motion";
 import { CheckCircle, Warehouse, Wrench } from "lucide-react";
+import MockVehicleSwitcher from "./mock-vehicle-switcher";
 
 const cards = [
-  {
-    Icon: Warehouse,
-    title: "Your Garage",
-    description:
-      "Manage and keep track of multiple vehicles easily and efficiently, all in one place.",
-  },
   {
     Icon: CheckCircle,
     title: "Vehicle Status",
     description:
       "View your tax, MOT, and insurance status from simply inputting your registration number.",
+  },
+  {
+    Icon: Warehouse,
+    title: "Your Garage",
+    description:
+      "Manage and keep track of multiple vehicles easily and efficiently, all in one place.",
   },
   {
     Icon: Wrench,
@@ -56,6 +57,7 @@ export default function InfoCards() {
             <Icon className="h-6 w-6 mb-2" />
             <h2 className="text-xl font-bold">{title}</h2>
             <p>{description}</p>
+            {title === "Your Garage" && <MockVehicleSwitcher />}
           </motion.div>
         ))}
       </motion.div>
