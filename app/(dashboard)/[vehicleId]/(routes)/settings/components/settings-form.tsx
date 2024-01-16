@@ -204,20 +204,22 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
             <p className="flex justify-center text-xl">Modifications</p>
             <div className="grid grid-cols-1 gap-2 mt-2 sm:grid-cols-2">
               <Card>
-                <CardContent>
-                  <p className="mt-5 mb-2">
-                    Delete All{" "}
-                    {noOfModifications > 0 ? noOfModifications : null}{" "}
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    Delete All {noOfModifications > 0 && noOfModifications}{" "}
                     Modifications
-                  </p>
-                  <CardDescription className="mb-2">
+                  </CardTitle>
+                  <CardDescription>
                     You will still keep all of your modification types, but all
                     modifications including their associated files will be
                     deleted.
                   </CardDescription>
-                  <div className="!pl-0 pt-5">
+                </CardHeader>
+                <CardContent className="flex flex-col justify-between h-full">
+                  <div>
                     <Button
                       type="button"
+                      className="flex"
                       disabled={loading || noOfModifications === 0}
                       variant="destructive"
                       onClick={() => {
@@ -230,17 +232,19 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                 </CardContent>
               </Card>
               <Card>
-                <CardContent>
-                  <p className="mt-5 mb-2">
+                <CardHeader>
+                  <CardTitle className="text-lg">
                     Delete All{" "}
-                    {noOfModificationTypes > 0 ? noOfModificationTypes : null}{" "}
+                    {noOfModificationTypes > 0 && noOfModificationTypes}{" "}
                     Modification Types
-                  </p>
-                  <CardDescription className="mb-2">
+                  </CardTitle>
+                  <CardDescription>
                     If your vehicle has no modifications, you can delete all
                     modification types.
                   </CardDescription>
-                  <div className="!pl-0 pt-5">
+                </CardHeader>
+                <CardContent className="flex flex-col justify-between h-full">
+                  <div className="pt-5">
                     <Button
                       type="button"
                       disabled={
@@ -261,11 +265,15 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
             </div>
             <p className="flex justify-center text-xl mt-6 mb-2">Servicing</p>
             <Card>
-              <CardContent>
-                <p className="mt-5 mb-2">Delete Service History</p>
-                <CardDescription className="mb-2">
+              <CardHeader>
+                <CardTitle className="text-lg">
+                  Delete Service History
+                </CardTitle>
+                <CardDescription>
                   You can delete your vehicle's service history at any time.
                 </CardDescription>
+              </CardHeader>
+              <CardContent>
                 <Button
                   type="button"
                   disabled={loading || noOfServices === 0}
@@ -280,14 +288,16 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
             </Card>
             <p className="flex justify-center text-xl mt-6 mb-2">Vehicle </p>
             <Card>
-              <CardContent>
-                <p className="mt-5 mb-2">
-                  Delete "<b>{initialData.name}</b>"
-                </p>
-                <CardDescription className="mb-2">
+              <CardHeader>
+                <CardTitle className="text-lg">
+                  Delete "{initialData.name}"
+                </CardTitle>
+                <CardDescription>
                   You can delete your vehicle and all of it's associated data at
                   any time.
                 </CardDescription>
+              </CardHeader>
+              <CardContent>
                 <Button
                   type="button"
                   disabled={loading}

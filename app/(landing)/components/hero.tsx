@@ -1,8 +1,9 @@
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import React from "react";
-import InfoCards from "./info-cards";
+
 import { ChevronDown } from "lucide-react";
+
+import InfoCards from "./info-cards";
+import { Button } from "@/components/ui/button";
 
 export default function Hero() {
   const scrollToNextSection = () => {

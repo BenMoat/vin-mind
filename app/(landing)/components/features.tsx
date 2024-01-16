@@ -59,8 +59,8 @@ export default function Features() {
   const descriptions = [
     "An overview of your vehicle with six configurable info cards",
     "Add, filter and categorise your modifications",
-    "Input the vehicle's service history for a full chronology",
-    "Delete your vehicle entirely, or any of it's data",
+    "Input the vehicle's service history for a full service chronology",
+    "Rename or delete your vehicle and any of it's associated data",
   ];
 
   return (

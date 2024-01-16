@@ -1,12 +1,13 @@
 "use client";
 
-import { Gauge } from "lucide-react";
-import Scrollspy from "react-scrollspy";
-
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { LandingNavbarMobile } from "./landing-navbar-mobile";
+import Scrollspy from "react-scrollspy";
 import { sectionRoutes } from "@/lib/constants";
+
+import { Gauge } from "lucide-react";
+
+import { LandingNavbarMobile } from "./landing-navbar-mobile";
+import { Button } from "@/components/ui/button";
 
 export const LandingNavbar = () => {
   const scrollToTop = () => {

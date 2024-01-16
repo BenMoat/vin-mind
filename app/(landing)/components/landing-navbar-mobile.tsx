@@ -2,9 +2,13 @@
 
 import { useState } from "react";
 
+import Link from "next/link";
+import Scrollspy from "react-scrollspy";
+import { sectionRoutes } from "@/lib/constants";
+
+import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
-import VehicleSwitcher from "@/components/vehicle-switcher";
-import { VehicleMenu } from "@/components/vehicle-menu";
+import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
   SheetContent,
@@ -12,11 +16,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import Scrollspy from "react-scrollspy";
-import Link from "next/link";
-import { sectionRoutes } from "@/lib/constants";
 
 export const LandingNavbarMobile = () => {
   const [isOpen, setIsOpen] = useState(false);
