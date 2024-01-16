@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { CheckCircle, Warehouse, Wrench } from "lucide-react";
 
 const cards = [
@@ -21,21 +22,43 @@ const cards = [
   },
 ];
 
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.5,
+    },
+  },
+};
+
+const item = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1 },
+};
+
 export default function InfoCards() {
   return (
     <div className="w-full max-w-full space-y-4 pt-8 mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-white">
+      <motion.div
+        className="grid grid-cols-1 md:grid-cols-3 gap-8 text-white"
+        variants={container}
+        initial="hidden"
+        animate="show"
+      >
         {cards.map(({ Icon, title, description }) => (
-          <div
+          <motion.div
             key={title}
             className="flex flex-col items-center space-y-2 p-6 border rounded-lg"
+            variants={item}
           >
             <Icon className="h-6 w-6 mb-2" />
             <h2 className="text-xl font-bold">{title}</h2>
             <p>{description}</p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }

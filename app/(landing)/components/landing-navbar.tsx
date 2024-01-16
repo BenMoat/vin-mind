@@ -8,6 +8,7 @@ import { Gauge } from "lucide-react";
 
 import { LandingNavbarMobile } from "./landing-navbar-mobile";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 
 export const LandingNavbar = () => {
   const scrollToTop = () => {
@@ -15,7 +16,16 @@ export const LandingNavbar = () => {
   };
 
   return (
-    <nav className="fixed z-[99999999] w-full border-b bg-[#060609]">
+    <motion.nav
+      className="fixed z-[99999999] w-full border-b bg-[#060609]"
+      initial={{ y: "-100%" }}
+      animate={{
+        y: "0%",
+        transition: {
+          duration: 0.2,
+        },
+      }}
+    >
       <div className="flex items-center justify-between h-16 cursor-default px-4">
         <LandingNavbarMobile />
         <div className="flex items-center justify-end sm:justify-between flex-grow">
@@ -52,6 +62,6 @@ export const LandingNavbar = () => {
           </div>
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 };
