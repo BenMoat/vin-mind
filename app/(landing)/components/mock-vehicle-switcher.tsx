@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { CarFront, ChevronDown, PlusCircle } from "lucide-react";
@@ -57,7 +57,7 @@ export default function MockVehicleSwitcher() {
   };
 
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
+    <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
@@ -80,7 +80,7 @@ export default function MockVehicleSwitcher() {
           />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[200px] p-0" align="end">
+      <DropdownMenuContent className="w-[200px] p-0">
         <DropdownMenuLabel>Garage</DropdownMenuLabel>
         {mockData
           .sort((a, b) => a.name.localeCompare(b.name))

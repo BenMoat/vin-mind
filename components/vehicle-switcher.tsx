@@ -38,7 +38,7 @@ export default function VehicleSwitcher({
   const currentVehicle = items.find((item) => item.id === params.vehicleId);
 
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
+    <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"

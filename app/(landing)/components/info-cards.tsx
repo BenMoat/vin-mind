@@ -23,28 +23,21 @@ const cards = [
   },
 ];
 
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.5,
-    },
-  },
-};
-
-const item = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1 },
-};
-
 export default function InfoCards() {
   return (
     <div className="w-full max-w-full space-y-4 pt-8 mx-auto">
       <motion.div
         className="grid grid-cols-1 md:grid-cols-3 gap-8 text-white"
-        variants={container}
+        variants={{
+          hidden: { opacity: 0 },
+          show: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.1,
+              delayChildren: 0.5,
+            },
+          },
+        }}
         initial="hidden"
         animate="show"
       >
@@ -52,7 +45,10 @@ export default function InfoCards() {
           <motion.div
             key={title}
             className="flex flex-col items-center space-y-2 p-6 border rounded-lg"
-            variants={item}
+            variants={{
+              hidden: { opacity: 0 },
+              show: { opacity: 1 },
+            }}
           >
             <Icon className="h-6 w-6 mb-2" />
             <h2 className="text-xl font-bold">{title}</h2>

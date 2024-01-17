@@ -29,6 +29,7 @@ export function ThemeToggle() {
         setIsHovering(false);
         setOpen(e);
       }}
+      modal={false}
     >
       <DropdownMenuTrigger asChild>
         <Button
