@@ -64,7 +64,7 @@ export default function MockVehicleSwitcher() {
           size="sm"
           aria-haspopup="true"
           aria-expanded={open}
-          className="flex w-[200px] justify-between"
+          className="relative flex w-[200px] justify-between"
         >
           <CarFront className="mr-2 h-4 w-4 shrink-0" aria-hidden="true" />
           <span id="vehicleButtonLabel" className="truncate">
@@ -78,6 +78,10 @@ export default function MockVehicleSwitcher() {
             }`}
             aria-hidden="true"
           />
+          <span className="absolute top-[-6px] right-[-6px] flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-600"></span>
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[200px] p-0">

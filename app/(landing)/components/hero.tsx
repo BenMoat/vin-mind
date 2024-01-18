@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 
 import InfoCards from "./info-cards";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 export default function Hero() {
@@ -21,13 +22,14 @@ export default function Hero() {
     >
       <div className="flex flex-col min-h-screen justify-center text-center pb-20 sm:pb-0">
         <motion.div
-          className="inline-flex justify-center pt-20 md:pt-0"
+          className="relative inline-flex justify-center pt-20 md:pt-0"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
           <h1 className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-white via-slate-500 to-blue-600 bg-clip-text text-transparent">
             VinMind
+            <Badge className="absolute">Beta 0.1.0</Badge>
           </h1>
         </motion.div>
         <motion.p
@@ -58,9 +60,7 @@ export default function Hero() {
             </Link>
           </motion.div>
         </motion.div>
-        <div>
-          <InfoCards />
-        </div>
+        <InfoCards />
         <div className="hidden sm:block text-center mt-8">
           <motion.div
             initial={{ opacity: 0 }}

@@ -1,29 +1,13 @@
-import { motion } from "framer-motion";
-import { CheckCircle, Warehouse, Wrench } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { CheckCircle, Undo, Warehouse, Wrench } from "lucide-react";
 import MockVehicleSwitcher from "./mock-vehicle-switcher";
-
-const cards = [
-  {
-    Icon: CheckCircle,
-    title: "Vehicle Status",
-    description:
-      "View your tax, MOT, and insurance status from simply inputting your registration number.",
-  },
-  {
-    Icon: Warehouse,
-    title: "Your Garage",
-    description:
-      "Manage and keep track of multiple vehicles easily and efficiently, all in one place.",
-  },
-  {
-    Icon: Wrench,
-    title: "Modification Tracker",
-    description:
-      "Track and categorise modifications made to your vehicle. Upload invoices, receipts or instructions of each modification.",
-  },
-];
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ModificationsCard } from "@/app/(dashboard)/[vehicleId]/(routes)/components/cards/modifications-card";
 
 export default function InfoCards() {
+  const [showModificationsCard, setShowModificationsCard] = useState(false);
+
   return (
     <div className="w-full max-w-full space-y-4 pt-8 mx-auto">
       <motion.div
@@ -41,21 +25,77 @@ export default function InfoCards() {
         initial="hidden"
         animate="show"
       >
-        {cards.map(({ Icon, title, description }) => (
-          <motion.div
-            key={title}
-            className="flex flex-col items-center space-y-2 p-6 border rounded-lg"
-            variants={{
-              hidden: { opacity: 0 },
-              show: { opacity: 1 },
-            }}
-          >
-            <Icon className="h-6 w-6 mb-2" />
-            <h2 className="text-xl font-bold">{title}</h2>
-            <p>{description}</p>
-            {title === "Your Garage" && <MockVehicleSwitcher />}
-          </motion.div>
-        ))}
+        <motion.div
+          className="flex flex-col items-center space-y-2 p-6 border rounded-lg"
+          variants={{
+            hidden: { opacity: 0 },
+            show: { opacity: 1 },
+          }}
+        >
+          <CheckCircle className="h-6 w-6 mb-2" />
+          <h2 className="text-xl font-bold">Vehicle Status</h2>
+          <p>
+            View your tax, MOT, and insurance status from simply inputting your
+            registration number.
+          </p>
+        </motion.div>
+
+        <motion.div
+          className="flex flex-col items-center space-y-2 p-6 border rounded-lg"
+          variants={{
+            hidden: { opacity: 0 },
+            show: { opacity: 1 },
+          }}
+        >
+          <Warehouse className="h-6 w-6 mb-2" />
+          <h2 className="text-xl font-bold">Your Garage</h2>
+          <p>
+            Manage and keep track of multiple vehicles easily and efficiently,
+            all in one place.
+          </p>
+          <MockVehicleSwitcher />
+        </motion.div>
+
+        <AnimatePresence mode="wait">
+          {!showModificationsCard ? (
+            <motion.div
+              key="modificationTracker"
+              className="flex flex-col items-center space-y-2 p-6 border rounded-lg"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Wrench className="h-6 w-6 items-center mb-2" />
+              <h2 className="text-xl font-bold">Modification Tracker</h2>
+              <p>
+                Track and categorise modifications made to your vehicle. Upload
+                invoices, receipts or instructions of each modification.
+              </p>
+              <Button size="sm" onClick={() => setShowModificationsCard(true)}>
+                Show Modifications
+              </Button>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="modificationsCard"
+              className="flex flex-col items-center space-y-2 p-6 border rounded-lg"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <ModificationsCard
+                totalModifications={20}
+                totalPrice={1931.33}
+                className="border-none"
+              />
+              <Button size="sm" onClick={() => setShowModificationsCard(false)}>
+                Hide Modifications
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     </div>
   );

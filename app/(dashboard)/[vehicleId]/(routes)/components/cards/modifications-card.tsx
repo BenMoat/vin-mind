@@ -13,14 +13,16 @@ import { formatCurrency } from "@/lib/utils";
 interface ModificationsCardProps {
   totalPrice: number;
   totalModifications: number;
+  className?: string;
 }
 
 export const ModificationsCard: React.FC<ModificationsCardProps> = ({
   totalPrice,
   totalModifications,
+  className,
 }) => {
   return (
-    <Card className="text-center">
+    <Card className={`text-center ${className}`}>
       <CardHeader className="pb-1">
         <CardTitle className="pb-1">Modifications</CardTitle>
         <CardDescription className="flex items-center justify-center text-bold text-md">
