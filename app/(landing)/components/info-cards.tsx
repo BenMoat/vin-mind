@@ -1,9 +1,17 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { CheckCircle, Undo, Warehouse, Wrench } from "lucide-react";
+import {
+  ArrowLeftRight,
+  ArrowRightLeft,
+  CheckCircle,
+  Undo,
+  Warehouse,
+  Wrench,
+} from "lucide-react";
 import MockVehicleSwitcher from "./mock-vehicle-switcher";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ModificationsCard } from "@/app/(dashboard)/[vehicleId]/(routes)/components/cards/modifications-card";
+import { Switch } from "@/components/ui/switch";
 
 export default function InfoCards() {
   const [showModificationsCard, setShowModificationsCard] = useState(false);
@@ -56,46 +64,59 @@ export default function InfoCards() {
           <MockVehicleSwitcher />
         </motion.div>
 
-        <AnimatePresence mode="wait">
-          {!showModificationsCard ? (
-            <motion.div
-              key="modificationTracker"
-              className="flex flex-col items-center space-y-2 p-6 border rounded-lg"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Wrench className="h-6 w-6 items-center mb-2" />
-              <h2 className="text-xl font-bold">Modification Tracker</h2>
-              <p>
-                Track and categorise modifications made to your vehicle. Upload
-                invoices, receipts or instructions of each modification.
-              </p>
-              <Button size="sm" onClick={() => setShowModificationsCard(true)}>
-                Show Modifications
-              </Button>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="modificationsCard"
-              className="flex flex-col items-center space-y-2 p-6 border rounded-lg"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <ModificationsCard
-                totalModifications={20}
-                totalPrice={1931.33}
-                className="border-none"
-              />
-              <Button size="sm" onClick={() => setShowModificationsCard(false)}>
-                Hide Modifications
-              </Button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <motion.div
+          variants={{
+            hidden: { opacity: 0 },
+            show: { opacity: 1 },
+          }}
+          className="flex flex-col items-center space-y-2 p-6 border rounded-lg transition-opacity duration-500"
+        >
+          <AnimatePresence mode="wait">
+            {!showModificationsCard ? (
+              <motion.div
+                key="modificationTracker"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="flex flex-col items-center flex-grow"
+              >
+                <div className="flex flex-col items-center">
+                  <Wrench className="h-6 w-6 items-center mb-2" />
+                  <h2 className="text-xl font-bold">Modification Tracker</h2>
+                  <p>
+                    Track and categorise modifications made to your vehicle.
+                    Upload invoices, receipts or instructions of each
+                    modification.
+                  </p>
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="modificationsCard"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="flex-grow"
+              >
+                <div>
+                  <ModificationsCard
+                    totalModifications={20}
+                    totalPrice={1931.33}
+                  />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setShowModificationsCard(!showModificationsCard)}
+          >
+            <ArrowLeftRight />
+          </Button>
+        </motion.div>
       </motion.div>
     </div>
   );
