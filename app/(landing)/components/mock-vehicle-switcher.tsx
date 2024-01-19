@@ -1,13 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
-import { Vehicle } from "@prisma/client";
-import { useParams, useRouter } from "next/navigation";
-import { useStoreModal } from "@/hooks/use-store-modal";
-
-import { Button } from "@/components/ui/button";
 import { CarFront, ChevronDown, PlusCircle } from "lucide-react";
+
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -15,27 +12,37 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { MockVehicle, mockData } from "@/lib/constants";
 
-export interface VehicleSwitcherProps {
-  items: Vehicle[];
-  className?: string;
-  onClick?: () => void;
+interface MockVehicleSwitcherProps {
+  onVehicleSwitch: (vehicle: MockVehicle) => void;
 }
 
-export default function VehicleSwitcher({
-  items = [],
-  className,
-  ...props
-}: VehicleSwitcherProps) {
-  const { onOpen: openVehicleModal } = useStoreModal();
-  const params = useParams();
-  const { push } = useRouter();
-
+export default function MockVehicleSwitcher({
+  onVehicleSwitch,
+}: MockVehicleSwitcherProps) {
   const [open, setOpen] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [currentVehicle, setCurrentVehicle] = useState<MockVehicle>(
+    mockData[1]
+  );
 
-  const currentVehicle = items.find((item) => item.id === params.vehicleId);
+  const { push } = useRouter();
+
+  const handleSelect = (vehicle: MockVehicle) => {
+    setCurrentVehicle(vehicle);
+    setOpen(false);
+    setHoveredItem(null);
+
+    if (onVehicleSwitch) {
+      onVehicleSwitch(vehicle);
+    }
+  };
+
+  const signUp = () => {
+    push("/sign-up");
+  };
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
@@ -45,11 +52,13 @@ export default function VehicleSwitcher({
           size="sm"
           aria-haspopup="true"
           aria-expanded={open}
-          className={cn("flex w-[200px] justify-between", className)}
+          className="relative flex w-[200px] justify-between"
         >
-          <CarFront className="mr-2 h-4 w-4" aria-hidden="true" />
+          <CarFront className="mr-2 h-4 w-4 shrink-0" aria-hidden="true" />
           <span id="vehicleButtonLabel" className="truncate">
-            <span className="truncate">{currentVehicle?.name}</span>
+            <span className="truncate" title={currentVehicle.name}>
+              {currentVehicle.name}
+            </span>
           </span>
           <ChevronDown
             className={`ml-auto h-4 w-4 shrink-0 opacity-50 transition-transform duration-300 ${
@@ -57,22 +66,23 @@ export default function VehicleSwitcher({
             }`}
             aria-hidden="true"
           />
+          <span className="absolute top-[-6px] right-[-6px] flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-600"></span>
+          </span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[200px] p-0" align="end">
+      <DropdownMenuContent className="w-[200px] p-0">
         <DropdownMenuLabel>Garage</DropdownMenuLabel>
-        {items
+        {mockData
           .sort((a, b) => a.name.localeCompare(b.name))
           .map((vehicle) => (
             <DropdownMenuCheckboxItem
               key={vehicle.id}
-              checked={vehicle.id === params.vehicleId}
-              onSelect={() => {
-                setOpen(false);
-                push(`/${vehicle.id}`);
-              }}
+              checked={vehicle.id === currentVehicle.id}
+              onSelect={() => handleSelect(vehicle)}
               className={`text-sm truncate w-full ${
-                vehicle.id === params.vehicleId && !hoveredItem && "bg-accent"
+                vehicle.id === currentVehicle.id && !hoveredItem && "bg-accent"
               }`}
               onMouseEnter={() => setHoveredItem(vehicle.id)}
               onMouseLeave={() => setHoveredItem(null)}
@@ -81,7 +91,7 @@ export default function VehicleSwitcher({
               <span
                 title={vehicle.name}
                 className={`truncate ${
-                  vehicle.id === currentVehicle?.id && "mr-5"
+                  vehicle.id === currentVehicle.id && "mr-5"
                 }`}
               >
                 {vehicle.name}
@@ -90,12 +100,12 @@ export default function VehicleSwitcher({
           ))}
         <DropdownMenuCheckboxItem
           className="border-t"
-          onSelect={openVehicleModal}
+          onSelect={signUp}
           onMouseEnter={() => setHoveredItem("addVehicle")}
           onMouseLeave={() => setHoveredItem(null)}
         >
           <PlusCircle className="mr-2 h-5 w-5" />
-          Add a Vehicle
+          Start my garage
         </DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>

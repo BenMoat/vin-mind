@@ -19,7 +19,7 @@ import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "./theme-toggle";
 
 interface NavbarMobileProps {
-  items: Vehicle[];
+  items?: Vehicle[];
 }
 
 export const NavbarMobile: React.FC<NavbarMobileProps> = ({ items }) => {
@@ -45,11 +45,13 @@ export const NavbarMobile: React.FC<NavbarMobileProps> = ({ items }) => {
           <SheetTitle className="flex justify-center">Menu</SheetTitle>
           <div className="!ml-[-4px] space-y-4">
             <Separator />
-            <VehicleSwitcher
-              items={items}
-              onClick={handleItemClick}
-              className="flex items-center justify-center"
-            />
+            {items && items.length > 0 && (
+              <VehicleSwitcher
+                items={items}
+                onClick={handleItemClick}
+                className="flex items-center justify-center"
+              />
+            )}
             <VehicleMenu
               onClick={handleItemClick}
               className="flex flex-col space-x-0 space-y-4 text-md"

@@ -26,6 +26,12 @@ body {
   @apply text-green-500;
 }
 
+@layer utilities {
+  .prevent-overflow {
+    @apply overflow-visible !important;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

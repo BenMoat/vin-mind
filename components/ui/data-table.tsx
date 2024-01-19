@@ -84,6 +84,27 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  //Prevent the scrollbar from disappearing when the dropdown is open
+  const handleTypeOpenChange = (open: boolean) => {
+    setTypeOpen(open);
+
+    if (open) {
+      document.body.classList.add("prevent-overflow");
+    } else {
+      document.body.classList.remove("prevent-overflow");
+    }
+  };
+
+  const handleObsoleteOpenChange = (open: boolean) => {
+    setObsoleteOpen(open);
+
+    if (open) {
+      document.body.classList.add("prevent-overflow");
+    } else {
+      document.body.classList.remove("prevent-overflow");
+    }
+  };
+
   return (
     <>
       <div className="pt-4 grid grid-cols-1 gap-2 sm:grid-cols-4 sm:items-center">
@@ -124,7 +145,7 @@ export function DataTable<TData, TValue>({
         <div className="col-span-1 sm:col-span-1 flex">
           {modType && (
             <Select
-              onOpenChange={setTypeOpen}
+              onOpenChange={handleTypeOpenChange}
               value={
                 (table.getColumn("type")?.getFilterValue() || "all") as string
               }
@@ -168,7 +189,7 @@ export function DataTable<TData, TValue>({
           )}
           {isObsolete && (
             <Select
-              onOpenChange={setObsoleteOpen}
+              onOpenChange={handleObsoleteOpenChange}
               value={
                 table.getColumn("isObsolete")?.getFilterValue() === true
                   ? "true"
