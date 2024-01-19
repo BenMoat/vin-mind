@@ -47,7 +47,7 @@ export default function VehicleSwitcher({
           aria-expanded={open}
           className={cn("flex w-[200px] justify-between", className)}
         >
-          <CarFront className="mr-2 h-4 w-4" aria-hidden="true" />
+          <CarFront className="mr-2 h-4 w-4 flex-shrink-0" aria-hidden="true" />
           <span id="vehicleButtonLabel" className="truncate">
             <span className="truncate">{currentVehicle?.name}</span>
           </span>
