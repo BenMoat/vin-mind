@@ -2,7 +2,8 @@
 
 ### VinMind is a web application designed for the management of one or more vehicles. It focuses on keeping track of vehicle modifications, insurance, servicing, tax and MOT.
 
-![landing](https://github.com/BenMoat/vin-mind/assets/43743754/e2dd564e-1b30-4ea6-a991-8a9ff5e8c269)
+![landing](https://github.com/BenMoat/vin-mind/assets/43743754/74801cbd-3ed4-4a05-9cc1-b2e3e3b9a2e7)
+![landing-switched](https://github.com/BenMoat/vin-mind/assets/43743754/74ed2d6a-262d-4932-a6dc-c923bec79386)
 
 <details>
 <summary><h2>Tech Stack</h2></summary>
