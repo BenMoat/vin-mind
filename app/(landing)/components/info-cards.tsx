@@ -1,20 +1,22 @@
-import { AnimatePresence, motion } from "framer-motion";
-import {
-  ArrowLeftRight,
-  ArrowRightLeft,
-  CheckCircle,
-  Undo,
-  Warehouse,
-  Wrench,
-} from "lucide-react";
-import MockVehicleSwitcher from "./mock-vehicle-switcher";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import MockVehicleSwitcher, { MockVehicle } from "./mock-vehicle-switcher";
+
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowLeftRight, CheckCircle, Warehouse, Wrench } from "lucide-react";
+
 import { ModificationsCard } from "@/app/(dashboard)/[vehicleId]/(routes)/components/cards/modifications-card";
-import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
 
 export default function InfoCards() {
   const [showModificationsCard, setShowModificationsCard] = useState(false);
+  const [selectedVehicle, setSelectedVehicle] = useState<MockVehicle | null>(
+    null
+  );
+
+  const handleVehicleSwitch = (vehicle: MockVehicle) => {
+    setSelectedVehicle(vehicle);
+    setShowModificationsCard(true);
+  };
 
   return (
     <div className="w-full max-w-full space-y-4 pt-8 mx-auto">
@@ -61,7 +63,7 @@ export default function InfoCards() {
             Manage and keep track of multiple vehicles easily and efficiently,
             all in one place.
           </p>
-          <MockVehicleSwitcher />
+          <MockVehicleSwitcher onVehicleSwitch={handleVehicleSwitch} />
         </motion.div>
 
         <motion.div
@@ -102,8 +104,10 @@ export default function InfoCards() {
               >
                 <div>
                   <ModificationsCard
-                    totalModifications={20}
-                    totalPrice={1931.33}
+                    totalModifications={
+                      selectedVehicle?.totalModifications || 2
+                    }
+                    totalPrice={selectedVehicle?.totalPrice || 123.92}
                   />
                 </div>
               </motion.div>
