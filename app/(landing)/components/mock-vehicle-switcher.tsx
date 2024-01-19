@@ -13,42 +13,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-
-export type MockVehicle = {
-  id: string;
-  name: string;
-  userId: string;
-  totalModifications: number;
-  totalPrice: number;
-};
+import { MockVehicle, mockData } from "@/lib/constants";
 
 interface MockVehicleSwitcherProps {
   onVehicleSwitch: (vehicle: MockVehicle) => void;
 }
-
-const mockData = [
-  {
-    id: "1",
-    name: "A90 Toyota Supra",
-    userId: "Benjie",
-    totalModifications: 12,
-    totalPrice: 1360.69,
-  },
-  {
-    id: "2",
-    name: "McLaren F1",
-    userId: "Future Benjie",
-    totalModifications: 2,
-    totalPrice: 123.92,
-  },
-  {
-    id: "3",
-    name: "Mercedes AMG GT Black Series",
-    userId: "Slightly more realistic Future Benjie",
-    totalModifications: 13,
-    totalPrice: 19286.78,
-  },
-];
 
 export default function MockVehicleSwitcher({
   onVehicleSwitch,
@@ -136,7 +105,7 @@ export default function MockVehicleSwitcher({
           onMouseLeave={() => setHoveredItem(null)}
         >
           <PlusCircle className="mr-2 h-5 w-5" />
-          Add a Vehicle
+          Start my garage
         </DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>

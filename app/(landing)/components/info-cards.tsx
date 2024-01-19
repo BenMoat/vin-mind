@@ -1,14 +1,18 @@
 import { useState } from "react";
-import MockVehicleSwitcher, { MockVehicle } from "./mock-vehicle-switcher";
+import MockVehicleSwitcher from "./mock-vehicle-switcher";
+import { MockVehicle } from "@/lib/constants";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeftRight, CheckCircle, Warehouse, Wrench } from "lucide-react";
+import { ArrowLeftRight, Warehouse, Wrench } from "lucide-react";
 
 import { ModificationsCard } from "@/app/(dashboard)/[vehicleId]/(routes)/components/cards/modifications-card";
 import { Button } from "@/components/ui/button";
+import { MockVehicleStatus } from "./mock-vehicle-status";
 
 export default function InfoCards() {
   const [showModificationsCard, setShowModificationsCard] = useState(false);
+  const [showVehicleStatusCard, setShowVehicleStatusCard] = useState(false);
+
   const [selectedVehicle, setSelectedVehicle] = useState<MockVehicle | null>(
     null
   );
@@ -16,6 +20,7 @@ export default function InfoCards() {
   const handleVehicleSwitch = (vehicle: MockVehicle) => {
     setSelectedVehicle(vehicle);
     setShowModificationsCard(true);
+    setShowVehicleStatusCard(true);
   };
 
   return (
@@ -42,12 +47,54 @@ export default function InfoCards() {
             show: { opacity: 1 },
           }}
         >
-          <CheckCircle className="h-6 w-6 mb-2" />
-          <h2 className="text-xl font-bold">Vehicle Status</h2>
-          <p>
-            View your tax, MOT, and insurance status from simply inputting your
-            registration number.
-          </p>
+          <AnimatePresence mode="wait">
+            {!showVehicleStatusCard ? (
+              <motion.div
+                key="vehicleStatus"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="flex flex-col items-center flex-grow"
+              >
+                <div className="flex flex-col items-center">
+                  <Wrench className="h-6 w-6 items-center mb-2" />
+                  <h2 className="text-xl font-bold">Vehicle Status</h2>
+                  <p>
+                    View your tax, MOT, and insurance status from simply
+                    inputting your registration number.
+                  </p>
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="statusCard"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="flex-grow"
+              >
+                <MockVehicleStatus
+                  taxDueDate={
+                    selectedVehicle?.taxDueDate || new Date("2021-09-27")
+                  }
+                  taxStatus={selectedVehicle?.taxStatus || "SORN"}
+                  updatedAt={
+                    selectedVehicle?.updatedAt ||
+                    new Date("2024-01-13T13:15:30")
+                  }
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setShowVehicleStatusCard(!showVehicleStatusCard)}
+          >
+            <ArrowLeftRight />
+          </Button>
         </motion.div>
 
         <motion.div
@@ -102,14 +149,10 @@ export default function InfoCards() {
                 transition={{ duration: 0.2 }}
                 className="flex-grow"
               >
-                <div>
-                  <ModificationsCard
-                    totalModifications={
-                      selectedVehicle?.totalModifications || 2
-                    }
-                    totalPrice={selectedVehicle?.totalPrice || 123.92}
-                  />
-                </div>
+                <ModificationsCard
+                  totalModifications={selectedVehicle?.totalModifications || 2}
+                  totalPrice={selectedVehicle?.totalPrice || 123.92}
+                />
               </motion.div>
             )}
           </AnimatePresence>
