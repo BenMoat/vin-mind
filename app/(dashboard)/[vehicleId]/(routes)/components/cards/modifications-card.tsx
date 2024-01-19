@@ -1,4 +1,5 @@
-"use client";
+import { formatCurrency } from "@/lib/utils";
+
 import { Wrench } from "lucide-react";
 
 import {
@@ -8,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { formatCurrency } from "@/lib/utils";
 
 interface ModificationsCardProps {
   totalPrice: number;
