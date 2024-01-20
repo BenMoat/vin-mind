@@ -14,7 +14,6 @@ import { useStoreModal } from "@/hooks/use-store-modal";
 
 import { ExternalLink } from "lucide-react";
 
-import { Modal } from "@/components/ui/modal";
 import {
   Form,
   FormControl,
@@ -23,8 +22,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
 
 type DvlaData = {
   registrationNumber?: string;
@@ -111,7 +111,7 @@ export const VehicleModal = () => {
 
       window.location.assign(`/${response.data.id}`);
     } catch (error) {
-      toast.error("Something went wrong 🫤");
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }

@@ -41,7 +41,7 @@ export const ModificationTypesClient: React.FC<
         </Button>
       </div>
       <Separator />
-      <Tabs className="sm:w-[400px]" defaultValue="modification-types">
+      <Tabs className="sm:w-[350px]" defaultValue="modification-types">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger asChild value="modifications">
             <Link href={`/${params.vehicleId}/modifications`}>Mods</Link>

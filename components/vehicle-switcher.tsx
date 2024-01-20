@@ -6,8 +6,11 @@ import { Vehicle } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 import { useStoreModal } from "@/hooks/use-store-modal";
 
+import { cn } from "@/lib/utils";
+
+import { CarFront, PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CarFront, ChevronDown, PlusCircle } from "lucide-react";
+import Chevron from "@/components/chevron";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -15,7 +18,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
 
 export interface VehicleSwitcherProps {
   items: Vehicle[];
@@ -51,12 +53,7 @@ export default function VehicleSwitcher({
           <span id="vehicleButtonLabel" className="truncate">
             <span className="truncate">{currentVehicle?.name}</span>
           </span>
-          <ChevronDown
-            className={`ml-auto h-4 w-4 shrink-0 opacity-50 transition-transform duration-300 ${
-              open && "transform rotate-180"
-            }`}
-            aria-hidden="true"
-          />
+          <Chevron open={open} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[200px] p-0" align="end">
@@ -89,7 +86,7 @@ export default function VehicleSwitcher({
             </DropdownMenuCheckboxItem>
           ))}
         <DropdownMenuCheckboxItem
-          className="border-t"
+          className="border-t flex justify-center pl-0"
           onSelect={openVehicleModal}
           onMouseEnter={() => setHoveredItem("addVehicle")}
           onMouseLeave={() => setHoveredItem(null)}

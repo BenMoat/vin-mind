@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { useParams, useRouter } from "next/navigation";
 import { Plus, PoundSterling } from "lucide-react";
 import Link from "next/link";
@@ -31,6 +33,7 @@ export const ModificationClient: React.FC<ModificationClientProps> = ({
 }) => {
   const params = useParams();
   const router = useRouter();
+  const [filteredPrice, setFilteredPrice] = useState(0);
 
   const totalPrice = data.reduce(
     (total, modification) => total + Number(modification.price),
@@ -55,8 +58,8 @@ export const ModificationClient: React.FC<ModificationClientProps> = ({
         </Button>
       </div>
       <Separator />
-      <div className="flex justify-between items-center">
-        <Tabs className="sm:w-[400px]" defaultValue="modifications">
+      <div className="flex relative justify-between items-center">
+        <Tabs className="sm:w-[350px]" defaultValue="modifications">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger asChild value="modifications">
               <Link href={`/${params.vehicleId}/modifications`}>Mods</Link>
@@ -70,10 +73,12 @@ export const ModificationClient: React.FC<ModificationClientProps> = ({
         </Tabs>
         {totalPrice > 0 && (
           <>
-            <a className="border rounded-md sm:py-2 sm:px-4 justify-end hidden sm:flex sm:col-span-1 sm:justify-start">
-              Total:&nbsp;
-              <b className="text-bold">{formatCurrency.format(totalPrice)}</b>
-            </a>
+            <div className="absolute hidden sm:grid right-0 top-0 grid-rows-2 justify-end ">
+              <a className="border rounded-md px-4 py-2">
+                <b>{formatCurrency.format(filteredPrice)} </b>
+                of <b>{formatCurrency.format(totalPrice)}</b>
+              </a>
+            </div>
             <Popover>
               <PopoverTrigger asChild className="sm:hidden">
                 <Button variant="outline">
@@ -81,8 +86,8 @@ export const ModificationClient: React.FC<ModificationClientProps> = ({
                 </Button>
               </PopoverTrigger>
               <PopoverContent side="left" className="w-auto">
-                Total:&nbsp;{" "}
-                <b className="text-bold">{formatCurrency.format(totalPrice)}</b>
+                <b>{formatCurrency.format(filteredPrice)} </b>
+                of <b>{formatCurrency.format(totalPrice)}</b>
               </PopoverContent>
             </Popover>
           </>
@@ -95,6 +100,7 @@ export const ModificationClient: React.FC<ModificationClientProps> = ({
         data={data}
         modType={modificationTypes}
         isObsolete
+        onFilteredPriceChange={setFilteredPrice}
       />
     </>
   );

@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { CarFront, ChevronDown, PlusCircle } from "lucide-react";
+import { MockVehicle, mockData } from "@/lib/constants";
+
+import { CarFront, PlusCircle } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -13,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MockVehicle, mockData } from "@/lib/constants";
+import Chevron from "@/components/chevron";
 
 interface MockVehicleSwitcherProps {
   onVehicleSwitch: (vehicle: MockVehicle) => void;
@@ -60,12 +62,7 @@ export default function MockVehicleSwitcher({
               {currentVehicle.name}
             </span>
           </span>
-          <ChevronDown
-            className={`ml-auto h-4 w-4 shrink-0 opacity-50 transition-transform duration-300 ${
-              open && "transform rotate-180"
-            }`}
-            aria-hidden="true"
-          />
+          <Chevron open={open} />
           <span className="absolute top-[-6px] right-[-6px] flex h-3 w-3">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-600"></span>
@@ -99,7 +96,7 @@ export default function MockVehicleSwitcher({
             </DropdownMenuCheckboxItem>
           ))}
         <DropdownMenuCheckboxItem
-          className="border-t flex justify-center !pl-0"
+          className="border-t flex justify-center pl-0"
           onSelect={signUp}
           onMouseEnter={() => setHoveredItem("addVehicle")}
           onMouseLeave={() => setHoveredItem(null)}
