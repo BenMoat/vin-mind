@@ -21,7 +21,7 @@ export const MockVehicleStatus: React.FC<MockVehicleStatusProps> = ({
   taxDueDate,
 }) => {
   return (
-    <Card className="relative text-center">
+    <Card className="relative">
       <LastUpdatedBadge tax updatedAt={updatedAt} />
       <CardHeader className="pb-1">
         <CardTitle className="pb-1">Tax</CardTitle>

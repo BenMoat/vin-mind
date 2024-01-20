@@ -73,7 +73,7 @@ export default function InfoCards() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="flex-grow"
+                className="flex-grow md:w-full"
               >
                 <MockVehicleStatus
                   taxDueDate={
@@ -147,7 +147,7 @@ export default function InfoCards() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="flex-grow"
+                className="flex-grow md:w-full"
               >
                 <ModificationsCard
                   totalModifications={selectedVehicle?.totalModifications || 2}

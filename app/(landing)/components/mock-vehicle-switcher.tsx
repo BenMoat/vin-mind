@@ -72,7 +72,7 @@ export default function MockVehicleSwitcher({
           </span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[200px] p-0">
+      <DropdownMenuContent className="w-[200px] dark">
         <DropdownMenuLabel>Garage</DropdownMenuLabel>
         {mockData
           .sort((a, b) => a.name.localeCompare(b.name))
@@ -99,7 +99,7 @@ export default function MockVehicleSwitcher({
             </DropdownMenuCheckboxItem>
           ))}
         <DropdownMenuCheckboxItem
-          className="border-t"
+          className="border-t flex justify-center !pl-0"
           onSelect={signUp}
           onMouseEnter={() => setHoveredItem("addVehicle")}
           onMouseLeave={() => setHoveredItem(null)}
