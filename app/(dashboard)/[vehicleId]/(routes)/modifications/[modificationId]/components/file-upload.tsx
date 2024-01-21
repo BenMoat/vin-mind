@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 
 import { cn } from "@/lib/utils";
-import { removeFilesFromAlbum } from "@/actions/cloudinary-api";
+import { removeFilesFromAlbum } from "@/app/actions/cloudinary-api";
 
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 

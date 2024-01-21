@@ -12,7 +12,7 @@ import {
   ModificationType,
   ModificationFiles,
 } from "@prisma/client";
-import { removeFilesFromAlbum } from "@/actions/cloudinary-api";
+import { removeFilesFromAlbum } from "@/app/actions/cloudinary-api";
 
 import toast from "react-hot-toast";
 

@@ -5,6 +5,7 @@ import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 
 import { DvlaData } from "@prisma/client";
+import { vehicleEnquiry } from "@/app/actions/vehicle";
 
 import CardSkeleton from "./card-skeleton";
 import { LastUpdatedBadge } from "../last-updated-badge";
@@ -40,17 +41,15 @@ export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({ initialData }) => {
       const fetchData = async () => {
         try {
           setLoading(true);
-          const response = await axios.post(
-            `/api/${params.vehicleId}/vehicle-enquiry`,
-            { registrationNumber }
+          const response = await vehicleEnquiry(
+            params.vehicleId,
+            registrationNumber
           );
           response.data.registrationNumber = registrationNumber;
           await saveData(response.data);
           setError("");
-        } catch (error) {
-          if (axios.isAxiosError(error) && error.response) {
-            setError("Failed to fetch data from the DVLA.");
-          }
+        } catch (error: any) {
+          setError("Failed to fetch Tax and MOT status");
         } finally {
           setLoading(false);
         }

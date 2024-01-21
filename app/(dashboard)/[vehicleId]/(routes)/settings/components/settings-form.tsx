@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
+import { checkVehicleExists } from "@/app/actions/vehicle";
 import { DvlaData, Vehicle } from "@prisma/client";
 
 import toast from "react-hot-toast";
@@ -49,9 +50,15 @@ const formSchema = z.object({
     .string()
     .min(1, "Enter a name for your vehicle")
     .max(40, "Vehicle name must be less than 40 characters")
-    .refine((value) => value.trim().length > 0, {
-      message: "Enter a name for your vehicle",
-    }),
+    .refine(
+      async (value) => {
+        const vehicleExists = await checkVehicleExists(value);
+        return !vehicleExists;
+      },
+      {
+        message: "A Vehicle with that name already exists",
+      }
+    ),
 });
 
 type SettingsFormValues = z.infer<typeof formSchema>;

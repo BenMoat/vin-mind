@@ -11,7 +11,7 @@ import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 
 import { useStoreModal } from "@/hooks/use-store-modal";
-import { checkVehicleExists } from "@/actions/vehicle";
+import { checkVehicleExists, vehicleEnquiry } from "@/app/actions/vehicle";
 
 import { ExternalLink } from "lucide-react";
 
@@ -26,6 +26,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
+import { RegChecker } from "../reg-checker";
 
 type DvlaData = {
   registrationNumber?: string;
@@ -48,7 +49,7 @@ const formSchema = z.object({
         return !vehicleExists;
       },
       {
-        message: "Vehicle already exists",
+        message: "A Vehicle with that name already exists",
       }
     ),
   registrationNumber: z.any(), //DVLA RES API handles this validation
@@ -76,26 +77,15 @@ export const VehicleModal = () => {
     setLoading(true);
     const registrationNumber = values.registrationNumber;
     if (registrationNumber) {
-      const fetchData = async () => {
-        try {
-          const request = axios.post(
-            `/api/${params.vehicleId}/vehicle-enquiry`,
-            { registrationNumber }
-          );
-          const response = await request;
-          response.data.registrationNumber = registrationNumber;
-          const save = saveData(values.name, response.data);
-          await Promise.all([request, save]);
-          setError("");
-        } catch (error) {
-          if (axios.isAxiosError(error) && error.response) {
-            setError(error.response.data.message);
-          }
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchData();
+      try {
+        const data = await vehicleEnquiry(params.vehicleId, registrationNumber);
+        await saveData(values.name, data);
+        setError("");
+      } catch (error: any) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
     } else {
       await saveData(values.name, null);
       setError("");

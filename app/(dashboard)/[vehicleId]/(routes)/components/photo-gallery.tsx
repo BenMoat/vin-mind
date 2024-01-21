@@ -3,7 +3,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useParams } from "next/navigation";
-import { removeFilesFromAlbum } from "@/actions/cloudinary-api";
+import { removeFilesFromAlbum } from "@/app/actions/cloudinary-api";
 
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 

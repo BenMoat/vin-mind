@@ -8,6 +8,7 @@ import { useParams, useRouter } from "next/navigation";
 
 import { SubmitHandler, FieldValues } from "react-hook-form";
 import { DvlaData } from "@prisma/client";
+import { vehicleEnquiry } from "@/app/actions/vehicle";
 
 import { ExternalLink } from "lucide-react";
 
@@ -49,25 +50,16 @@ export const RegChecker: React.FC<DvlaDataProps> = ({
   const onSubmit: SubmitHandler<FieldValues> = async () => {
     setLoading(true);
     const registrationNumber = form.getValues("initialData.registrationNumber");
-    const fetchData = async () => {
-      try {
-        const response = await axios.post(
-          `/api/${params.vehicleId}/vehicle-enquiry`,
-          { registrationNumber }
-        );
-        response.data.registrationNumber = registrationNumber;
-        await saveData(response.data);
-        setError("");
-        toast.success("Registration updated");
-      } catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
-          setError(error.response.data.message);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+    try {
+      const data = await vehicleEnquiry(params.vehicleId, registrationNumber);
+      await saveData(data);
+      setError("");
+      toast.success("Registration updated");
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   async function saveData(data: DvlaDataProps) {
