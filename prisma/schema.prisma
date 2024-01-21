@@ -13,6 +13,7 @@ datasource db {
 
 model Vehicle {
   id                 String              @id @default(uuid())
+  slug               String
   name               String
   userId             String
   dvlaData           DvlaData?           @relation("VehicleToDvlaData")

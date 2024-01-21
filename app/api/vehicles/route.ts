@@ -3,6 +3,8 @@ import { auth } from "@clerk/nextjs";
 
 import prismadb from "@/lib/prismadb";
 
+import generateSlug from "@/lib/util-types/slug-utils";
+
 export async function GET(req: Request) {
   try {
     const { userId } = auth();
@@ -48,6 +50,8 @@ export async function POST(req: Request) {
       motExpiryDate,
     } = body;
 
+    const slug = generateSlug(name);
+
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -62,6 +66,7 @@ export async function POST(req: Request) {
       vehicle = await prismadb.vehicle.create({
         data: {
           name,
+          slug,
           userId,
         },
       });
@@ -69,6 +74,7 @@ export async function POST(req: Request) {
       vehicle = await prismadb.vehicle.create({
         data: {
           name,
+          slug,
           userId,
           dvlaData: {
             create: {

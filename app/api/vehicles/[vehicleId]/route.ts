@@ -1,6 +1,9 @@
-import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs";
+
 import prismadb from "@/lib/prismadb";
+
+import generateSlug from "@/lib/util-types/slug-utils";
 
 export async function PATCH(
   req: Request,
@@ -24,6 +27,8 @@ export async function PATCH(
       return new NextResponse("Vehicle ID is required", { status: 400 });
     }
 
+    const slug = generateSlug(name);
+
     const vehicle = await prismadb.vehicle.updateMany({
       where: {
         id: params.vehicleId,
@@ -31,6 +36,7 @@ export async function PATCH(
       },
       data: {
         name,
+        slug,
       },
     });
 
