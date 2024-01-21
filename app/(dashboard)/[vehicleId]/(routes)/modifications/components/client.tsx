@@ -75,8 +75,8 @@ export const ModificationClient: React.FC<ModificationClientProps> = ({
           <>
             <div className="absolute hidden sm:grid right-0 top-0 grid-rows-2 justify-end ">
               <a className="border rounded-md px-4 py-2">
-                <b>{formatCurrency.format(filteredPrice)} </b>
-                of <b>{formatCurrency.format(totalPrice)}</b>
+                <b>{formatCurrency.format(filteredPrice)}</b> of
+                <b> {formatCurrency.format(totalPrice)}</b>
               </a>
             </div>
             <Popover>
@@ -87,7 +87,7 @@ export const ModificationClient: React.FC<ModificationClientProps> = ({
               </PopoverTrigger>
               <PopoverContent side="left" className="w-auto">
                 <b>{formatCurrency.format(filteredPrice)} </b>
-                of <b>{formatCurrency.format(totalPrice)}</b>
+                of <b> {formatCurrency.format(totalPrice)}</b>
               </PopoverContent>
             </Popover>
           </>

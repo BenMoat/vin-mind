@@ -3,6 +3,37 @@ import { auth } from "@clerk/nextjs";
 
 import prismadb from "@/lib/prismadb";
 
+export async function GET(req: Request) {
+  try {
+    const { userId } = auth();
+
+    const url = new URL(req.url);
+    const vehicleName = url.searchParams.get("vehicleName");
+
+    if (!vehicleName) {
+      return new NextResponse("Vehicle name is required as a query parameter", {
+        status: 400,
+      });
+    }
+
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const vehicle = await prismadb.vehicle.findFirst({
+      where: {
+        name: vehicleName,
+        userId,
+      },
+    });
+
+    return NextResponse.json({ exists: Boolean(vehicle) });
+  } catch (error) {
+    console.error("[VEHICLES_GET]", error);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+}
+
 export async function POST(req: Request) {
   try {
     const { userId } = auth();

@@ -11,6 +11,7 @@ import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 
 import { useStoreModal } from "@/hooks/use-store-modal";
+import { checkVehicleExists } from "@/actions/vehicle";
 
 import { ExternalLink } from "lucide-react";
 
@@ -41,9 +42,15 @@ const formSchema = z.object({
     .string()
     .min(1, "Enter a name for your vehicle")
     .max(40, "Vehicle name must be less than 40 characters")
-    .refine((value) => value.trim().length > 0, {
-      message: "Enter a name for your vehicle",
-    }),
+    .refine(
+      async (value) => {
+        const vehicleExists = await checkVehicleExists(value);
+        return !vehicleExists;
+      },
+      {
+        message: "Vehicle already exists",
+      }
+    ),
   registrationNumber: z.any(), //DVLA RES API handles this validation
 });
 
