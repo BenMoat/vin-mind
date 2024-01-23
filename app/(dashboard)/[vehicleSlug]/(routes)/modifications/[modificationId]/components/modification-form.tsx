@@ -49,6 +49,7 @@ import {
 } from "@/components/ui/select";
 
 interface ModificationFormProps {
+  vehicleId: string;
   initialData:
     | (Modification & {
         files: ModificationFiles[];
@@ -74,6 +75,7 @@ const formSchema = z.object({
 type ModificationFormValues = z.infer<typeof formSchema>;
 
 export const ModificationForm: React.FC<ModificationFormProps> = ({
+  vehicleId,
   initialData,
   modificationTypes,
 }) => {
@@ -122,11 +124,11 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
       const formData = { ...data, price };
       const request = initialData
         ? axios.patch(
-            `/api/${params.vehicleId}/modifications/${params.modificationId}`,
+            `/api/${vehicleId}/modifications/${params.modificationId}`,
             formData
           )
-        : axios.post(`/api/${params.vehicleId}/modifications`, formData);
-      const navigation = router.push(`/${params.vehicleId}/modifications`);
+        : axios.post(`/api/${vehicleId}/modifications`, formData);
+      const navigation = router.push(`/${params.vehicleSlug}/modifications`);
       await Promise.all([request, navigation]);
       toast.success(toastMessage);
     } catch (error) {
@@ -150,10 +152,10 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
     try {
       setLoading(true);
       const request = axios.delete(
-        `/api/${params.vehicleId}/modifications/${params.modificationId}`
+        `/api/${vehicleId}/modifications/${params.modificationId}`
       );
       await removeFilesFromAlbum(fileUrls);
-      const navigation = router.push(`/${params.vehicleId}/modifications`);
+      const navigation = router.push(`/${params.vehicleSlug}/modifications`);
       await Promise.all([request, navigation]);
       toast.success("Modification deleted");
     } catch (error) {
@@ -177,6 +179,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
         modification={initialData?.name}
       />
       <TypeModal
+        vehicleId={vehicleId}
         isOpen={typeOpen}
         onClose={() => {
           setTypeOpen(false);
@@ -354,7 +357,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                 </FormDescription>
                 <FormControl>
                   <FileUpload
-                    folder={`${params.vehicleId}/modifications`}
+                    folder={`${vehicleId}/modifications`}
                     value={field.value.map((file) => file.url)}
                     disabled={loading}
                     onChange={(url) => {

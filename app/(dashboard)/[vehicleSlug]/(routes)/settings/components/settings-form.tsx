@@ -101,23 +101,23 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
       setLoading(true);
       switch (deleteAction) {
         case DeleteAction.Vehicle:
-          await axios.delete(`/api/vehicles/${params.vehicleId}`);
+          await axios.delete(`/api/vehicles/${initialData.id}`);
           router.refresh();
           router.push("/");
           toast.success("Vehicle deleted");
           break;
         case DeleteAction.Modifications:
-          await axios.delete(`/api/${params.vehicleId}/modifications`);
+          await axios.delete(`/api/${initialData.id}/modifications`);
           router.refresh();
           toast.success("All modifications deleted");
           break;
         case DeleteAction.ModificationTypes:
-          await axios.delete(`/api/${params.vehicleId}/modification-types`);
+          await axios.delete(`/api/${initialData.id}/modification-types`);
           router.refresh();
           toast.success("All modifications types deleted");
           break;
         case DeleteAction.ServiceHistory:
-          await axios.delete(`/api/${params.vehicleId}/servicing`);
+          await axios.delete(`/api/${initialData.id}/servicing`);
           router.refresh();
           toast.success("Service history deleted");
           break;

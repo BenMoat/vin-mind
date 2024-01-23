@@ -4,7 +4,7 @@ import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import toast from "react-hot-toast";
@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/form";
 
 interface TypeModalProps {
+  vehicleId: string;
   isOpen: boolean;
   onClose: () => void;
   loading: boolean;
@@ -37,6 +38,7 @@ const formSchema = z.object({
 });
 
 export const TypeModal: React.FC<TypeModalProps> = ({
+  vehicleId,
   isOpen,
   onClose,
   loading,
@@ -48,7 +50,6 @@ export const TypeModal: React.FC<TypeModalProps> = ({
     },
   });
 
-  const params = useParams();
   const router = useRouter();
 
   const [isMounted, setIsMounted] = useState(false);
@@ -61,7 +62,7 @@ export const TypeModal: React.FC<TypeModalProps> = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post(`/api/${params.vehicleId}/modification-types`, values);
+      await axios.post(`/api/${vehicleId}/modification-types`, values);
       router.refresh();
       toast.success("Modification Type Added");
       form.reset();

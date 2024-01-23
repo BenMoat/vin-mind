@@ -5,8 +5,16 @@ import { ModificationForm } from "./components/modification-form";
 const ModificationPage = async ({
   params,
 }: {
-  params: { modificationId: string; vehicleId: string };
+  params: { modificationId: string; vehicleSlug: string };
 }) => {
+  const vehicle = await prismadb.vehicle.findFirst({
+    where: { slug: params.vehicleSlug },
+  });
+
+  if (!vehicle) {
+    throw new Error(`Vehicle with slug ${params.vehicleSlug} not found`);
+  }
+
   const modification = await prismadb.modification.findUnique({
     where: { id: params.modificationId },
     include: {
@@ -16,7 +24,7 @@ const ModificationPage = async ({
   });
 
   const modificationTypes = await prismadb.modificationType.findMany({
-    where: { vehicleId: params.vehicleId },
+    where: { vehicleId: vehicle.id },
     orderBy: { name: "asc" },
   });
 
@@ -24,6 +32,7 @@ const ModificationPage = async ({
     <div className="flex-col">
       <div className="flex-1 space-y-4">
         <ModificationForm
+          vehicleId={vehicle.id}
           initialData={JSON.parse(JSON.stringify(modification))}
           modificationTypes={modificationTypes}
         />

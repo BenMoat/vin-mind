@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/card";
 
 interface ModificationTypeFormProps {
+  vehicleId: string;
   initialData: ModificationType | null;
   modifications: Modification[] | null;
 }
@@ -51,6 +52,7 @@ const formSchema = z.object({
 type ModificationTypeFormValues = z.infer<typeof formSchema>;
 
 export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
+  vehicleId,
   initialData,
   modifications,
 }) => {
@@ -83,11 +85,13 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
       setLoading(true);
       const request = initialData
         ? axios.patch(
-            `/api/${params.vehicleId}/modification-types/${params.modificationTypeId}`,
+            `/api/${vehicleId}/modification-types/${params.modificationTypeId}`,
             data
           )
-        : axios.post(`/api/${params.vehicleId}/modification-types`, data);
-      const navigation = router.push(`/${params.vehicleId}/modification-types`);
+        : axios.post(`/api/${vehicleId}/modification-types`, data);
+      const navigation = router.push(
+        `/${params.vehicleSlug}/modification-types`
+      );
       await Promise.all([request, navigation]);
       toast.success(toastMessage);
     } catch (error) {
@@ -102,9 +106,11 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
     try {
       setLoading(true);
       const request = axios.delete(
-        `/api/${params.vehicleId}/modification-types/${params.modificationTypeId}`
+        `/api/${vehicleId}/modification-types/${params.modificationTypeId}`
       );
-      const navigation = router.push(`/${params.vehicleId}/modification-types`);
+      const navigation = router.push(
+        `/${params.vehicleSlug}/modification-types`
+      );
       await Promise.all([request, navigation]);
       toast.success("Modification Type deleted");
     } catch (error) {
