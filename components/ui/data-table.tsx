@@ -296,7 +296,7 @@ export function DataTable<TData, TValue>({
                   onClick={() =>
                     router.push(
                       // @ts-ignore
-                      `/${params.vehicleId}/${routeName}/${row.original.id}`
+                      `/${params.vehicleSlug}/${routeName}/${row.original.id}`
                     )
                   }
                 >

@@ -19,30 +19,30 @@ export function VehicleMenu({
 
   const routes = [
     {
-      href: `/${params.vehicleId}`,
+      href: `/${params.vehicleSlug}`,
       label: "Overview",
-      active: pathname === `/${params.vehicleId}`,
+      active: pathname === `/${params.vehicleSlug}`,
     },
     {
-      href: `/${params.vehicleId}/modifications`,
+      href: `/${params.vehicleSlug}/modifications`,
       label: "Modifications",
       active:
-        pathname === `/${params.vehicleId}/modifications` ||
-        pathname === `/${params.vehicleId}/modification-types` ||
+        pathname === `/${params.vehicleSlug}/modifications` ||
+        pathname === `/${params.vehicleSlug}/modification-types` ||
         pathname ===
-          `/${params.vehicleId}/modifications/${params.modificationId}` ||
+          `/${params.vehicleSlug}/modifications/${params.modificationId}` ||
         pathname ===
-          `/${params.vehicleId}/modification-types/${params.modificationTypeId}`,
+          `/${params.vehicleSlug}/modification-types/${params.modificationTypeId}`,
     },
     {
-      href: `/${params.vehicleId}/servicing`,
+      href: `/${params.vehicleSlug}/servicing`,
       label: "Servicing",
-      active: pathname === `/${params.vehicleId}/servicing`,
+      active: pathname === `/${params.vehicleSlug}/servicing`,
     },
     {
-      href: `/${params.vehicleId}/settings`,
+      href: `/${params.vehicleSlug}/settings`,
       label: "Settings",
-      active: pathname === `/${params.vehicleId}/settings`,
+      active: pathname === `/${params.vehicleSlug}/settings`,
     },
   ];
 

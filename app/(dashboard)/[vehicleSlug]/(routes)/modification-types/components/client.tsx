@@ -33,7 +33,7 @@ export const ModificationTypesClient: React.FC<
         />
         <Button
           onClick={() =>
-            router.push(`/${params.vehicleId}/modification-types/new`)
+            router.push(`/${params.vehicleSlug}/modification-types/new`)
           }
         >
           <Plus className="sm:mr-2 h-4 w-4" />
@@ -44,10 +44,10 @@ export const ModificationTypesClient: React.FC<
       <Tabs className="sm:w-[350px]" defaultValue="modification-types">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger asChild value="modifications">
-            <Link href={`/${params.vehicleId}/modifications`}>Mods</Link>
+            <Link href={`/${params.vehicleSlug}/modifications`}>Mods</Link>
           </TabsTrigger>
           <TabsTrigger asChild value="modification-types">
-            <Link href={`/${params.vehicleId}/modification-types`}>
+            <Link href={`/${params.vehicleSlug}/modification-types`}>
               Mod Types
             </Link>
           </TabsTrigger>

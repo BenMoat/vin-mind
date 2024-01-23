@@ -6,21 +6,22 @@ import { SettingsForm } from "./components/settings-form";
 
 interface SettingsPageProps {
   params: {
-    vehicleId: string;
+    vehicleSlug: string;
   };
 }
 
 const SettingsPage: React.FC<SettingsPageProps> = async ({ params }) => {
-  const { userId } = auth();
+  const vehicle = await prismadb.vehicle.findFirst({
+    where: { slug: params.vehicleSlug },
+  });
 
-  if (!userId) {
-    redirect("/sign-in");
+  if (!vehicle) {
+    throw new Error(`Vehicle with slug ${params.vehicleSlug} not found`);
   }
 
-  const vehicle = await prismadb.vehicle.findFirst({
+  const vehicleSettings = await prismadb.vehicle.findFirst({
     where: {
-      id: params.vehicleId,
-      userId,
+      id: vehicle.id,
     },
     include: {
       dvlaData: true,
@@ -29,23 +30,23 @@ const SettingsPage: React.FC<SettingsPageProps> = async ({ params }) => {
 
   const noOfModifications = await prismadb.modification.count({
     where: {
-      vehicleId: params.vehicleId,
+      vehicleId: vehicle.id,
     },
   });
 
   const noOfModificationTypes = await prismadb.modificationType.count({
     where: {
-      vehicleId: params.vehicleId,
+      vehicleId: vehicle.id,
     },
   });
 
   const noOfServices = await prismadb.serviceHistory.count({
     where: {
-      vehicleId: params.vehicleId,
+      vehicleId: vehicle.id,
     },
   });
 
-  if (!vehicle) {
+  if (!vehicleSettings) {
     redirect("/");
   }
 
@@ -53,8 +54,8 @@ const SettingsPage: React.FC<SettingsPageProps> = async ({ params }) => {
     <div className="flex-col">
       <div className="flex-1 space-y-4">
         <SettingsForm
-          initialData={vehicle}
-          dvlaData={vehicle.dvlaData}
+          initialData={vehicleSettings}
+          dvlaData={vehicleSettings.dvlaData}
           noOfModifications={noOfModifications}
           noOfModificationTypes={noOfModificationTypes}
           noOfServices={noOfServices}

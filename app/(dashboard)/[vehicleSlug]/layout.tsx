@@ -11,7 +11,7 @@ export default async function DashboardLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { vehicleId: string };
+  params: { vehicleSlug: string };
 }) {
   const { userId } = auth();
 
@@ -21,7 +21,7 @@ export default async function DashboardLayout({
 
   const vehicle = await prismadb.vehicle.findFirst({
     where: {
-      id: params.vehicleId,
+      slug: params.vehicleSlug,
       userId,
     },
   });

@@ -7,11 +7,19 @@ import { ModificationTypeColumn } from "./components/columns";
 const ModificationTypesPage = async ({
   params,
 }: {
-  params: { vehicleId: string };
+  params: { vehicleSlug: string };
 }) => {
+  const vehicle = await prismadb.vehicle.findFirst({
+    where: { slug: params.vehicleSlug },
+  });
+
+  if (!vehicle) {
+    throw new Error(`Vehicle with slug ${params.vehicleSlug} not found`);
+  }
+
   const modificationTypes = await prismadb.modificationType.findMany({
     where: {
-      vehicleId: params.vehicleId,
+      vehicleId: vehicle.id,
     },
     include: {
       modifications: true,

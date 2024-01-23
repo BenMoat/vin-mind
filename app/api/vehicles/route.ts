@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs";
+import { auth, useUser } from "@clerk/nextjs";
 
 import prismadb from "@/lib/prismadb";
 
@@ -7,7 +7,9 @@ import generateSlug from "@/lib/util-types/slug-utils";
 
 export async function GET(req: Request) {
   try {
-    const { userId } = auth();
+    const { userId, user } = auth();
+
+    console.log("USER", user?.username);
 
     const url = new URL(req.url);
     const vehicleName = url.searchParams.get("vehicleName");
@@ -38,7 +40,7 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    const { userId } = auth();
+    const { userId, user } = auth();
     const body = await req.json();
 
     const {
@@ -52,9 +54,16 @@ export async function POST(req: Request) {
 
     const slug = generateSlug(name);
 
-    if (!userId) {
+    if (!userId || !user) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
+
+    await prismadb.user.create({
+      data: {
+        id: userId,
+        username: user.username!,
+      },
+    });
 
     if (!name) {
       return new NextResponse("Vehicle name is required", { status: 400 });

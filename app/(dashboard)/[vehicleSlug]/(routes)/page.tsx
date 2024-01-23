@@ -30,15 +30,23 @@ import {
 } from "@/components/ui/popover";
 
 interface DashboardPageProps {
-  params: { vehicleId: string };
+  params: { vehicleSlug: string };
 }
 
 export const DashboardPage: React.FC<DashboardPageProps> = async ({
   params,
 }) => {
   const vehicle = await prismadb.vehicle.findFirst({
+    where: { slug: params.vehicleSlug },
+  });
+
+  if (!vehicle) {
+    throw new Error(`Vehicle with slug ${params.vehicleSlug} not found`);
+  }
+
+  const vehicleDashboard = await prismadb.vehicle.findFirst({
     where: {
-      id: params.vehicleId,
+      id: vehicle.id,
     },
     include: {
       dashboardConfigure: true,
@@ -54,7 +62,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
     },
   });
 
-  if (!vehicle) {
+  if (!vehicleDashboard) {
     return (
       <>
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
@@ -70,7 +78,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
   }
 
   const totalPriceOfModifications =
-    vehicle.modifications?.reduce(
+    vehicleDashboard.modifications?.reduce(
       (total: number, modification: Modification) =>
         total + Number(modification.price),
       0
@@ -94,41 +102,45 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
                 Toggle the visibility of cards on your dashboard.
               </p>
             </div>
-            <ConfigureModal initialData={vehicle.dashboardConfigure} />
+            <ConfigureModal initialData={vehicleDashboard.dashboardConfigure} />
           </PopoverContent>
         </Popover>
       </div>
       <Separator />
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {vehicle.dashboardConfigure?.taxAndMot && (
-          <TaxAndMOTCards initialData={vehicle.dvlaData} />
+        {vehicleDashboard.dashboardConfigure?.taxAndMot && (
+          <TaxAndMOTCards initialData={vehicleDashboard.dvlaData} />
         )}
-        {vehicle.dashboardConfigure?.insurance && (
-          <InsuranceCard initialData={vehicle.insurance} />
+        {vehicleDashboard.dashboardConfigure?.insurance && (
+          <InsuranceCard initialData={vehicleDashboard.insurance} />
         )}
-        {vehicle.dashboardConfigure?.servicing && (
-          <ServicingCard initialData={stringify(vehicle.serviceHistory[0])} />
-        )}
-        {vehicle.dashboardConfigure?.totalModifications && (
-          <ModificationsCard
-            totalPrice={totalPriceOfModifications}
-            totalModifications={vehicle.modifications?.length}
+        {vehicleDashboard.dashboardConfigure?.servicing && (
+          <ServicingCard
+            initialData={stringify(vehicleDashboard.serviceHistory[0])}
           />
         )}
-        {vehicle.dashboardConfigure?.mileage && (
-          <MileageCard initialData={stringify(vehicle.serviceHistory[0])} />
+        {vehicleDashboard.dashboardConfigure?.totalModifications && (
+          <ModificationsCard
+            totalPrice={totalPriceOfModifications}
+            totalModifications={vehicleDashboard.modifications?.length}
+          />
+        )}
+        {vehicleDashboard.dashboardConfigure?.mileage && (
+          <MileageCard
+            initialData={stringify(vehicleDashboard.serviceHistory[0])}
+          />
         )}
       </div>
       <Card>
         <CardHeader>
           <CardTitle className="text-xl">Photo Gallery</CardTitle>
           <CardDescription>
-            Upload up to 5 pictures of your {vehicle.name}.
+            Upload up to 5 pictures of your {vehicleDashboard.name}.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <PhotoGallery
-            initialData={vehicle.images.map((image) => image.url)}
+            initialData={vehicleDashboard.images.map((image) => image.url)}
           />
         </CardContent>
       </Card>

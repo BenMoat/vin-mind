@@ -8,11 +8,19 @@ import { ModificationColumn } from "./components/columns";
 const ModificationsPage = async ({
   params,
 }: {
-  params: { vehicleId: string };
+  params: { vehicleSlug: string };
 }) => {
+  const vehicle = await prismadb.vehicle.findFirst({
+    where: { slug: params.vehicleSlug },
+  });
+
+  if (!vehicle) {
+    throw new Error(`Vehicle with slug ${params.vehicleSlug} not found`);
+  }
+
   const modifications = await prismadb.modification.findMany({
     where: {
-      vehicleId: params.vehicleId,
+      vehicleId: vehicle.id,
     },
     include: {
       modificationType: true,
@@ -37,7 +45,7 @@ const ModificationsPage = async ({
   );
 
   const modificationTypes = await prismadb.modificationType.findMany({
-    where: { vehicleId: params.vehicleId },
+    where: { vehicleId: vehicle.id },
   });
 
   return (

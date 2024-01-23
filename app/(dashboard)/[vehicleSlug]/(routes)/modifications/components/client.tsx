@@ -50,7 +50,9 @@ export const ModificationClient: React.FC<ModificationClientProps> = ({
           description="Manage your vehicle's modifications."
         />
         <Button
-          onClick={() => router.push(`/${params.vehicleId}/modifications/new`)}
+          onClick={() =>
+            router.push(`/${params.vehicleSlug}/modifications/new`)
+          }
           className="flex items-center"
         >
           <Plus className="sm:mr-2 h-4 w-4" />
@@ -62,10 +64,10 @@ export const ModificationClient: React.FC<ModificationClientProps> = ({
         <Tabs className="sm:w-[350px]" defaultValue="modifications">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger asChild value="modifications">
-              <Link href={`/${params.vehicleId}/modifications`}>Mods</Link>
+              <Link href={`/${params.vehicleSlug}/modifications`}>Mods</Link>
             </TabsTrigger>
             <TabsTrigger asChild value="modification-types">
-              <Link href={`/${params.vehicleId}/modification-types`}>
+              <Link href={`/${params.vehicleSlug}/modification-types`}>
                 Mod Types
               </Link>
             </TabsTrigger>
