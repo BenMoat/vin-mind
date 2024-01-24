@@ -1,4 +1,6 @@
 import prismadb from "@/lib/prismadb";
+import { getVehicleBySlug } from "@/app/actions/vehicle";
+
 import { format } from "date-fns";
 
 import { ModificationTypesClient } from "./components/client";
@@ -9,13 +11,7 @@ const ModificationTypesPage = async ({
 }: {
   params: { vehicleSlug: string };
 }) => {
-  const vehicle = await prismadb.vehicle.findFirst({
-    where: { slug: params.vehicleSlug },
-  });
-
-  if (!vehicle) {
-    throw new Error(`Vehicle with slug ${params.vehicleSlug} not found`);
-  }
+  const vehicle = await getVehicleBySlug(params.vehicleSlug);
 
   const modificationTypes = await prismadb.modificationType.findMany({
     where: {

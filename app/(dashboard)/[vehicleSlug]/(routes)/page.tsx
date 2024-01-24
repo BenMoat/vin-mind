@@ -1,7 +1,8 @@
 import { Modification } from "@prisma/client";
 import prismadb from "@/lib/prismadb";
-
 import { stringify } from "@/lib/utils";
+
+import { getVehicleBySlug } from "@/app/actions/vehicle";
 
 import { Eye, HelpCircle } from "lucide-react";
 
@@ -36,13 +37,7 @@ interface DashboardPageProps {
 export const DashboardPage: React.FC<DashboardPageProps> = async ({
   params,
 }) => {
-  const vehicle = await prismadb.vehicle.findFirst({
-    where: { slug: params.vehicleSlug },
-  });
-
-  if (!vehicle) {
-    throw new Error(`Vehicle with slug ${params.vehicleSlug} not found`);
-  }
+  const vehicle = await getVehicleBySlug(params.vehicleSlug);
 
   const vehicleDashboard = await prismadb.vehicle.findFirst({
     where: {

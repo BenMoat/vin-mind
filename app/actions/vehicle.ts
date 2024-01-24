@@ -1,4 +1,5 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
+import prismadb from "@/lib/prismadb";
 
 export const checkVehicleExists = async (vehicleName: string) => {
   try {
@@ -29,3 +30,15 @@ export const vehicleEnquiry = async (
     throw error;
   }
 };
+
+export async function getVehicleBySlug(slug: string) {
+  const vehicle = await prismadb.vehicle.findFirst({
+    where: { slug },
+  });
+
+  if (!vehicle) {
+    throw new Error(`Error loading page for "${slug}".`);
+  }
+
+  return vehicle;
+}

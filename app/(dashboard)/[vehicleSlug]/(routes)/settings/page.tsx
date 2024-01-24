@@ -1,6 +1,6 @@
 import prismadb from "@/lib/prismadb";
+import { getVehicleBySlug } from "@/app/actions/vehicle";
 
-import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { SettingsForm } from "./components/settings-form";
 
@@ -11,13 +11,7 @@ interface SettingsPageProps {
 }
 
 const SettingsPage: React.FC<SettingsPageProps> = async ({ params }) => {
-  const vehicle = await prismadb.vehicle.findFirst({
-    where: { slug: params.vehicleSlug },
-  });
-
-  if (!vehicle) {
-    throw new Error(`Vehicle with slug ${params.vehicleSlug} not found`);
-  }
+  const vehicle = await getVehicleBySlug(params.vehicleSlug);
 
   const vehicleSettings = await prismadb.vehicle.findFirst({
     where: {

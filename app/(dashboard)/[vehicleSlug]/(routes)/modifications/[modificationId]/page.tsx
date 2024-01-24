@@ -1,4 +1,5 @@
 import prismadb from "@/lib/prismadb";
+import { getVehicleBySlug } from "@/app/actions/vehicle";
 
 import { ModificationForm } from "./components/modification-form";
 
@@ -7,13 +8,7 @@ const ModificationPage = async ({
 }: {
   params: { modificationId: string; vehicleSlug: string };
 }) => {
-  const vehicle = await prismadb.vehicle.findFirst({
-    where: { slug: params.vehicleSlug },
-  });
-
-  if (!vehicle) {
-    throw new Error(`Vehicle with slug ${params.vehicleSlug} not found`);
-  }
+  const vehicle = await getVehicleBySlug(params.vehicleSlug);
 
   const modification = await prismadb.modification.findUnique({
     where: { id: params.modificationId },

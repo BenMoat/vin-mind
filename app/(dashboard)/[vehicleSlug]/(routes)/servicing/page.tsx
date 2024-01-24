@@ -1,4 +1,5 @@
 import prismadb from "@/lib/prismadb";
+import { getVehicleBySlug } from "@/app/actions/vehicle";
 
 import { ServiceHistoryClient } from "./components/client";
 
@@ -7,13 +8,7 @@ const ModificationsPage = async ({
 }: {
   params: { vehicleSlug: string };
 }) => {
-  const vehicle = await prismadb.vehicle.findFirst({
-    where: { slug: params.vehicleSlug },
-  });
-
-  if (!vehicle) {
-    throw new Error(`Vehicle with slug ${params.vehicleSlug} not found`);
-  }
+  const vehicle = await getVehicleBySlug(params.vehicleSlug);
 
   const serviceHistory = await prismadb.serviceHistory.findMany({
     where: {
