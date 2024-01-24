@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "next/navigation";
 
 import { Insurance } from "@prisma/client";
 
@@ -22,14 +21,14 @@ import {
 } from "@/components/ui/card";
 
 interface InsuranceCardProps {
+  vehicleId: string;
   initialData: Insurance | null;
 }
 
 export const InsuranceCard: React.FC<InsuranceCardProps> = ({
+  vehicleId,
   initialData,
 }) => {
-  const params = useParams();
-
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -39,9 +38,7 @@ export const InsuranceCard: React.FC<InsuranceCardProps> = ({
       if (initialData) {
         try {
           setLoading(true);
-          const response = await axios.get(
-            `/api/${params.vehicleId}/insurance`
-          );
+          const response = await axios.get(`/api/${vehicleId}/insurance`);
 
           // Check if the insurance is still valid against today's date
           const today = new Date();
@@ -64,7 +61,7 @@ export const InsuranceCard: React.FC<InsuranceCardProps> = ({
     /* Cache a timestamp for when the data was last fetched. Compare it against the current time
     to determine whether to fetch new data or not.*/
     const storedTimestamp = parseInt(
-      localStorage.getItem(`insTMS-${params.vehicleId}`) || "0",
+      localStorage.getItem(`insTMS-${vehicleId}`) || "0",
       10
     );
     const currentTime = Date.now();
@@ -72,17 +69,14 @@ export const InsuranceCard: React.FC<InsuranceCardProps> = ({
 
     if (currentTime - storedTimestamp > timeThreshold) {
       fetchData();
-      localStorage.setItem(
-        `insTMS-${params.vehicleId}`,
-        currentTime.toString()
-      );
+      localStorage.setItem(`insTMS-${vehicleId}`, currentTime.toString());
     }
   }, [initialData]);
 
   async function saveData(data: Insurance) {
     try {
       setLoading(true);
-      await axios.patch(`/api/${params.vehicleId}/insurance`, data);
+      await axios.patch(`/api/${vehicleId}/insurance`, data);
       setError("");
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -96,6 +90,7 @@ export const InsuranceCard: React.FC<InsuranceCardProps> = ({
   return (
     <>
       <InsuranceModal
+        vehicleId={vehicleId}
         initialData={initialData}
         isOpen={isOpen}
         onClose={() => {

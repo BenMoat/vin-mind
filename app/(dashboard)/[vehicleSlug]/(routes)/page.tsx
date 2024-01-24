@@ -104,10 +104,16 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
       <Separator />
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {vehicleDashboard.dashboardConfigure?.taxAndMot && (
-          <TaxAndMOTCards initialData={vehicleDashboard.dvlaData} />
+          <TaxAndMOTCards
+            vehicleId={vehicle.id}
+            initialData={vehicleDashboard.dvlaData}
+          />
         )}
         {vehicleDashboard.dashboardConfigure?.insurance && (
-          <InsuranceCard initialData={vehicleDashboard.insurance} />
+          <InsuranceCard
+            vehicleId={vehicle.id}
+            initialData={vehicleDashboard.insurance}
+          />
         )}
         {vehicleDashboard.dashboardConfigure?.servicing && (
           <ServicingCard
@@ -135,6 +141,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = async ({
         </CardHeader>
         <CardContent>
           <PhotoGallery
+            vehicleId={vehicle.id}
             initialData={vehicleDashboard.images.map((image) => image.url)}
           />
         </CardContent>

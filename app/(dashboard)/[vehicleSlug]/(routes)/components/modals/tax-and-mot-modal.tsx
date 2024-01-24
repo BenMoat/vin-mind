@@ -8,6 +8,7 @@ import { Modal } from "@/components/ui/modal";
 import { RegChecker } from "@/components/reg-checker";
 
 interface TaxAndMotModalProps {
+  vehicleId: string;
   initialData: DvlaData | null;
   isOpen: boolean;
   onClose: () => void;
@@ -31,6 +32,7 @@ const description = (
 );
 
 export const TaxAndMOTModal: React.FC<TaxAndMotModalProps> = ({
+  vehicleId,
   initialData,
   isOpen,
   onClose,
@@ -42,7 +44,12 @@ export const TaxAndMOTModal: React.FC<TaxAndMotModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
     >
-      <RegChecker onClose={onClose} isModal initialData={initialData} />
+      <RegChecker
+        vehicleId={vehicleId}
+        onClose={onClose}
+        isModal
+        initialData={initialData}
+      />
     </Modal>
   );
 };

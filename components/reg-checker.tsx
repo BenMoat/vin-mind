@@ -24,12 +24,14 @@ import {
 } from "@/components/ui/card";
 
 interface DvlaDataProps {
+  vehicleId: string;
   initialData: DvlaData | null;
   isModal?: boolean;
   onClose?: () => void;
 }
 
 export const RegChecker: React.FC<DvlaDataProps> = ({
+  vehicleId,
   initialData,
   isModal,
   onClose,
@@ -51,7 +53,7 @@ export const RegChecker: React.FC<DvlaDataProps> = ({
     setLoading(true);
     const registrationNumber = form.getValues("initialData.registrationNumber");
     try {
-      const data = await vehicleEnquiry(params.vehicleId, registrationNumber);
+      const data = await vehicleEnquiry(vehicleId, registrationNumber);
       await saveData(data);
       setError("");
       toast.success("Registration updated");
@@ -66,12 +68,12 @@ export const RegChecker: React.FC<DvlaDataProps> = ({
     try {
       if (initialData) {
         await axios.patch(
-          `/api/${params.vehicleId}/vehicle-enquiry/save-enquiry`,
+          `/api/${vehicleId}/vehicle-enquiry/save-enquiry`,
           data
         );
       } else {
         await axios.post(
-          `/api/${params.vehicleId}/vehicle-enquiry/save-enquiry`,
+          `/api/${vehicleId}/vehicle-enquiry/save-enquiry`,
           data
         );
       }
@@ -89,10 +91,8 @@ export const RegChecker: React.FC<DvlaDataProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(
-        `/api/${params.vehicleId}/vehicle-enquiry/save-enquiry`
-      );
-      localStorage.removeItem(`resTMS-${params.vehicleId}`);
+      await axios.delete(`/api/${vehicleId}/vehicle-enquiry/save-enquiry`);
+      localStorage.removeItem(`resTMS-${vehicleId}`);
       form.setValue("initialData.registrationNumber", "");
       router.refresh();
       toast.success("Registration removed");

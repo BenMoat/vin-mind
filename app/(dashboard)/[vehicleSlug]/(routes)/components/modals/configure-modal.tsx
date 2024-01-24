@@ -40,7 +40,10 @@ export const ConfigureModal: React.FC<ConfigureModalProps> = ({
   const onSubmit: SubmitHandler<FieldValues> = async () => {
     try {
       const data = form.getValues().initialData;
-      await axios.patch(`/api/${params.vehicleId}/dashboard-configure`, data);
+      await axios.patch(
+        `/api/${initialData?.vehicleId}/dashboard-configure`,
+        data
+      );
       router.refresh();
     } catch (error) {
       toast.error("Something went wrong");

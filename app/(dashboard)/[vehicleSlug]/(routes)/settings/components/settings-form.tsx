@@ -86,7 +86,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
   const onSubmit = async (data: SettingsFormValues) => {
     try {
       setLoading(true);
-      await axios.patch(`/api/vehicles/${params.vehicleId}`, data);
+      await axios.patch(`/api/vehicles/${initialData.id}`, data);
       router.refresh();
       toast.success("Vehicle updated");
     } catch (error) {
@@ -193,7 +193,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
             </form>
           </Form>
         </Card>
-        <RegChecker initialData={dvlaData} />
+        <RegChecker vehicleId={initialData.id} initialData={dvlaData} />
       </div>
       <div className="flex justify-center !mt-4">
         <Card className="border-destructive">

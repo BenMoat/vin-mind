@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import axios from "axios";
-import { useParams } from "next/navigation";
 import { removeFilesFromAlbum } from "@/app/actions/cloudinary-api";
 
 import { CldImage, CldUploadWidget } from "next-cloudinary";
@@ -20,19 +19,22 @@ import {
 } from "@/components/ui/carousel";
 
 interface PhotoGalleryProps {
+  vehicleId: string;
   initialData: string[];
 }
 
-export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ initialData }) => {
+export const PhotoGallery: React.FC<PhotoGalleryProps> = ({
+  vehicleId,
+  initialData,
+}) => {
   const [images, setImages] = useState<string[]>(initialData);
-  const params = useParams();
 
-  const folder = `${params.vehicleId}/images`;
+  const folder = `${vehicleId}/images`;
 
   const onUpload = async (result: any) => {
     try {
       setImages((prevImages) => [...prevImages, result.info.secure_url]);
-      axios.post(`/api/${params.vehicleId}/images`, {
+      axios.post(`/api/${vehicleId}/images`, {
         url: result.info.secure_url,
       });
     } catch (error) {
@@ -44,7 +46,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({ initialData }) => {
     try {
       await removeFilesFromAlbum([url]);
       setImages((prevImages) => prevImages.filter((image) => image !== url));
-      axios.delete(`/api/${params.vehicleId}/images`, { data: { url: url } });
+      axios.delete(`/api/${vehicleId}/images`, { data: { url: url } });
     } catch (error) {
       console.error(error);
     }

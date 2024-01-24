@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { DvlaData } from "@prisma/client";
 import { vehicleEnquiry } from "@/app/actions/vehicle";
@@ -23,11 +23,14 @@ import {
 } from "@/components/ui/card";
 
 interface DvlaDataProps {
+  vehicleId: string;
   initialData: DvlaData | null;
 }
 
-export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({ initialData }) => {
-  const params = useParams();
+export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({
+  vehicleId,
+  initialData,
+}) => {
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -41,10 +44,7 @@ export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({ initialData }) => {
       const fetchData = async () => {
         try {
           setLoading(true);
-          const response = await vehicleEnquiry(
-            params.vehicleId,
-            registrationNumber
-          );
+          const response = await vehicleEnquiry(vehicleId, registrationNumber);
           response.data.registrationNumber = registrationNumber;
           await saveData(response.data);
           setError("");
@@ -58,7 +58,7 @@ export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({ initialData }) => {
       /* Cache a timestamp for when the data was last fetched. Compare it against the current time
     to determine whether to fetch new data or not.*/
       const storedTimestamp = parseInt(
-        localStorage.getItem(`resTMS-${params.vehicleId}`) || "0",
+        localStorage.getItem(`resTMS-${vehicleId}`) || "0",
         10
       );
       const currentTime = Date.now();
@@ -66,10 +66,7 @@ export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({ initialData }) => {
 
       if (currentTime - storedTimestamp > timeThreshold) {
         fetchData();
-        localStorage.setItem(
-          `resTMS-${params.vehicleId}`,
-          currentTime.toString()
-        );
+        localStorage.setItem(`resTMS-${vehicleId}`, currentTime.toString());
       }
     }
   }, [initialData, registrationNumber]);
@@ -80,7 +77,7 @@ export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({ initialData }) => {
       setError("");
       if (initialData) {
         await axios.patch(
-          `/api/${params.vehicleId}/vehicle-enquiry/save-enquiry`,
+          `/api/${vehicleId}/vehicle-enquiry/save-enquiry`,
           data
         );
       }
@@ -97,6 +94,7 @@ export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({ initialData }) => {
   return (
     <>
       <TaxAndMOTModal
+        vehicleId={vehicleId}
         initialData={initialData}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}

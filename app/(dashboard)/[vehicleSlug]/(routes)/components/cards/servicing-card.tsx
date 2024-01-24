@@ -57,7 +57,7 @@ export const ServicingCard: React.FC<ServiceHistoryCardProps> = ({
                     className="rounded-full w-10 p-0 mb-[-5px]"
                     type="button"
                     onClick={() => {
-                      router.push(`/${params.vehicleId}/servicing/new`);
+                      router.push(`/${params.vehicleSlug}/servicing/new`);
                     }}
                   >
                     <PlusCircle className="h-8 w-8" />
@@ -82,7 +82,7 @@ export const ServicingCard: React.FC<ServiceHistoryCardProps> = ({
                 type="button"
                 onClick={() => {
                   router.push(
-                    `/${params.vehicleId}/servicing/${initialData.id}`
+                    `/${params.vehicleSlug}/servicing/${initialData.id}`
                   );
                 }}
               >
@@ -101,7 +101,7 @@ export const ServicingCard: React.FC<ServiceHistoryCardProps> = ({
                 className="rounded-full w-10 p-0 mb-[-5px]"
                 type="button"
                 onClick={() => {
-                  router.push(`/${params.vehicleId}/servicing/new`);
+                  router.push(`/${params.vehicleSlug}/servicing/new`);
                 }}
               >
                 <PlusCircle className="h-8 w-8" />

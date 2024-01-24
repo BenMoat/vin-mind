@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 import { Insurance } from "@prisma/client";
@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/popover";
 
 interface InsuranceModalProps {
+  vehicleId: string;
   initialData: Insurance | null;
   isOpen: boolean;
   onClose: () => void;
@@ -44,6 +45,7 @@ const formSchema = z.object({
 });
 
 export const InsuranceModal: React.FC<InsuranceModalProps> = ({
+  vehicleId,
   initialData,
   isOpen,
   onClose,
@@ -57,7 +59,6 @@ export const InsuranceModal: React.FC<InsuranceModalProps> = ({
     },
   });
 
-  const params = useParams();
   const router = useRouter();
   const { formState } = form;
 
@@ -73,8 +74,8 @@ export const InsuranceModal: React.FC<InsuranceModalProps> = ({
       values.isInsured = values.endDate >= today;
 
       const request = !initialData?.startDate
-        ? axios.post(`/api/${params.vehicleId}/insurance`, values)
-        : axios.patch(`/api/${params.vehicleId}/insurance`, values);
+        ? axios.post(`/api/${vehicleId}/insurance`, values)
+        : axios.patch(`/api/${vehicleId}/insurance`, values);
       const refresh = router.refresh();
 
       await Promise.all([request, refresh]);
@@ -90,8 +91,8 @@ export const InsuranceModal: React.FC<InsuranceModalProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
-      const request = axios.delete(`/api/${params.vehicleId}/insurance`);
-      localStorage.removeItem(`insTMS-${params.vehicleId}`);
+      const request = axios.delete(`/api/${vehicleId}/insurance`);
+      localStorage.removeItem(`insTMS-${vehicleId}`);
       const refresh = router.refresh();
 
       await Promise.all([request, refresh]);
