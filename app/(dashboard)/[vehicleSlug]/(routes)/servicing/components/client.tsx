@@ -45,11 +45,11 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
         />
         {data.length > 0 && (
           <Button
-            onClick={() => router.push(`/${params.vehicleId}/servicing/new`)}
+            onClick={() => router.push(`/${params.vehicleSlug}/servicing/new`)}
             className="flex items-center"
           >
             <Plus className="sm:mr-2 h-4 w-4" />
-            <span className="hidden sm:block">Add Servicing</span>
+            <span className="hidden sm:block">Add New</span>
           </Button>
         )}
       </div>
@@ -67,7 +67,7 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
               <div className="flex justify-center">
                 <Button
                   onClick={() =>
-                    router.push(`/${params.vehicleId}/servicing/new`)
+                    router.push(`/${params.vehicleSlug}/servicing/new`)
                   }
                   className="max-w-[200px] mt-2"
                 >
@@ -102,7 +102,7 @@ export const ServiceHistoryClient: React.FC<ServiceHistoryProps> = ({
               }`}
               key={index}
             >
-              <Link href={`/${params.vehicleId}/servicing/${service.id}`}>
+              <Link href={`/${params.vehicleSlug}/servicing/${service.id}`}>
                 <Card
                   key={index}
                   className="sm:w-[600px] transition-colors hover:bg-secondary"

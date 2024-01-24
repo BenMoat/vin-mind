@@ -38,6 +38,7 @@ import {
 } from "@/components/ui/popover";
 
 interface ServiceFormProps {
+  vehicleId: string;
   initialData: ServiceHistory;
 }
 
@@ -65,7 +66,10 @@ const formSchema = z.object({
 
 type ServiceCardValues = z.infer<typeof formSchema>;
 
-export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
+export const ServicingForm: React.FC<ServiceFormProps> = ({
+  vehicleId,
+  initialData,
+}) => {
   const params = useParams();
   const router = useRouter();
 
@@ -112,11 +116,11 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
       const formData = { ...data, mileage, cost, details };
       const request = initialData
         ? axios.patch(
-            `/api/${params.vehicleId}/servicing/${params.servicingId}`,
+            `/api/${vehicleId}/servicing/${params.servicingId}`,
             formData
           )
-        : axios.post(`/api/${params.vehicleId}/servicing`, formData);
-      const navigation = router.push(`/${params.vehicleId}/servicing`);
+        : axios.post(`/api/${vehicleId}/servicing`, formData);
+      const navigation = router.push(`/${params.vehicleSlug}/servicing`);
       await Promise.all([request, navigation]);
       toast.success(toastMessage);
     } catch (error) {
@@ -131,9 +135,9 @@ export const ServicingForm: React.FC<ServiceFormProps> = ({ initialData }) => {
     try {
       setLoading(true);
       const request = axios.delete(
-        `/api/${params.vehicleId}/servicing/${params.servicingId}`
+        `/api/${vehicleId}/servicing/${params.servicingId}`
       );
-      const navigation = router.push(`/${params.vehicleId}/servicing`);
+      const navigation = router.push(`/${params.vehicleSlug}/servicing`);
       await Promise.all([request, navigation]);
       toast.success("Servicing record deleted");
     } catch (error) {
