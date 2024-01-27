@@ -25,7 +25,6 @@ interface TypeModalProps {
   vehicleId: string;
   isOpen: boolean;
   onClose: () => void;
-  loading: boolean;
 }
 
 const formSchema = z.object({
@@ -41,7 +40,6 @@ export const TypeModal: React.FC<TypeModalProps> = ({
   vehicleId,
   isOpen,
   onClose,
-  loading,
 }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -53,6 +51,7 @@ export const TypeModal: React.FC<TypeModalProps> = ({
   const router = useRouter();
 
   const [isMounted, setIsMounted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
@@ -62,6 +61,7 @@ export const TypeModal: React.FC<TypeModalProps> = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      setLoading(true);
       await axios.post(`/api/${vehicleId}/modification-types`, values);
       router.refresh();
       toast.success("Modification Type Added");
@@ -70,6 +70,7 @@ export const TypeModal: React.FC<TypeModalProps> = ({
       toast.error("Something went wrong");
     } finally {
       onClose();
+      setLoading(false);
     }
   };
 

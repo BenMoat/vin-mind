@@ -184,7 +184,6 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
         onClose={() => {
           setTypeOpen(false);
         }}
-        loading={loading}
       />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} goBack />
@@ -223,7 +222,7 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                     <Input
                       type="text"
                       disabled={loading}
-                      className="max-w-[300px] placeholder:italic"
+                      className="max-w-[200px] placeholder:italic"
                       placeholder="£149.99"
                       {...field}
                       onChange={(e) => {
@@ -250,51 +249,47 @@ export const ModificationForm: React.FC<ModificationFormProps> = ({
                   <FormDescription>
                     What type of modification is this? (e.g. Engine, Wheels)
                   </FormDescription>
-                  <div className="sm:flex">
-                    <Select
-                      disabled={loading}
-                      onOpenChange={setSelectOpen}
-                      onValueChange={field.onChange}
-                      value={field.value}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger
-                          className={`max-w-[300px] ${
-                            !field.value && "text-muted-foreground italic"
-                          }`}
-                          open={selectOpen}
-                          aria-label="Modification Type"
+                  <Select
+                    disabled={loading}
+                    onOpenChange={setSelectOpen}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger
+                        className={`max-w-[200px] ${
+                          !field.value && "text-muted-foreground italic"
+                        }`}
+                        open={selectOpen}
+                        aria-label="Modification Type"
+                      >
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Performance"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {modificationTypes.map((modificationType) => (
+                        <SelectItem
+                          key={modificationType.id}
+                          value={modificationType.id}
                         >
-                          <SelectValue
-                            defaultValue={field.value}
-                            placeholder="Performance"
-                          />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {modificationTypes.map((modificationType) => (
-                          <SelectItem
-                            key={modificationType.id}
-                            value={modificationType.id}
-                          >
-                            {modificationType.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <Button
-                      type="button"
-                      className="ml-auto mt-2 sm:ml-2 sm:mt-0"
-                      variant="secondary"
-                      onClick={() => {
-                        setTypeOpen(true);
-                      }}
-                    >
-                      <PlusCircle className="mr-2 h-5 w-5" />
-                      New Type
-                    </Button>
-                  </div>
+                          {modificationType.name}
+                        </SelectItem>
+                      ))}
+                      <div
+                        className="border-t flex text-sm items-center justify-center hover:bg-accent hover:cursor-pointer h-8"
+                        onClick={() => {
+                          setTypeOpen(true);
+                        }}
+                      >
+                        <PlusCircle className="mr-2 h-5 w-5" />
+                        <p>New Type</p>
+                      </div>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

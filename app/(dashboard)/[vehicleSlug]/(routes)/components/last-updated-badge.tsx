@@ -42,7 +42,7 @@ export const LastUpdatedBadge: React.FC<LastUpdatedBadgeProps> = ({
       <PopoverTrigger className="absolute right-0">
         <Badge
           variant="outline"
-          className="rounded-lg p-2 mr-[-1px] mt-[-1px]"
+          className="rounded-lg p-2 mr-[-1px] mt-[-1px] hover:bg-accent"
           aria-label="Information"
         >
           <HelpCircle size={18} className="flex justify-center" />
