@@ -3,12 +3,12 @@
 import Link from "next/link";
 import Scrollspy from "react-scrollspy";
 import { sectionRoutes } from "@/lib/constants";
+import { motion } from "framer-motion";
 
 import { Gauge } from "lucide-react";
 
 import { LandingNavbarMobile } from "./landing-navbar-mobile";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
 
 export const LandingNavbar = () => {
   const scrollToTop = () => {

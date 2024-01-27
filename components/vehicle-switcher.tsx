@@ -6,8 +6,11 @@ import { Vehicle } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 import { useStoreModal } from "@/hooks/use-store-modal";
 
+import { cn } from "@/lib/utils";
+
+import { CarFront, PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CarFront, ChevronDown, PlusCircle } from "lucide-react";
+import Chevron from "@/components/chevron";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -15,7 +18,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
 
 export interface VehicleSwitcherProps {
   items: Vehicle[];
@@ -35,7 +37,7 @@ export default function VehicleSwitcher({
   const [open, setOpen] = useState(false);
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
-  const currentVehicle = items.find((item) => item.id === params.vehicleId);
+  const currentVehicle = items.find((item) => item.slug === params.vehicleSlug);
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen} modal={false}>
@@ -47,16 +49,11 @@ export default function VehicleSwitcher({
           aria-expanded={open}
           className={cn("flex w-[200px] justify-between", className)}
         >
-          <CarFront className="mr-2 h-4 w-4" aria-hidden="true" />
+          <CarFront className="mr-2 h-4 w-4 flex-shrink-0" aria-hidden="true" />
           <span id="vehicleButtonLabel" className="truncate">
             <span className="truncate">{currentVehicle?.name}</span>
           </span>
-          <ChevronDown
-            className={`ml-auto h-4 w-4 shrink-0 opacity-50 transition-transform duration-300 ${
-              open && "transform rotate-180"
-            }`}
-            aria-hidden="true"
-          />
+          <Chevron open={open} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-[200px] p-0" align="end">
@@ -65,23 +62,25 @@ export default function VehicleSwitcher({
           .sort((a, b) => a.name.localeCompare(b.name))
           .map((vehicle) => (
             <DropdownMenuCheckboxItem
-              key={vehicle.id}
-              checked={vehicle.id === params.vehicleId}
+              key={vehicle.slug}
+              checked={vehicle.slug === params.vehicleSlug}
               onSelect={() => {
                 setOpen(false);
-                push(`/${vehicle.id}`);
+                push(`/${vehicle.slug}`);
               }}
               className={`text-sm truncate w-full ${
-                vehicle.id === params.vehicleId && !hoveredItem && "bg-accent"
+                vehicle.slug === params.vehicleSlug &&
+                !hoveredItem &&
+                "bg-accent"
               }`}
-              onMouseEnter={() => setHoveredItem(vehicle.id)}
+              onMouseEnter={() => setHoveredItem(vehicle.slug)}
               onMouseLeave={() => setHoveredItem(null)}
             >
               <CarFront className="absolute left-2 mr-2 h-4 w-4" />
               <span
                 title={vehicle.name}
                 className={`truncate ${
-                  vehicle.id === currentVehicle?.id && "mr-5"
+                  vehicle.slug === currentVehicle?.slug && "mr-5"
                 }`}
               >
                 {vehicle.name}
@@ -89,7 +88,7 @@ export default function VehicleSwitcher({
             </DropdownMenuCheckboxItem>
           ))}
         <DropdownMenuCheckboxItem
-          className="border-t"
+          className="border-t flex justify-center pl-0"
           onSelect={openVehicleModal}
           onMouseEnter={() => setHoveredItem("addVehicle")}
           onMouseLeave={() => setHoveredItem(null)}

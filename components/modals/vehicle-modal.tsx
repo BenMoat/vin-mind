@@ -11,10 +11,10 @@ import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 
 import { useStoreModal } from "@/hooks/use-store-modal";
+import { checkVehicleExists, vehicleEnquiry } from "@/app/actions/vehicle";
 
 import { ExternalLink } from "lucide-react";
 
-import { Modal } from "@/components/ui/modal";
 import {
   Form,
   FormControl,
@@ -23,8 +23,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Modal } from "@/components/ui/modal";
 
 type DvlaData = {
   registrationNumber?: string;
@@ -41,9 +42,15 @@ const formSchema = z.object({
     .string()
     .min(1, "Enter a name for your vehicle")
     .max(40, "Vehicle name must be less than 40 characters")
-    .refine((value) => value.trim().length > 0, {
-      message: "Enter a name for your vehicle",
-    }),
+    .refine(
+      async (value) => {
+        const vehicleExists = await checkVehicleExists(value);
+        return !vehicleExists;
+      },
+      {
+        message: "A Vehicle with that name already exists",
+      }
+    ),
   registrationNumber: z.any(), //DVLA RES API handles this validation
 });
 
@@ -69,26 +76,15 @@ export const VehicleModal = () => {
     setLoading(true);
     const registrationNumber = values.registrationNumber;
     if (registrationNumber) {
-      const fetchData = async () => {
-        try {
-          const request = axios.post(
-            `/api/${params.vehicleId}/vehicle-enquiry`,
-            { registrationNumber }
-          );
-          const response = await request;
-          response.data.registrationNumber = registrationNumber;
-          const save = saveData(values.name, response.data);
-          await Promise.all([request, save]);
-          setError("");
-        } catch (error) {
-          if (axios.isAxiosError(error) && error.response) {
-            setError(error.response.data.message);
-          }
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchData();
+      try {
+        const data = await vehicleEnquiry(params.vehicleId, registrationNumber);
+        await saveData(values.name, data);
+        setError("");
+      } catch (error: any) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
     } else {
       await saveData(values.name, null);
       setError("");
@@ -109,9 +105,9 @@ export const VehicleModal = () => {
 
       toast.success("Vehicle added");
 
-      window.location.assign(`/${response.data.id}`);
+      window.location.assign(`/${response.data.slug}`);
     } catch (error) {
-      toast.error("Something went wrong 🫤");
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }

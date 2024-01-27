@@ -1,6 +1,5 @@
 import { CheckCircle, XCircle } from "lucide-react";
 
-import { LastUpdatedBadge } from "@/app/(dashboard)/[vehicleId]/(routes)/components/last-updated-badge";
 import {
   Card,
   CardContent,
@@ -8,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { LastUpdatedBadge } from "@/app/(dashboard)/[vehicleSlug]/(routes)/components/last-updated-badge";
 
 interface MockVehicleStatusProps {
   updatedAt: Date;
@@ -21,7 +21,7 @@ export const MockVehicleStatus: React.FC<MockVehicleStatusProps> = ({
   taxDueDate,
 }) => {
   return (
-    <Card className="relative text-center">
+    <Card className="relative">
       <LastUpdatedBadge tax updatedAt={updatedAt} />
       <CardHeader className="pb-1">
         <CardTitle className="pb-1">Tax</CardTitle>

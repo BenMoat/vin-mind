@@ -55,7 +55,7 @@ const Section = ({
       <h2 className="text-2xl sm:text-4xl font-bold text-center pb-10">
         {title}
       </h2>
-      <div className="relative">
+      <div className="relative pt-10 sm:pt-0">
         <div className="sm:inline-flex items-center border backdrop-blur rounded-lg sm:px-4 w-full sm:w-auto sm:h-12 absolute z-10 top-[-24px] left-1/2 transform -translate-x-1/2">
           <p className="text-sm sm:text-md text-center py-2 sm:py-0">
             {description}

@@ -1,7 +1,40 @@
 import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs";
+import { auth, useUser } from "@clerk/nextjs";
 
 import prismadb from "@/lib/prismadb";
+
+import generateSlug from "@/lib/util-types/slug-utils";
+
+export async function GET(req: Request) {
+  try {
+    const { userId } = auth();
+
+    const url = new URL(req.url);
+    const vehicleName = url.searchParams.get("vehicleName");
+
+    if (!vehicleName) {
+      return new NextResponse("Vehicle name is required as a query parameter", {
+        status: 400,
+      });
+    }
+
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const vehicle = await prismadb.vehicle.findFirst({
+      where: {
+        name: vehicleName,
+        userId,
+      },
+    });
+
+    return NextResponse.json({ exists: Boolean(vehicle) });
+  } catch (error) {
+    console.error("[VEHICLES_GET]", error);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+}
 
 export async function POST(req: Request) {
   try {
@@ -17,6 +50,8 @@ export async function POST(req: Request) {
       motExpiryDate,
     } = body;
 
+    const slug = generateSlug(name);
+
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -31,6 +66,7 @@ export async function POST(req: Request) {
       vehicle = await prismadb.vehicle.create({
         data: {
           name,
+          slug,
           userId,
         },
       });
@@ -38,6 +74,7 @@ export async function POST(req: Request) {
       vehicle = await prismadb.vehicle.create({
         data: {
           name,
+          slug,
           userId,
           dvlaData: {
             create: {

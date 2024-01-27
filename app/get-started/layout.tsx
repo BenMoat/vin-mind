@@ -21,7 +21,7 @@ export default async function SetupLayout({
   });
 
   if (vehicle) {
-    redirect(`/${vehicle.id}`);
+    redirect(`/${vehicle.slug}`);
   }
 
   return <>{children}</>;

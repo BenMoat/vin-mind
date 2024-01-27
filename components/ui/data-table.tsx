@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as React from "react";
 
 import {
@@ -44,6 +44,7 @@ interface DataTableProps<TData, TValue> {
   filterKey: string;
   modType?: any[];
   isObsolete?: boolean;
+  onFilteredPriceChange?: (totalPrice: number) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -53,6 +54,7 @@ export function DataTable<TData, TValue>({
   filterKey,
   modType,
   isObsolete,
+  onFilteredPriceChange,
 }: DataTableProps<TData, TValue>) {
   const params = useParams();
   const router = useRouter();
@@ -104,6 +106,17 @@ export function DataTable<TData, TValue>({
       document.body.classList.remove("prevent-overflow");
     }
   };
+
+  useEffect(() => {
+    let total = 0;
+    for (let row of table.getRowModel().rows) {
+      // @ts-ignore
+      total += row.original.price;
+    }
+    if (onFilteredPriceChange) {
+      onFilteredPriceChange(total);
+    }
+  }, [table.getRowModel().rows]);
 
   return (
     <>
@@ -283,7 +296,7 @@ export function DataTable<TData, TValue>({
                   onClick={() =>
                     router.push(
                       // @ts-ignore
-                      `/${params.vehicleId}/${routeName}/${row.original.id}`
+                      `/${params.vehicleSlug}/${routeName}/${row.original.id}`
                     )
                   }
                 >

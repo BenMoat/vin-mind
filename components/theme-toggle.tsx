@@ -1,8 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { Moon, Sun, ChevronDown } from "lucide-react";
 import { useTheme } from "next-themes";
+import Chevron from "./chevron";
+
+import { Moon, Sun } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -39,12 +41,7 @@ export function ThemeToggle() {
         >
           <Sun className="mr-4 absolute h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="mr-4 absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <ChevronDown
-            className={`ml-6 h-4 w-4 shrink-0 opacity-50 transition-transform duration-300 ${
-              open && "transform rotate-180"
-            }`}
-          />
-
+          <Chevron open={open} className="!ml-6" />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>

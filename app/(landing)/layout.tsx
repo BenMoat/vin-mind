@@ -33,6 +33,6 @@ export default async function SetupLayout({
   const vehicle = vehicles[0];
 
   if (vehicle) {
-    redirect(`/${vehicle.id}`);
+    redirect(`/${vehicle.slug}`);
   }
 }

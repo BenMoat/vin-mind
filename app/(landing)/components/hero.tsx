@@ -1,5 +1,7 @@
 "use client";
 
+import { version } from "@/package.json";
+
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -22,15 +24,26 @@ export default function Hero() {
     >
       <div className="flex flex-col min-h-screen justify-center text-center pb-20 sm:pb-0">
         <motion.div
-          className="relative inline-flex justify-center pt-20 md:pt-0"
+          className="inline-flex justify-center pt-20 md:pt-0"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-white via-slate-500 to-blue-600 bg-clip-text text-transparent">
+          <h1 className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-white via-slate-500 to-blue-600 bg-clip-text text-transparent sm:relative">
             VinMind
-            <Badge className="absolute">Beta 0.1.0</Badge>
+            <Badge className="hidden sm:block sm:absolute sm:top-0 sm:right-[-80px]">
+              Beta {version}
+            </Badge>
           </h1>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Badge className="inline-flex justify-center sm:hidden">
+            Beta {version}
+          </Badge>
         </motion.div>
         <motion.p
           className="text-lg sm:text-xl mt-4"

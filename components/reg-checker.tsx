@@ -4,10 +4,12 @@ import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { SubmitHandler, FieldValues } from "react-hook-form";
 import { DvlaData } from "@prisma/client";
+import { vehicleEnquiry } from "@/app/actions/vehicle";
+import { areStringsEqual } from "@/lib/utils";
 
 import { ExternalLink } from "lucide-react";
 
@@ -23,17 +25,18 @@ import {
 } from "@/components/ui/card";
 
 interface DvlaDataProps {
+  vehicleId: string;
   initialData: DvlaData | null;
   isModal?: boolean;
   onClose?: () => void;
 }
 
 export const RegChecker: React.FC<DvlaDataProps> = ({
+  vehicleId,
   initialData,
   isModal,
   onClose,
 }) => {
-  const params = useParams();
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
@@ -49,37 +52,28 @@ export const RegChecker: React.FC<DvlaDataProps> = ({
   const onSubmit: SubmitHandler<FieldValues> = async () => {
     setLoading(true);
     const registrationNumber = form.getValues("initialData.registrationNumber");
-    const fetchData = async () => {
-      try {
-        const response = await axios.post(
-          `/api/${params.vehicleId}/vehicle-enquiry`,
-          { registrationNumber }
-        );
-        response.data.registrationNumber = registrationNumber;
-        await saveData(response.data);
-        setError("");
-        toast.success("Registration updated");
-      } catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
-          setError(error.response.data.message);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
+    try {
+      const data = await vehicleEnquiry(vehicleId, registrationNumber);
+      await saveData(data);
+      setError("");
+      toast.success("Registration updated");
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   async function saveData(data: DvlaDataProps) {
     try {
       if (initialData) {
         await axios.patch(
-          `/api/${params.vehicleId}/vehicle-enquiry/save-enquiry`,
+          `/api/${vehicleId}/vehicle-enquiry/save-enquiry`,
           data
         );
       } else {
         await axios.post(
-          `/api/${params.vehicleId}/vehicle-enquiry/save-enquiry`,
+          `/api/${vehicleId}/vehicle-enquiry/save-enquiry`,
           data
         );
       }
@@ -97,10 +91,7 @@ export const RegChecker: React.FC<DvlaDataProps> = ({
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(
-        `/api/${params.vehicleId}/vehicle-enquiry/save-enquiry`
-      );
-      localStorage.removeItem(`resTMS-${params.vehicleId}`);
+      await axios.delete(`/api/${vehicleId}/vehicle-enquiry/save-enquiry`);
       form.setValue("initialData.registrationNumber", "");
       router.refresh();
       toast.success("Registration removed");
@@ -110,16 +101,6 @@ export const RegChecker: React.FC<DvlaDataProps> = ({
       setLoading(false);
     }
   };
-
-  //Check if the two registraion numbers are equal, ignoring whitespace and casing
-  function areEqual(value1: string, value2: string | null) {
-    if (value1 && value2) {
-      const sanitizedValue1 = value1.replace(/\s/g, "").toUpperCase();
-      const sanitizedValue2 = value2.replace(/\s/g, "").toUpperCase();
-      return sanitizedValue1 === sanitizedValue2;
-    }
-    return false;
-  }
 
   return (
     <Card
@@ -198,7 +179,7 @@ export const RegChecker: React.FC<DvlaDataProps> = ({
                       disabled={
                         loading ||
                         !field.value ||
-                        areEqual(
+                        areStringsEqual(
                           field.value,
                           initialData?.registrationNumber || ""
                         )

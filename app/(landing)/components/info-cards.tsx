@@ -5,9 +5,9 @@ import { MockVehicle } from "@/lib/constants";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeftRight, Warehouse, Wrench } from "lucide-react";
 
-import { ModificationsCard } from "@/app/(dashboard)/[vehicleId]/(routes)/components/cards/modifications-card";
 import { Button } from "@/components/ui/button";
 import { MockVehicleStatus } from "./mock-vehicle-status";
+import { ModificationsCard } from "@/app/(dashboard)/[vehicleSlug]/(routes)/components/cards/modifications-card";
 
 export default function InfoCards() {
   const [showModificationsCard, setShowModificationsCard] = useState(false);
@@ -73,7 +73,7 @@ export default function InfoCards() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="flex-grow"
+                className="flex-grow md:w-full"
               >
                 <MockVehicleStatus
                   taxDueDate={
@@ -147,7 +147,7 @@ export default function InfoCards() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="flex-grow"
+                className="flex-grow md:w-full"
               >
                 <ModificationsCard
                   totalModifications={selectedVehicle?.totalModifications || 2}
