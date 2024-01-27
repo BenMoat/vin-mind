@@ -4,9 +4,10 @@ import { useState } from "react";
 import axios from "axios";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
+import generateSlug from "@/lib/util-types/slug-utils";
 import { checkVehicleExists } from "@/app/actions/vehicle";
 import { DvlaData, Vehicle } from "@prisma/client";
 
@@ -70,7 +71,6 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
   noOfModificationTypes,
   noOfServices,
 }) => {
-  const params = useParams();
   const router = useRouter();
 
   const [deleteAction, setDeleteAction] = useState<DeleteAction | null>(null);
@@ -87,8 +87,9 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
     try {
       setLoading(true);
       await axios.patch(`/api/vehicles/${initialData.id}`, data);
-      router.refresh();
+      const slug = generateSlug(data.name);
       toast.success("Vehicle updated");
+      router.push(`/${slug}/settings`);
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
