@@ -7,12 +7,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-interface LastUpdatedBadgeProps {
+type LastUpdatedBadgeProps = {
   updatedAt: Date;
-  tax?: boolean;
-  mot?: boolean;
-  insurance?: boolean;
-}
+} & (
+  | { tax: boolean; mot?: never; insurance?: never }
+  | { tax?: never; mot: boolean; insurance?: never }
+  | { tax?: never; mot?: never; insurance: boolean }
+);
 
 export const LastUpdatedBadge: React.FC<LastUpdatedBadgeProps> = ({
   updatedAt,
@@ -34,7 +35,6 @@ export const LastUpdatedBadge: React.FC<LastUpdatedBadgeProps> = ({
     if (tax) return "tax";
     if (mot) return "MOT";
     if (insurance) return "insurance";
-    return ""; // default case if not prop is supplied by the parent
   };
 
   return (
@@ -53,7 +53,7 @@ export const LastUpdatedBadge: React.FC<LastUpdatedBadgeProps> = ({
           Last sync: {date} at{time}
         </p>
         <p className="text-muted-foreground text-sm">
-          {`If your ${getStatusText()} status has recently changed, please allow up to `}
+          {`If your ${getStatusText()} status has recently changed, please allow `}
           <b className="text-bold">24 hours</b>
           {` for this to take effect.`}
         </p>

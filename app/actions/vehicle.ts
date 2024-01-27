@@ -27,7 +27,6 @@ export const vehicleEnquiry = async (
     if (axios.isAxiosError(error) && error.response) {
       throw new Error(error.response.data.message);
     }
-    throw error;
   }
 };
 

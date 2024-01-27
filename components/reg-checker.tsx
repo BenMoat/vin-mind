@@ -4,11 +4,12 @@ import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import { SubmitHandler, FieldValues } from "react-hook-form";
 import { DvlaData } from "@prisma/client";
 import { vehicleEnquiry } from "@/app/actions/vehicle";
+import { areStringsEqual } from "@/lib/utils";
 
 import { ExternalLink } from "lucide-react";
 
@@ -36,7 +37,6 @@ export const RegChecker: React.FC<DvlaDataProps> = ({
   isModal,
   onClose,
 }) => {
-  const params = useParams();
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
@@ -92,7 +92,6 @@ export const RegChecker: React.FC<DvlaDataProps> = ({
     try {
       setLoading(true);
       await axios.delete(`/api/${vehicleId}/vehicle-enquiry/save-enquiry`);
-      localStorage.removeItem(`resTMS-${vehicleId}`);
       form.setValue("initialData.registrationNumber", "");
       router.refresh();
       toast.success("Registration removed");
@@ -102,16 +101,6 @@ export const RegChecker: React.FC<DvlaDataProps> = ({
       setLoading(false);
     }
   };
-
-  //Check if the two registraion numbers are equal, ignoring whitespace and casing
-  function areEqual(value1: string, value2: string | null) {
-    if (value1 && value2) {
-      const sanitizedValue1 = value1.replace(/\s/g, "").toUpperCase();
-      const sanitizedValue2 = value2.replace(/\s/g, "").toUpperCase();
-      return sanitizedValue1 === sanitizedValue2;
-    }
-    return false;
-  }
 
   return (
     <Card
@@ -190,7 +179,7 @@ export const RegChecker: React.FC<DvlaDataProps> = ({
                       disabled={
                         loading ||
                         !field.value ||
-                        areEqual(
+                        areStringsEqual(
                           field.value,
                           initialData?.registrationNumber || ""
                         )

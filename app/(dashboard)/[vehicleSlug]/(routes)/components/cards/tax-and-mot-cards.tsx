@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { differenceInHours } from "date-fns";
 
 import { DvlaData } from "@prisma/client";
 import { vehicleEnquiry } from "@/app/actions/vehicle";
@@ -41,35 +42,26 @@ export const TaxAndMOTCards: React.FC<DvlaDataProps> = ({
 
   useEffect(() => {
     if (registrationNumber) {
-      const fetchData = async () => {
-        try {
-          setLoading(true);
-          const response = await vehicleEnquiry(vehicleId, registrationNumber);
-          response.data.registrationNumber = registrationNumber;
-          await saveData(response.data);
-          setError("");
-        } catch (error: any) {
-          setError("Failed to fetch Tax and MOT status");
-        } finally {
-          setLoading(false);
-        }
-      };
+      const { updatedAt } = initialData;
+      const timeDifference = differenceInHours(new Date(), new Date(updatedAt));
 
-      /* Cache a timestamp for when the data was last fetched. Compare it against the current time
-    to determine whether to fetch new data or not.*/
-      const storedTimestamp = parseInt(
-        localStorage.getItem(`resTMS-${vehicleId}`) || "0",
-        10
-      );
-      const currentTime = Date.now();
-      const timeThreshold = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+      if (timeDifference > 24) {
+        const handleVehicleEnquiry = async () => {
+          try {
+            const response = await vehicleEnquiry(
+              vehicleId,
+              registrationNumber
+            );
+            saveData(response);
+          } catch (error) {
+            setError("Failed to retrieve Tax and MOT status.");
+          }
+        };
 
-      if (currentTime - storedTimestamp > timeThreshold) {
-        fetchData();
-        localStorage.setItem(`resTMS-${vehicleId}`, currentTime.toString());
+        handleVehicleEnquiry();
       }
     }
-  }, [initialData, registrationNumber]);
+  }, [registrationNumber, initialData, vehicleId]);
 
   async function saveData(data: DvlaDataProps) {
     try {
