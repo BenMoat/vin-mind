@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { differenceInHours } from "date-fns";
 
 import { Insurance } from "@prisma/client";
 
@@ -34,44 +35,25 @@ export const InsuranceCard: React.FC<InsuranceCardProps> = ({
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (initialData) {
-        try {
-          setLoading(true);
-          const response = await axios.get(`/api/${vehicleId}/insurance`);
+    if (initialData) {
+      const { updatedAt } = initialData;
+      const timeDifference = differenceInHours(new Date(), new Date(updatedAt));
 
-          // Check if the insurance is still valid against today's date
-          const today = new Date();
-          const endDate = new Date(response.data[0].endDate);
+      if (timeDifference > 24) {
+        const fetchData = async () => {
+          try {
+            const response = await axios.get(`/api/${vehicleId}/insurance`);
 
-          initialData.isInsured = endDate >= today;
-
-          await saveData(response.data[0]);
-          setError("");
-        } catch (error) {
-          if (axios.isAxiosError(error) && error.response) {
+            saveData(response.data[0]);
+          } catch (error) {
             setError("Failed to fetch insurance data.");
           }
-        } finally {
-          setLoading(false);
-        }
+        };
+
+        fetchData();
       }
-    };
-
-    /* Cache a timestamp for when the data was last fetched. Compare it against the current time
-    to determine whether to fetch new data or not.*/
-    const storedTimestamp = parseInt(
-      localStorage.getItem(`insTMS-${vehicleId}`) || "0",
-      10
-    );
-    const currentTime = Date.now();
-    const timeThreshold = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-
-    if (currentTime - storedTimestamp > timeThreshold) {
-      fetchData();
-      localStorage.setItem(`insTMS-${vehicleId}`, currentTime.toString());
     }
-  }, [initialData]);
+  }, [initialData, vehicleId]);
 
   async function saveData(data: Insurance) {
     try {
@@ -103,7 +85,9 @@ export const InsuranceCard: React.FC<InsuranceCardProps> = ({
             <XCircle className="w-8 h-8 text-destructive" />
           </span>
           <p className="text-sm">{error}</p>
-          <Button variant="outline">Retry</Button>
+          <Button onClick={() => window.location.reload()} variant="outline">
+            Retry
+          </Button>
         </div>
       ) : loading ? (
         <CardSkeleton />

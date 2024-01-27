@@ -80,6 +80,7 @@ export const InsuranceModal: React.FC<InsuranceModalProps> = ({
 
       await Promise.all([request, refresh]);
       toast.success("Insurance Reminder Added");
+      router.refresh();
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
@@ -92,11 +93,10 @@ export const InsuranceModal: React.FC<InsuranceModalProps> = ({
     try {
       setLoading(true);
       const request = axios.delete(`/api/${vehicleId}/insurance`);
-      localStorage.removeItem(`insTMS-${vehicleId}`);
       const refresh = router.refresh();
-
       await Promise.all([request, refresh]);
       toast.success("Insurance Reminder Deleted");
+      router.refresh();
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
