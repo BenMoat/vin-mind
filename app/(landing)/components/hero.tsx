@@ -1,5 +1,7 @@
 "use client";
 
+import { version } from "@/package.json";
+
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -30,7 +32,7 @@ export default function Hero() {
           <h1 className="text-5xl sm:text-6xl font-bold bg-gradient-to-r from-white via-slate-500 to-blue-600 bg-clip-text text-transparent sm:relative">
             VinMind
             <Badge className="hidden sm:block sm:absolute sm:top-0 sm:right-[-80px]">
-              Beta 0.1.0
+              Beta {version}
             </Badge>
           </h1>
         </motion.div>
@@ -40,7 +42,7 @@ export default function Hero() {
           transition={{ duration: 0.5 }}
         >
           <Badge className="inline-flex justify-center sm:hidden">
-            Beta 0.1.0
+            Beta {version}
           </Badge>
         </motion.div>
         <motion.p

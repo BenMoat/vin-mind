@@ -1,4 +1,6 @@
-import { Copyright, GithubIcon } from "lucide-react";
+import { version } from "@/package.json";
+
+import { Copyright, Gauge } from "lucide-react";
 
 export default function Footer({ className, ...props }: any) {
   return (
@@ -8,15 +10,15 @@ export default function Footer({ className, ...props }: any) {
       >
         <p className="w-full text-center">
           <Copyright className="inline-block mr-1 align-middle" size={16} />
-          {new Date().getFullYear()} VinMind &nbsp;&middot;&nbsp; All Rights
-          Reserved &nbsp;&middot;&nbsp; Built by{" "}
+          {new Date().getFullYear()} VinMind {version} &nbsp;&middot;&nbsp; All
+          Rights Reserved &nbsp;&middot;&nbsp; Built by{" "}
           <a
             href="https://benmoat.dev"
             target="_blank"
             className="underline hover:text-primary transition-colors"
           >
             Ben Moat
-            <GithubIcon className="inline-block align-middle ml-1" size={16} />
+            <Gauge className="inline-block align-middle ml-1" size={16} />
           </a>
         </p>
       </div>
