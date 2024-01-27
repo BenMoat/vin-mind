@@ -30,8 +30,18 @@ export async function removeFilesFromAlbum(fileUrls: string[]) {
 
 export async function removeVehicleFolder(folderName: string) {
   try {
-    const response = await cloudinary.v2.api.delete_folder(folderName);
-    return response;
+    const folders = await cloudinary.v2.api.sub_folders("/");
+    const folderExists = folders.folders.some(
+      (folder: { path: string }) => folder.path === folderName
+    );
+
+    if (folderExists) {
+      const response = await cloudinary.v2.api.delete_folder(folderName);
+      return response;
+    } else {
+      console.log(`Folder does not exist: ${folderName}`);
+      return null;
+    }
   } catch (error) {
     console.error(`Failed to remove folder: ${folderName}`, error);
     throw error;
