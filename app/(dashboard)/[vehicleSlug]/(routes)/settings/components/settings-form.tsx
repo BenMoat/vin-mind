@@ -103,8 +103,8 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
       switch (deleteAction) {
         case DeleteAction.Vehicle:
           await axios.delete(`/api/vehicles/${initialData.id}`);
-          router.refresh();
           router.push("/");
+          router.refresh();
           toast.success("Vehicle deleted");
           break;
         case DeleteAction.Modifications:

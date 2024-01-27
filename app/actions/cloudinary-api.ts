@@ -27,3 +27,13 @@ export async function removeFilesFromAlbum(fileUrls: string[]) {
     )
   );
 }
+
+export async function removeVehicleFolder(folderName: string) {
+  try {
+    const response = await cloudinary.v2.api.delete_folder(folderName);
+    return response;
+  } catch (error) {
+    console.error(`Failed to remove folder: ${folderName}`, error);
+    throw error;
+  }
+}
