@@ -1,5 +1,6 @@
 import axios from "axios";
 import prismadb from "@/lib/prismadb";
+import { auth } from "@clerk/nextjs";
 
 export const checkVehicleExists = async (vehicleName: string) => {
   try {
@@ -30,14 +31,20 @@ export const vehicleEnquiry = async (
   }
 };
 
-export async function getVehicleBySlug(slug: string) {
+export const getVehicleBySlug = async (slug: string) => {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("Unauthorized");
+  }
+
   const vehicle = await prismadb.vehicle.findFirst({
-    where: { slug },
+    where: { slug, userId },
   });
 
   if (!vehicle) {
-    throw new Error(`Error loading page for "${slug}".`);
+    throw new Error(`Error loading page for vehicle, "${slug}".`);
   }
 
   return vehicle;
-}
+};

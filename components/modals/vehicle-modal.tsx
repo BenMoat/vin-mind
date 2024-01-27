@@ -26,7 +26,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
-import { RegChecker } from "../reg-checker";
 
 type DvlaData = {
   registrationNumber?: string;
@@ -106,7 +105,7 @@ export const VehicleModal = () => {
 
       toast.success("Vehicle added");
 
-      window.location.assign(`/${response.data.id}`);
+      window.location.assign(`/${response.data.slug}`);
     } catch (error) {
       toast.error("Something went wrong");
     } finally {

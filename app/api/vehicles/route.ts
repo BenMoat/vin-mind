@@ -7,9 +7,7 @@ import generateSlug from "@/lib/util-types/slug-utils";
 
 export async function GET(req: Request) {
   try {
-    const { userId, user } = auth();
-
-    console.log("USER", user?.username);
+    const { userId } = auth();
 
     const url = new URL(req.url);
     const vehicleName = url.searchParams.get("vehicleName");
@@ -40,7 +38,7 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    const { userId, user } = auth();
+    const { userId } = auth();
     const body = await req.json();
 
     const {
@@ -54,16 +52,9 @@ export async function POST(req: Request) {
 
     const slug = generateSlug(name);
 
-    if (!userId || !user) {
+    if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-
-    await prismadb.user.create({
-      data: {
-        id: userId,
-        username: user.username!,
-      },
-    });
 
     if (!name) {
       return new NextResponse("Vehicle name is required", { status: 400 });

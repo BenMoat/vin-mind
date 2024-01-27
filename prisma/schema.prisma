@@ -11,20 +11,11 @@ datasource db {
   relationMode = "prisma"
 }
 
-model User {
-  id        String    @id @default(uuid())
-  username  String    @unique
-  vehicles  Vehicle[] @relation("UserToVehicle")
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-}
-
 model Vehicle {
   id                 String              @id @default(uuid())
   slug               String
   name               String
   userId             String
-  user               User                @relation("UserToVehicle", fields: [userId], references: [id], onDelete: Cascade)
   dvlaData           DvlaData?           @relation("VehicleToDvlaData")
   dashboardConfigure DashboardConfigure? @relation("VehicleToDashboardConfigure")
   images             DashboardImages[]   @relation("VehicleToDashboardImages")
