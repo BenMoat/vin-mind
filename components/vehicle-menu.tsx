@@ -37,7 +37,9 @@ export function VehicleMenu({
     {
       href: `/${params.vehicleSlug}/servicing`,
       label: "Servicing",
-      active: pathname === `/${params.vehicleSlug}/servicing`,
+      active:
+        pathname === `/${params.vehicleSlug}/servicing` ||
+        pathname === `/${params.vehicleSlug}/servicing/${params.servicingId}`,
     },
     {
       href: `/${params.vehicleSlug}/settings`,

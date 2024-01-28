@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
-import { UserButton, ClerkLoading, ClerkLoaded, auth } from "@clerk/nextjs";
+import { ClerkLoading, ClerkLoaded, auth } from "@clerk/nextjs";
+import ThemedUserButton from "./user-button-themed";
 import prismadb from "@/lib/prismadb";
 
 import { Gauge } from "lucide-react";
@@ -39,7 +40,7 @@ export const Navbar = async () => {
             <Skeleton className="w-8 h-8 mr-2 rounded-full" />
           </ClerkLoading>
           <ClerkLoaded>
-            <UserButton afterSignOutUrl="/" />
+            <ThemedUserButton />
           </ClerkLoaded>
         </div>
       </div>
