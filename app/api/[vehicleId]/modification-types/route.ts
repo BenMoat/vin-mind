@@ -8,19 +8,34 @@ export async function GET(
   { params }: { params: { vehicleId: string } }
 ) {
   try {
-    if (!params.vehicleId) {
-      return new NextResponse("Vehicle ID is required", { status: 400 });
+    const { userId } = auth();
+
+    const url = new URL(req.url);
+    const modificationType = url.searchParams.get("modificationType");
+
+    if (!modificationType) {
+      return new NextResponse(
+        "Modification Type is required as a query parameter",
+        {
+          status: 400,
+        }
+      );
     }
 
-    const modificationTypes = await prismadb.modificationType.findMany({
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const type = await prismadb.modificationType.findFirst({
       where: {
+        name: modificationType,
         vehicleId: params.vehicleId,
       },
     });
 
-    return NextResponse.json(modificationTypes);
+    return NextResponse.json({ exists: Boolean(type) });
   } catch (error) {
-    console.log("[MODIFICATION-TYPES_GET]", error);
+    console.error("[MOD-TYPE-EXISTS]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }

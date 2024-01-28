@@ -9,8 +9,25 @@ export const checkVehicleExists = async (vehicleName: string) => {
     });
     return response.data.exists;
   } catch (error) {
-    console.error(error);
-    throw error;
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.message);
+    }
+  }
+};
+
+export const checkModTypeExists = async (
+  modificationType: string,
+  vehicleId: string
+) => {
+  try {
+    const response = await axios.get(`/api/${vehicleId}/modification-types`, {
+      params: { modificationType: modificationType },
+    });
+    return response.data.exists;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.message);
+    }
   }
 };
 

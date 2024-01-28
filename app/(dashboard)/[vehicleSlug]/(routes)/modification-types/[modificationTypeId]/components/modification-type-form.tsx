@@ -33,6 +33,7 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
+import { checkModTypeExists } from "@/app/actions/vehicle";
 
 interface ModificationTypeFormProps {
   vehicleId: string;
@@ -40,22 +41,28 @@ interface ModificationTypeFormProps {
   modifications: Modification[] | null;
 }
 
-const formSchema = z.object({
-  name: z
-    .string()
-    .min(1, "Please enter a modification type")
-    .refine((value) => value.trim().length > 0, {
-      message: "Please enter a modification type",
-    }),
-});
-
-type ModificationTypeFormValues = z.infer<typeof formSchema>;
-
 export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
   vehicleId,
   initialData,
   modifications,
 }) => {
+  const formSchema = z.object({
+    name: z
+      .string()
+      .min(1, "Please enter a modification type")
+      .refine(
+        async (value) => {
+          const vehicleExists = await checkModTypeExists(value, vehicleId);
+          return !vehicleExists;
+        },
+        {
+          message: "A modification type with that name already exists",
+        }
+      ),
+  });
+
+  type ModificationTypeFormValues = z.infer<typeof formSchema>;
+
   const params = useParams();
   const router = useRouter();
 
@@ -179,7 +186,9 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
                         <Button
                           disabled={
                             loading ||
-                            form.getValues("name").trim() === initialData?.name
+                            form.getValues("name").trim() ===
+                              initialData?.name ||
+                            !field.value
                           }
                           className="ml-auto"
                           type="submit"
@@ -256,7 +265,10 @@ export const ModificationTypeForm: React.FC<ModificationTypeFormProps> = ({
                           {...field}
                         />
                         <FormMessage />
-                        <Button disabled={loading} type="submit">
+                        <Button
+                          disabled={loading || !field.value}
+                          type="submit"
+                        >
                           {action}
                         </Button>
                       </CardContent>

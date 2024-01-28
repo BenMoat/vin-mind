@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { auth, useUser } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs";
 
 import prismadb from "@/lib/prismadb";
 
@@ -31,7 +31,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ exists: Boolean(vehicle) });
   } catch (error) {
-    console.error("[VEHICLES_GET]", error);
+    console.error("[VEHICLE_EXISTS]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }

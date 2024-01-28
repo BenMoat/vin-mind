@@ -181,7 +181,9 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({
                       <FormMessage />
                       <Button
                         disabled={
-                          loading || field.value.trim() === initialData?.name
+                          loading ||
+                          !field.value ||
+                          field.value.trim() === initialData?.name
                         }
                         type="submit"
                       >
